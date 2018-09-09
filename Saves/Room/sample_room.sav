@@ -47,5 +47,12 @@
 
   "sleep": {
     "example_bed": "example_bed text"
+  },
+  "triggers": {
+    "example_trigger_action": {
+      "example_trigger_type": {
+        "change_key": "change_value"
+      }
+    }
   }
 }

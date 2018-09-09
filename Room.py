@@ -12,6 +12,7 @@ class Room:
     look = None
     inventory = None
     sleep = None
+    triggers = None
 
     def __init__(self, room_name=None, player_name=None):
         self.room_name = room_name
@@ -49,6 +50,7 @@ class Room:
         room_dict["inventory"] = self.inventory
         room_dict["sleep"] = self.sleep
         room_dict["go"] = self.go
+        room_dict["triggers"] = self.triggers
 
         room_file = "Saves/Room/{}_{}.sav".format(self.player_name.replace(" ", "_"), self.room_name.replace(" ", "_"))
         room_json = json.dumps(room_dict)
@@ -65,6 +67,7 @@ class Room:
         self.inventory = room_data["inventory"]
         self.sleep = room_data["sleep"]
         self.go = room_data["go"]
+        self.triggers = room_data["triggers"]
 
         print("\n~{}~\n".format(self.room_name.replace("_", " ")))
         if self.init is not None:

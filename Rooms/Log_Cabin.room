@@ -78,5 +78,7 @@
 
   "sleep": {
     "bedroll": "You fall asleep on the uncomfortable bedroll.\nSomehow you awake more tired."
-  }
+  },
+
+  "triggers": {}
 }

@@ -52,7 +52,7 @@ class CommandParser:
             self.save_state()
 
     @staticmethod
-    def check_for_trigger(item):
+    def check_item_trigger(item):
         # ##
         # Checks if the command you are issuing has a triggers
         #
@@ -164,7 +164,7 @@ class CommandParser:
                                     door["open"] = True
                                     print(door["open_description"])
 
-                                    if self.check_for_trigger(door):
+                                    if self.check_item_trigger(door):
                                         triggers = door["triggers"]["open"]
                                         self.parse_trigger(triggers)
 
@@ -197,7 +197,7 @@ class CommandParser:
                 inventory_item = self.room.inventory[command_item]
                 if "eat" in inventory_item.keys():
 
-                    if self.check_for_trigger(inventory_item):
+                    if self.check_item_trigger(inventory_item):
                         triggers = inventory_item["triggers"]["eat"]
                         self.parse_trigger(triggers)
 
@@ -209,7 +209,7 @@ class CommandParser:
                 inventory_item = self.player.inventory[command_item]
                 if "eat" in inventory_item.keys():
 
-                    if self.check_for_trigger(inventory_item):
+                    if self.check_item_trigger(inventory_item):
                         triggers = inventory_item["triggers"]["eat"]
                         self.parse_trigger(triggers)
 
@@ -231,13 +231,45 @@ class CommandParser:
         # @author Dakotah Jones
         # ##
 
-
+        directions = [
+            "north",
+            "south",
+            "east",
+            "west",
+            "up",
+            "down"
+        ]
+        equivalent = {
+            "northern": "north",
+            "southern": "south",
+            "eastern": "east",
+            "western": "west"
+        }
 
         if len(command_list) == 1:
-            print("Move in which compass direction?")
-        elif len(command_list) == 2 and command_list[1] in self.direction:
-            next_room = self.room.g
-            self.room.load_room()
+            print("Move in which direction?")
+        elif len(command_list) == 2:
+            direction = command_list[1]
+
+            if direction in equivalent.keys():
+                direction = equivalent[direction]
+
+            if direction in self.room.go.keys():
+                room_exit = self.room.go[direction]
+                if room_exit["open"]:
+
+                    if not room_exit["locked"]:
+                        self.room.room_name = room_exit["room_name"]
+                        self.room.check_save()
+                    else:
+                        print("That door is locked")
+
+                else:
+                    print("That door is not currently.")
+
+            else:
+                print("You cannot go in that direction.")
+
         else:
             print("Movement command was not understood.")
 
@@ -284,7 +316,7 @@ class CommandParser:
                 item = self.room.inventory[item_name]
 
                 # Check if taking the the item triggers a change.
-                if self.check_for_trigger(item):
+                if self.check_item_trigger(item):
                     triggers = item["triggers"]["take"]
                     self.parse_trigger(triggers)
 
@@ -373,13 +405,27 @@ class CommandParser:
                     item[key] = val
                     if item in self.room.inventory:
                         del self.room.inventory[key]
+            elif trigger_type == "player-death":
+                self.player.alive = False
+            elif trigger_type == "player-win":
+                self.player.win = True
         del triggers
+
+    def check_room_trigger(self):
+        out = False
+        for key, val in self.room.triggers.items():
+            out = True
+            break
+        return out
 
     def look_command(self):
         look = self.room.look
         for key, val in look.items():
             if val:
                 print(key)
+        if self.check_room_trigger():
+            if "look" in self.room.triggers.keys():
+                self.parse_trigger(self.room.triggers["look"])
 
     def check_inventory_command(self):
         print("Inventory:")
