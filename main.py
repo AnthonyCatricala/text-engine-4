@@ -9,7 +9,7 @@ def init_game():
     # TODO Take this out of a main file for production.
     # Setup essential game parts.
 
-    player = Player(player_name="Sample")
+    player = Player(player_name="Demo")
     room = Room(room_name="Log_Cabin", player_name=player.player_name)
     command_parser = CommandParser(player=player, room=room)
 
