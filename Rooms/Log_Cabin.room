@@ -1,0 +1,46 @@
+{
+  "room_name": "Log Cabin",
+  "init": "You awake in a dimly lit log cabin.",
+  "enter": "You enter the dimly lit cabin, your eyes slowly adjust.",
+  "look": {
+    "You are in a small dark room." : true,
+    "There is an uncomfortable looking bedroll and a table on the opposite side of the room.": true,
+    "A chunk of old bread sits on the table.": true,
+    "A hand written note sits on the table.": true,
+    "A small key rests on the table.": false,
+    "A northern archway leads to a small kitchen.": true,
+    "The south facing door has sunlight glinting from the cracks.": true
+  },
+  "inventory": {
+    "note": {
+      "examine": "A hand written piece of paper.",
+      "read": "..:: Create Your Own Scriptable Text Adventure Group #4 ::..\nDevelopers:\nAnthony Catricala\nLucy Oliverio\nMikael Johnson {}\nPatrick Modica\nDakotah Jones\n",
+      "take": "You pickup the note.",
+      "drop": "You drop the note on the ground."
+    },
+    "bread": {
+      "take": "You pickup the bread.",
+      "drop": "You drop the bread onto the ground",
+      "eat": "You eat the stale loaf of bread. It doesn't tasty particularly good, but at least it's something.",
+      "examine": "A loaf of stale crusty bread"
+    }
+  },
+
+  "go": {
+    "south": {
+      "room_name": "Cabin_Entrance",
+      "locked": true,
+      "locked_description": "You jiggle the handle; it seems to be locked.",
+      "open": false,
+      "open_description": "You open the creaky wooden door."
+    },
+    "north": {
+      "room_name": "Cabin_Front_Lawn",
+      "open": true
+    }
+  },
+
+  "sleep": {
+    "bedroll": "You fall asleep on the uncomfortable bedroll.\nSomehow you awake more tired."
+  }
+}

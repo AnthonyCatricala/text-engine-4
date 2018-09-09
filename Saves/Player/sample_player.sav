@@ -1,0 +1,6 @@
+{
+  "player_name": "sample",
+  "alive": True,
+  "win": False,
+  "inventory": {}
+}
