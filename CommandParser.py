@@ -39,11 +39,70 @@ class CommandParser:
             self.parse_drop_command(command_parts)
         elif command_parts[0] in self.movement:
             self.parse_movement_command(command_parts)
+        elif command_parts[0] == "open":
+            self.parse_open_command(command_parts)
         elif command_parts[0] == "eat":
             self.parse_eat_command(command_parts)
         else:
             print(self.__general_error)
         self.save_state()
+
+    def check_for_trigger(self, item):
+        # ##
+        # Checks if the command you are issuing has a triggers
+        #
+        # @return true/false
+        # @author Dakotah Jones
+        # ##
+
+        for key, value in item.items():
+            if "trigger" in key:
+                out = True
+        return out
+
+    def parse_open_command(self, command_list):
+        directions = [
+            "north",
+            "south",
+            "east",
+            "west",
+            "up",
+            "down"
+        ]
+        equivelent = {
+            "northern": "north",
+            "southern": "south",
+            "eastern": "east",
+            "western": "west"
+        }
+
+        num_parts = len(command_list)
+
+        if num_parts >= 2:
+            command_direction = command_list[1]
+            if command_direction in equivelent.keys():
+                command_direction = equivelent[command_direction]
+            if command_direction in directions:
+                if num_parts == 3:
+                    door_part = command_list[2]
+                    if door_part == "door":
+                        exits = self.room.get_exits()
+                        if command_direction in exits.keys():
+                            door = exits[command_direction]
+                            if door["locked"]:
+                                print(door["locked_description"])
+                            else:
+                                door["open"] = True
+                                print("open_description")
+                                self.room.save_room()
+                        else:
+                            print("Door does not exist.")
+
+
+                else:
+                    print(self.__general_error)
+            else:
+                print("Open which door?")
 
     def parse_eat_command(self, command_list):
         # ##

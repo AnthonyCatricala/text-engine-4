@@ -73,3 +73,6 @@ class Room:
             self.save_room()
         else:
             print(self.enter)
+
+    def get_exits(self):
+        return self.go

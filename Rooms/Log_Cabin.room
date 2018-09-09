@@ -7,6 +7,7 @@
     "There is an uncomfortable looking bedroll and a table on the opposite side of the room.": true,
     "A chunk of old bread sits on the table.": true,
     "A hand written note sits on the table.": true,
+    "A key rests on the table where the note used to be.": false,
     "A small key rests on the table.": false,
     "A northern archway leads to a small kitchen.": true,
     "The south facing door has sunlight glinting from the cracks.": true
@@ -14,15 +15,41 @@
   "inventory": {
     "note": {
       "examine": "A hand written piece of paper.",
-      "read": "..:: Create Your Own Scriptable Text Adventure Group #4 ::..\nDevelopers:\nAnthony Catricala\nLucy Oliverio\nMikael Johnson {}\nPatrick Modica\nDakotah Jones\n",
-      "take": "You pickup the note.",
-      "drop": "You drop the note on the ground."
+      "read": "..:: Create Your Own Scriptable Text Adventure Group #4 ::..\nDevelopers:\nAnthony Catricala\nLucy Oliverio\nMichael Johnson\nPatrick Modica\nDakotah Jones\n",
+      "take": "You pickup the note. ",
+      "drop": "You drop the note on the ground.",
+      "trigger": {
+        "take": {
+          "look-change": {
+            "A hand written note sits on the table.": false,
+            "A key rests on the table where the note used to be.": true
+          },
+          "add-to-room": {
+            "cabin_key": {
+              "take": "You pickup the cabin key.",
+              "drop": "You drop the cabin key onto the ground",
+              "examine": "A simple small brass key.",
+              "unlock": {
+                "room_name": "Log Cabin",
+                "door": "south"
+              }
+            }
+          }
+        }
+      }
     },
     "bread": {
       "take": "You pickup the bread.",
       "drop": "You drop the bread onto the ground",
       "eat": "You eat the stale loaf of bread. It doesn't tasty particularly good, but at least it's something.",
-      "examine": "A loaf of stale crusty bread"
+      "examine": "A loaf of stale crusty bread",
+      "trigger": {
+        "take": {
+          "look": {
+            "A chunk of old bread sits on the table.": false
+          }
+        }
+      }
     }
   },
 
@@ -33,10 +60,6 @@
       "locked_description": "You jiggle the handle; it seems to be locked.",
       "open": false,
       "open_description": "You open the creaky wooden door."
-    },
-    "north": {
-      "room_name": "Cabin_Front_Lawn",
-      "open": true
     }
   },
 
