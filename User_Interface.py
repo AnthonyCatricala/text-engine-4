@@ -81,10 +81,10 @@ class User_Interface:
         ##
         com = self.remove_user_error(inp_com)
         par_com = com.split(" ")
-        temp_str1 = {"go", "g"}, {"look", "l", "examine"}, {"inventory", "i", "inv"}, {
+        temp_str1 = {"go", "g"}, {"look", "l"}, {"examine"}, {"inventory", "i", "inv"}, {
             "sleep"}, {"enter", "ent"}, {"north", "n", "northern"}, {
                         "south", "s", "southern"}, {"east", "e", "eastern"}, {"west", "w", "western"}
-        temp_str2 = ["go", "examine", "inventory", "sleep", "enter", "north", "south", "east", "west"]
+        temp_str2 = ["go", "look", "examine", "inventory", "sleep", "enter", "north", "south", "east", "west"]
         i = 0
         com = ""
         is_there = False
@@ -110,7 +110,7 @@ class User_Interface:
         ##
         com_arr = self.refine_input(inp_str)
         if len(com_arr) == 1:
-            if com_arr[0] == "inventory" or com_arr[0] == "examine" or com_arr[0] == "sleep":
+            if com_arr[0] == "inventory" or com_arr[0] == "examine" or com_arr[0] == "examine" or com_arr[0] == "sleep":
                 return com_arr[0]
             else:
                 return None
@@ -130,7 +130,7 @@ class User_Interface:
         #   if the command is normal
         if "sleep" in com_arr:
             return "sleep"
-        ch_com = self.com_check(com_arr, {"go", "examine", "enter"})
+        ch_com = self.com_check(com_arr, {"go", "examine", "enter", "look"})
         if ch_com is not None:
             ch_item = self.com_check(com_arr, {"north", "south", "east", "west", ""})
             if ch_item is not None:
