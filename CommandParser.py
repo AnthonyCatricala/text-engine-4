@@ -17,6 +17,14 @@ class CommandParser:
         self.movement = ["go", "walk", "run", "move", "exit"]
 
     def parse_command(self, command):
+        # ##
+        # Top level entry for user commands.
+        # This level will determine which type of command has been issued.
+        #
+        # @author Dakotah Jones
+        # ##
+
+        print()
         command_parts = command.split(" ")
         if len(command_parts) >= 1:
             major_command = command_parts[0]
@@ -27,8 +35,8 @@ class CommandParser:
                     self.look_command()
                 elif major_command == "inventory":
                     self.check_inventory_command()
-                else:
-                    print(self.__general_error)
+                elif major_command != "":
+                    print("{}\n".format(self.__general_error))
 
             # Multi argument commands.
             elif major_command == "sleep":
@@ -47,8 +55,10 @@ class CommandParser:
                 self.parse_eat_command(command_parts)
             elif major_command == "unlock":
                 self.parse_unlock_command(command_parts)
+            elif major_command == "help":
+                self.parse_help_command(command_parts)
             else:
-                print(self.__general_error)
+                print("{}\n".format(self.__general_error))
             self.save_state()
 
     @staticmethod
@@ -92,9 +102,9 @@ class CommandParser:
                 direction = equivalent[direction]
 
             if direction in directions:
-                print("Unlock {} {} with what?".format(direction, command_list[2]))
+                print("Unlock {} {} with what?\n".format(direction, command_list[2]))
             else:
-                print(self.__general_error)
+                print("{}\n".format(self.__general_error))
         elif num_parts == 5:
             direction = command_list[1]
 
@@ -113,18 +123,18 @@ class CommandParser:
                 if direction in self.room.go.keys():
                     if key_name in room_items.keys():
                         self.room.go[direction]["locked"] = False
-                        print("You unlock the {} with the {}".format(locked_object, key_name))
+                        print("You unlock the {} with the {}.\n".format(locked_object, key_name))
                         del room_items[key_name]
                     elif key_name in player_items.keys():
                         self.room.go[direction]["locked"] = False
-                        print("You unlock the {} with the {}".format(locked_object, key_name))
+                        print("You unlock the {} with the {}.\n".format(locked_object, key_name))
                         del player_items[key_name]
                     else:
-                        print("A key b that name doesn't exist.")
+                        print("A key b that name doesn't exist.\n")
                 else:
-                    print("There is no {} in that direction.".format(locked_object))
+                    print("There is no {} in that direction.\n".format(locked_object))
             else:
-                print(self.__general_error)
+                print("{}\n".format(self.__general_error))
 
     def parse_open_command(self, command_list):
         directions = [
@@ -159,10 +169,10 @@ class CommandParser:
                             if not door["open"]:
 
                                 if door["locked"]:
-                                    print(door["locked_description"])
+                                    print("{}\n".format(door["locked_description"]))
                                 else:
                                     door["open"] = True
-                                    print(door["open_description"])
+                                    print("{}\n".format(door["open_description"]))
 
                                     if self.check_item_trigger(door):
                                         triggers = door["triggers"]["open"]
@@ -170,16 +180,16 @@ class CommandParser:
 
                                     self.room.save_room()
                             else:
-                                print("That door is already open.")
+                                print("That door is already open.\n")
 
                         else:
-                            print("Door does not exist.")
+                            print("Door does not exist.\n")
 
                 else:
-                    print(self.__general_error)
+                    print("{}\n".format(self.__general_error))
 
             else:
-                print("Open which door?")
+                print("Open which door?\n")
 
     def parse_eat_command(self, command_list):
         # ##
@@ -221,7 +231,7 @@ class CommandParser:
                 eat_statement = "Could not eat '{}'. No such object was found in your inventory.".format(command_item)
         else:
             eat_statement = self.__general_error
-        print(eat_statement)
+        print("{}\n".format(eat_statement))
 
     def parse_movement_command(self, command_list):
         # ##
@@ -247,7 +257,7 @@ class CommandParser:
         }
 
         if len(command_list) == 1:
-            print("Move in which direction?")
+            print("Move in which direction?\n")
         elif len(command_list) == 2:
             direction = command_list[1]
 
@@ -262,16 +272,16 @@ class CommandParser:
                         self.room.room_name = room_exit["room_name"]
                         self.room.check_save()
                     else:
-                        print("That door is locked")
+                        print("That door is locked.\n")
 
                 else:
-                    print("That door is not currently.")
+                    print("That door is not currently open.\n")
 
             else:
-                print("You cannot go in that direction.")
+                print("You cannot go in that direction.\n")
 
         else:
-            print("Movement command was not understood.")
+            print("Movement command was not understood.\n")
 
     def parse_drop_command(self, command_list):
         # ##
@@ -296,7 +306,7 @@ class CommandParser:
         else:
             take_statement = self.__general_error
 
-        print(take_statement)
+        print("{}\n".format(take_statement))
 
     def parse_take_command(self, command_list):
         # ##
@@ -330,7 +340,7 @@ class CommandParser:
         else:
             take_statement = self.__general_error
 
-        print(take_statement)
+        print("{}\n".format(take_statement))
 
     def parse_read_command(self, command_list):
         # ##
@@ -356,7 +366,7 @@ class CommandParser:
         else:
             read_statement = self.__general_error
 
-        print(read_statement)
+        print("{}\n".format(read_statement))
 
     def parse_sleep_command(self, command_list):
         # ##
@@ -388,7 +398,7 @@ class CommandParser:
         if sleep_statement is None:
             sleep_statement = self.__general_error
 
-        print(sleep_statement)
+        print("{}\n".format(sleep_statement))
 
     def parse_trigger(self, triggers):
 
@@ -413,6 +423,8 @@ class CommandParser:
 
     def check_room_trigger(self):
         out = False
+
+        # TODO update this to simply check if there are any triggers.
         for key, val in self.room.triggers.items():
             out = True
             break
@@ -423,6 +435,7 @@ class CommandParser:
         for key, val in look.items():
             if val:
                 print(key)
+        print()
         if self.check_room_trigger():
             if "look" in self.room.triggers.keys():
                 self.parse_trigger(self.room.triggers["look"])

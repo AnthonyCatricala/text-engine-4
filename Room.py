@@ -3,6 +3,12 @@ import json
 
 
 class Room:
+    # ##
+    # Room object
+    #
+    # @author Dakotah Jones
+    # @date 
+    # ##
     player_name = ""
 
     room_name = ""
@@ -71,11 +77,11 @@ class Room:
 
         print("\n~{}~\n".format(self.room_name.replace("_", " ")))
         if self.init is not None:
-            print(self.init)
+            print("{}\n".format(self.init))
             self.init = None
             self.save_room()
         else:
-            print(self.enter)
+            print("{}\n".format(self.enter))
 
     def get_exits(self):
         return self.go

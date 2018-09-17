@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from Player import Player
 from Room import Room
 from CommandParser import CommandParser
