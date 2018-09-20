@@ -1,3 +1,6 @@
+import os
+
+
 class CommandParser:
     # ##
     # Purpose of the CommandParser is to manipulate the player and room.
@@ -35,6 +38,8 @@ class CommandParser:
                     self.look_command()
                 elif major_command == "inventory":
                     self.check_inventory_command()
+                elif major_command == "help":
+                    os.system("python3 HelpMenu.py")
                 elif major_command != "":
                     print("{}\n".format(self.__general_error))
 
@@ -56,7 +61,10 @@ class CommandParser:
             elif major_command == "unlock":
                 self.parse_unlock_command(command_parts)
             elif major_command == "help":
-                self.parse_help_command(command_parts)
+                sh_cmd = "python3 HelpMenu.py "
+                for part in command_parts[1:]:
+                    sh_cmd += "{} ".format(part)
+                os.system(sh_cmd)
             else:
                 print("{}\n".format(self.__general_error))
             self.save_state()
