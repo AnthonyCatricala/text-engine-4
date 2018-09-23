@@ -15,76 +15,55 @@ class User_Interface:
     def remove_user_error(self, str):
         ##
         # Author: Lucy Oliverio
-        # Date: 9/15/18
         # Description: It takes out the spaces and changes all upper case letters to lower
         ##
+        s_arr = str.lower().split(" ")
         s = ""
-        space = 1
-        for c in str:
-            if 96 < ord(c) < 123:
-                s = s + c
-                space = 0
-            elif 64 < ord(c) < 91:
-                s = s + chr(ord(c) + 32)
-                space = 0
-            elif ord(c) == 32 and space == 0:
-                s = s + " "
-                space = 1
-        return s
+        for x in s_arr:
+            if x != '':
+                s = s + " " + x
+        del s_arr
+        return s[1:]
 
-    def com_check(self, inp_str_arr, inp_comm_arr):
+    def com_check(self, com_given, com_check):
         ##
         # Author: Lucy Oliverio
-        # Date: 9/16/18
         # Description: Given an array of the user's input and an array of valid inputs,
         #           the program checks to see if that command is inside the user's input
         ##
-        c = None
-        tem_item = inp_str_arr
-        it_chosen = None
+        par_giv_com = com_given
+        i = 0
+        ch_item = None
         s = ""
-        i_num = 0
 
         #   checks each individual command with the user's input, if it is there it increases
         #   i. If i > 1, it returns an error that the player has input
         #   too many items for the program to understand. If i = 0, it returns None.
         #   if i = 1, it returns the command in the form of a string
 
-        for x in inp_comm_arr:
-            x = x.split("-")
-            i = 0
-            while i < len(tem_item) - len(x)+1:
-                com = tem_item[len(tem_item) - len(x) - i:len(tem_item) - i]
-                if com == x:
-                    tem_item = tem_item[0:len(tem_item) - len(x)]
-                    i_num = i_num + 1
-                    it_chosen = x
-                    continue
-                else:
+        for cc_ele in com_check:
+            cc_ele = cc_ele.split('_')
+            while len(par_giv_com) >= len(cc_ele):
+                if par_giv_com[:len(cc_ele)] == cc_ele:
+                    #s = cc_ele
+                    for x in cc_ele:
+                        s = s + " " + x
+                    s = s[1:]
                     i = i + 1
-        #   Checks to see of there is multiple valid commands
-        if i_num > 1:
-            print("Too many objects in word")
-            return None
-        elif i_num == 1 and (it_chosen[0] != 'triggers'):
-            s = it_chosen[0]
-            for x in it_chosen[1:]:
-                s = s + "-" + x
-            return s
-        return None
+                par_giv_com = par_giv_com[1:]
+            par_giv_com = com_given
 
-    def refine_input(self, inp_com):
+        if i == 0 or i > 1:
+            s = None
+        return s
+
+    def refine_input(self, inp_com, temp_str1, temp_str2):
         ##
         # Author: Lucy Oliverio
-        # Date: 9/17/18
         # description: Given a string, the program will replaces all key words with the correct words and spacing
         ##
         com = self.remove_user_error(inp_com)
         par_com = com.split(" ")
-        temp_str1 = {"go", "g"}, {"look", "l"}, {"examine"}, {"inventory", "i", "inv"}, {
-            "sleep"}, {"enter", "ent"}, {"north", "n", "northern"}, {
-                        "south", "s", "southern"}, {"east", "e", "eastern"}, {"west", "w", "western"}
-        temp_str2 = ["go", "look", "examine", "inventory", "sleep", "enter", "north", "south", "east", "west"]
         i = 0
         com = ""
         is_there = False
@@ -94,47 +73,47 @@ class User_Interface:
                     if x == xxx:
                         com = com + " " + temp_str2[i]
                         is_there = True
+                        continue
                 i = i + 1
             i = 0
             if is_there is False:
                 com = com + " " + x
             elif is_there is True:
                 is_there = False
+        del temp_str1, temp_str2, par_com, is_there, i
         return com[1:].split()
 
     def start(self, inp_str):
         ##
         # Author: Lucy Oliverio
-        # Date: 9/15/18 - 9/17/18
         # description: Given a string, it returns the simplified version of the command or None if it wasn't valid
         ##
-        com_arr = self.refine_input(inp_str)
-        if len(com_arr) == 1:
-            if com_arr[0] == "inventory" or com_arr[0] == "examine" or com_arr[0] == "examine" or com_arr[0] == "sleep":
-                return com_arr[0]
-            else:
-                return None
-        if ("not" in com_arr) or ("dont" in com_arr) or ("never" in com_arr):
-            return None
-
-        #   if the command involves a special item
-        ch_item = None
-        ch_item = self.com_check(com_arr, self.room_items)
-        if ch_item is not None:
-            ch_com = self.com_check(com_arr, self.cr.inventory[ch_item])
-            if ch_com is not None:
-                return ch_com + " " + ch_item
-            else:
-                return None
-
-        #   if the command is normal
-        if "sleep" in com_arr:
-            return "sleep"
-        ch_com = self.com_check(com_arr, {"go", "examine", "enter", "look"})
-        if ch_com is not None:
-            ch_item = self.com_check(com_arr, {"north", "south", "east", "west", ""})
+        s = None
+        temp_str1 = {"go", "g"}, {"look", "l"}, {"examine", "exam"}, {"inventory", "i", "inv"}, {
+            "sleep"}, {"enter", "ent"}, {"north", "n", "northern"}, {
+                        "south", "s", "southern"}, {"east", "e", "eastern"}, {"west", "w", "western"}
+        temp_str2 = ["go", "look", "examine", "inventory", "sleep", "enter", "north", "south", "east", "west"]
+        com_arr = self.refine_input(inp_str, temp_str1, temp_str2)
+        del temp_str1, temp_str2
+        if (len(com_arr) == 1) and (com_arr[0] in {"inventory", "look", "sleep"}):
+                s = com_arr[0]
+        elif {"not", "dont", "never"} not in com_arr:
+            #   if the command involves a special item
+            ch_item = self.com_check(com_arr, self.room_items)
             if ch_item is not None:
-                return ch_com + " " + ch_item
-            return None
-        #default return
-        return None
+                ch_com = self.com_check(com_arr, self.cr.inventory[ch_item])
+                if ch_com is not None:
+                    s = ch_com + " " + ch_item
+
+            else:
+                ch_com = self.com_check(com_arr, {"go", "examine", "enter"})
+                if ch_com is not None:
+                    ch_item = self.com_check(com_arr, {"north", "south", "east", "west"})
+                    if ch_item is not None:
+                        s = ch_com + " " + ch_item
+                    else:
+                        ch_item = self.com_check(com_arr, {"north_east", "south_east", "south_west", "north_west"})
+                        if ch_item is not None:
+                            s = ch_com + " " + ch_item
+            #default return
+        return s
