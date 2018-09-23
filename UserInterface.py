@@ -1,4 +1,7 @@
-class User_Interface:
+import re
+
+
+class UserInterface:
     ##
     # Author: Lucy Oliverio
     # Date: 9/15/18
@@ -12,25 +15,16 @@ class User_Interface:
         self.cr = room
         self.room_items = self.cr.inventory.keys()
 
-    def remove_user_error(self, str):
+    def remove_user_error(self, input_str):
         ##
         # Author: Lucy Oliverio
         # Date: 9/15/18
         # Description: It takes out the spaces and changes all upper case letters to lower
         ##
-        s = ""
-        space = 1
-        for c in str:
-            if 96 < ord(c) < 123:
-                s = s + c
-                space = 0
-            elif 64 < ord(c) < 91:
-                s = s + chr(ord(c) + 32)
-                space = 0
-            elif ord(c) == 32 and space == 0:
-                s = s + " "
-                space = 1
-        return s
+
+        out = input_str.lower()
+        out = re.sub(r" {2,}", " ", out)
+        return out
 
     def com_check(self, inp_str_arr, inp_comm_arr):
         ##
