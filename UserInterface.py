@@ -13,7 +13,10 @@ class UserInterface:
 
     def __init__(self, room):
         self.cr = room
-        self.room_items = self.cr.inventory.keys()
+                if self.cr.inventory is not None:
+            self.room_items = self.cr.inventory.keys()
+        else:
+            self.room_items = ""
 
     def remove_user_error(self, input_str):
         ##
