@@ -1,3 +1,5 @@
+import json
+
 def update_initial_room_message(room=None, init_text=""):
     # ##
     # Updates a rooms initial message.
@@ -209,7 +211,8 @@ def create_room(
 
     return room_dict
 
-
+# TODO Move saving and opening of a room to seperate function.
+# TODO If given a room as a param this will require no return.
 def add_object_to_room(room_name=None, item_name=None, item_dict=None):
     if room_name is None:
         print("Error :: No room name was provided.")
@@ -225,7 +228,8 @@ def add_object_to_room(room_name=None, item_name=None, item_dict=None):
             f.write(room_json)
         f.close
 
-
+# TODO This one is going to be harder than originally expected.
+# TODO Map this out before starting.
 def link_two_rooms(start_room=None, direction=None, destination_room=None, locked=False, door_open=True, open_description="", locked_description="", door_key=""):
     if start_room is None:
         print("Error :: No starting was provided.")
