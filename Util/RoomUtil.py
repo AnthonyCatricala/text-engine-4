@@ -1,37 +1,116 @@
-def add_init(room_name=None, init_text=""):
-    if room_name is None:
-
-def remove_init():
-    print()
-
-def change_init():
-    print()
+def update_initial_room_message(room=None, init_text=""):
+    if room is not None:
+        room["init"] = init_text
 
 
-def load_room():
-    print()
+def remove_initial_room_message(room=None):
+    if room is not None:
+        room["init"] = ""
 
-def createRoom(room_name=None, init_text=None, look_text=None):
-    if player_name is None:
-        self.room_name = "New Room"
-    else:
-        self.room_name = room_name
 
-    if init_text is None:
-        self.init_text = "You walk into a newly-created empty room. You have a feeling you are the first person to ever set foot in this room."
-    else:
-        self.init_text = init_text
+def update_entering_room_message(room=None, enter_text=""):
+    if room is not None:
+        room["enter"] = enter_text
 
-    if look_text is None:
-        self.look_text = "You are in an empty room. The room is immaculate, obviously freshly created."
-    else:
-        self.look_text = look_text
+
+def remove_entering_room_message(room=None):
+    if room is not None:
+        room["enter"] = ""
+
+
+def add_a_group_of_room_descriptions(room=None, room_description_group=None):
+    if room is not None and room_description_group is not None:
+        for key,value in room_description_group.items():
+            room["look"][key] = value
+
+
+def add_a_single_room_description(room=None, room_description=None, description_initially_visible=True):
+    if room is not None and room_description is not None:
+        room["look"][room_description] = description_initially_visible
+
+
+def remove_a_single_room_description(room=None, room_description=None):
+    if room is not None and room_description is not None:
+        del room["look"][room_description]
+
+
+def remove_all_room_descriptions(room=None):
+    if room is not None:
+        room["look"] = dict()
+
+
+def create_object(
+        object_name=None,
+        object_description=None,
+        take_description=None,
+        drop_description=None,
+        read_description=None,
+        eat_description=None,
+        drink_description=None,
+        is_illuminated=False,
+        is_container=False):
+
+    if object_name is not None:
+        obj_wrapper = dict()
+        obj_wrapper[object_name] = dict()
+        obj = obj_wrapper[object_name]
+
+        if object_description is not None:
+            obj["examine"] = object_description
+
+        if read_description is not None:
+            obj["read"] = read_description
+
+        if take_description is not None:
+            obj["take"] = take_description
+
+        if eat_description is not None:
+            obj["eat"] = eat_description
+
+        if drink_description is not None:
+            obj["drink"] = drink_description
+
+        if drop_description is not None:
+            obj["drop"] = drop_description
+
+        obj["illuminated"] = is_illuminated
+        obj["container"] = is_container
+        obj["triggers"] = dict()
+        obj["inventory"] = dict()
+
+        return obj_wrapper
+
+
+def add_light_to_room(room=None):
+    if room is not None:
+        room["illuminated"] = True
+
+
+def remove_light_from_room(room=None):
+    if room is not None:
+        room["illuminated"] = False
+
+
+def illuminate_object(room=None, item=None):
+    if room is not None:
+        room["illuminated"] = True
+    if item is not None:
+        item["illuminated"] = False
+
+
+def create_room(
+        room_name="New Room",
+        init_text="You walk into a newly-created empty room. "
+                  "You have a feeling you are the first person to ever set foot in this room.",
+        enter_text="You walk into the room.",
+        illuminated=True,):
 
     room_dict = dict()
-    room_dict["room_name"] = self.room_name
-    room_dict["init"] = self.init
-    room_dict["enter"] = self.enter
-    room_dict["look"] = self.look
+    room_dict["room_name"] = room_name
+    room_dict["init"] = init_text
+    room_dict["enter"] = enter_text
+    room_dict["illuminated"] = illuminated
+    room_dict["look"] = dict()
     room_dict["inventory"] = dict()
     room_dict["sleep"] = dict()
     room_dict["go"] = dict()
