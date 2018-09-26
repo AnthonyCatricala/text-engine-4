@@ -117,3 +117,36 @@ def create_room(
     room_dict["triggers"] = dict()
 
     return room_dict
+
+
+def add_object_to_room(room_name=None, item_name=None, item_dict=None):
+    if room_name is None:
+        print("Error :: No room name was provided.")
+    elif item_name is None:
+        print("Error :: No item name was provided.")
+    elif item_dict is None:
+        print("Error :: No item dict was provided.")
+    else:
+        room["inventory"][item_name] = item_dict
+        room_file_name = "./Rooms/{}.room".format(room_name.replace(" ", "_"))
+        room_json = json.dumps(room_dict)
+        with open(room_file_name, "w") as f:
+            f.write(room_json)
+        f.close
+
+
+def link_two_rooms(start_room=None, direction=None, destination_room=None, locked=False, door_open=True, open_description="", locked_description="", door_key=""):
+    if start_room is None:
+        print("Error :: No starting was provided.")
+    elif direction is None:
+        print("Error :: No direction was provided.")
+    elif destination_room is None:
+        print("Error :: No destination_room was provided.")
+    else
+        start_room["go"][direction] = dict()
+        room_exit = start_room["go"][direction]
+        room_exit["room_name"] = destination_room["room_name"]
+        room_exit["locked"] = locked
+        room_exit["open"] = door_open
+        room_exit["open_description"] = open_description
+        room_exit["key"] = door_key
