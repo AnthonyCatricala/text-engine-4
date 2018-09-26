@@ -1,40 +1,100 @@
 def update_initial_room_message(room=None, init_text=""):
+    # ##
+    # Updates a rooms initial message.
+    # This message will be displayed when the user
+    # loads the room for the first time.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
     if room is not None:
         room["init"] = init_text
 
 
 def remove_initial_room_message(room=None):
+    # ##
+    # Removes a rooms initial message.
+    # This message will be displayed when the user
+    # loads the room for the first time.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
     if room is not None:
         room["init"] = ""
 
 
 def update_entering_room_message(room=None, enter_text=""):
+    # ##
+    # Updates a rooms enter message.
+    # This message will be displayed when the user
+    # enters the room from another room.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
     if room is not None:
         room["enter"] = enter_text
 
 
 def remove_entering_room_message(room=None):
+    # ##
+    # Removes a rooms enter message.
+    # This message will be displayed when the user
+    # enters the room from another room.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
     if room is not None:
         room["enter"] = ""
 
 
 def add_a_group_of_room_descriptions(room=None, room_description_group=None):
+    # ##
+    # Adds a group of room descriptions to a room.
+    # These messages will be displayed when a user supplies a 'look' command.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
     if room is not None and room_description_group is not None:
         for key,value in room_description_group.items():
             room["look"][key] = value
 
 
 def add_a_single_room_description(room=None, room_description=None, description_initially_visible=True):
+    # ##
+    # Adds a single room description to a room.
+    # This message will be displayed when a user supplies a 'look' command.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
     if room is not None and room_description is not None:
         room["look"][room_description] = description_initially_visible
 
 
 def remove_a_single_room_description(room=None, room_description=None):
+    # ##
+    # Removes a single room description to a room.
+    # This message will be displayed when a user supplies a 'look' command.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
     if room is not None and room_description is not None:
         del room["look"][room_description]
 
 
 def remove_all_room_descriptions(room=None):
+    # ##
+    # Removes all room descriptions from a room.
+    # No messages will be displayed when a user supplies a 'look' command.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
     if room is not None:
         room["look"] = dict()
 
@@ -49,6 +109,12 @@ def create_object(
         drink_description=None,
         is_illuminated=False,
         is_container=False):
+    # ##
+    # Creates an object that the player can interact with.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
 
     if object_name is not None:
         obj_wrapper = dict()
@@ -82,16 +148,34 @@ def create_object(
 
 
 def add_light_to_room(room=None):
+    # ##
+    # Adds light to a room preventing darkness.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
     if room is not None:
         room["illuminated"] = True
 
 
 def remove_light_from_room(room=None):
+    # ##
+    # Removes light from a room causing darkness.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
     if room is not None:
         room["illuminated"] = False
 
 
-def illuminate_object(room=None, item=None):
+def illuminate_object(item=None, room=None):
+    # ##
+    # Adds light to a room or object preventing darkness.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
     if room is not None:
         room["illuminated"] = True
     if item is not None:
@@ -104,6 +188,13 @@ def create_room(
                   "You have a feeling you are the first person to ever set foot in this room.",
         enter_text="You walk into the room.",
         illuminated=True,):
+    # ##
+    # Creates a room to be further manipulated via the other room API functions.
+    # Base room creation function.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
 
     room_dict = dict()
     room_dict["room_name"] = room_name
