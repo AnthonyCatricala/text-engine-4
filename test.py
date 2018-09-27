@@ -1,1 +1,2 @@
-class test:
+class Test:
+    print("hello World")
