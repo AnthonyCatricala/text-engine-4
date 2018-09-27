@@ -1,5 +1,20 @@
 import json
 
+
+def update_room_name(room=None, room_name=None):
+    # ##
+    # Updates a rooms name.
+    # The room name is displayed when entering a room.
+    # The room name also determines the '.room' file name.
+    #
+    # @author Dakotah Jones
+    # @date 09/26/2018
+    # ##
+    if room is not None and room_name is not None:
+        if len(room_name) > 0:
+            room["room_name"] = room_name
+
+
 def update_initial_room_message(room=None, init_text=""):
     # ##
     # Updates a rooms initial message.
@@ -211,6 +226,32 @@ def create_room(
 
     return room_dict
 
+
+def load_room(room_name=None):
+    if room_name is not None:
+        input_room_name = room_name.replace(" ", "_")
+        if ".room" not in input_room_name:
+            input_room_name = "{}.room".format(input_room_name)
+        file_path = "./Rooms/{}".format(input_room_name)
+
+        with open(file_path) as f:
+            room = json.load(f)
+        f.close()
+        return room
+
+
+def save_room(room=None):
+    if room is not None:
+        room_name = room["room_name"].replace(" ", "_")
+        file_name = "./Rooms/{}.room".format(room_name)
+        room_json = json.dumps(room, indent=4)
+        with open(file_name, "w+") as f:
+            f.write(room_json)
+        f.close()
+
+
+
+
 # TODO Move saving and opening of a room to seperate function.
 # TODO If given a room as a param this will require no return.
 def add_object_to_room(room_name=None, item_name=None, item_dict=None):
@@ -237,7 +278,7 @@ def link_two_rooms(start_room=None, direction=None, destination_room=None, locke
         print("Error :: No direction was provided.")
     elif destination_room is None:
         print("Error :: No destination_room was provided.")
-    else
+    else:
         start_room["go"][direction] = dict()
         room_exit = start_room["go"][direction]
         room_exit["room_name"] = destination_room["room_name"]
