@@ -13,7 +13,7 @@ class UserInterface:
 
     def __init__(self, room):
         self.cr = room
-                if self.cr.inventory is not None:
+        if self.cr.inventory is not None:
             self.room_items = self.cr.inventory.keys()
         else:
             self.room_items = ""
