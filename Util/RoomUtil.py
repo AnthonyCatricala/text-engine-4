@@ -250,24 +250,11 @@ def save_room(room=None):
         f.close()
 
 
+def add_object_to_room(room=None, item=None):
+    if room is not None and item is not None:
+        for key, value in item.items():
+            room["inventory"][key] = value
 
-
-# TODO Move saving and opening of a room to seperate function.
-# TODO If given a room as a param this will require no return.
-def add_object_to_room(room_name=None, item_name=None, item_dict=None):
-    if room_name is None:
-        print("Error :: No room name was provided.")
-    elif item_name is None:
-        print("Error :: No item name was provided.")
-    elif item_dict is None:
-        print("Error :: No item dict was provided.")
-    else:
-        room["inventory"][item_name] = item_dict
-        room_file_name = "./Rooms/{}.room".format(room_name.replace(" ", "_"))
-        room_json = json.dumps(room_dict)
-        with open(room_file_name, "w") as f:
-            f.write(room_json)
-        f.close
 
 # TODO This one is going to be harder than originally expected.
 # TODO Map this out before starting.
