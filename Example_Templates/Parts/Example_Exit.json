@@ -1,0 +1,9 @@
+{
+  "compass-direction": {
+    "links-to": "./Rooms/Example_Room_2.room",
+    "description": "This is a description of the exit and/or door.",
+    "blocked": false,
+    "door": {},
+    "triggers": {}
+  }
+}
