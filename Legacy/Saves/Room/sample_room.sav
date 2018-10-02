@@ -1,0 +1,58 @@
+{
+  "room_name": "example_room_name",
+  "init": "example_init_room_text",
+  "enter": "example_enter_room_text",
+
+  "look": {
+    "look_text_1" : true,
+    "look_text_2": true,
+    "look_text_3": false
+  },
+
+  "inventory": {
+
+    "note": {
+      "examine": "example_examine_action_text",
+      "read": "example_read_action_text",
+      "take": "example_take_action_text",
+      "drop": "example_drop_action_text"
+    },
+
+    "bread": {
+      "take": "example_take_action_text",
+      "drop": "example_drop_action_text",
+      "eat": "example_eat_action_text",
+      "examine": "example_examine_action_text"
+    }
+  },
+
+  "go": {
+
+    "south": {
+      "room_name": "example_room_1",
+      "locked": true,
+      "locked_description": "example_unlock_statement",
+      "open": false,
+      "open_description": "example_door_open_statement"
+    },
+
+    "north": {
+      "room_name": "example_room_2",
+      "locked": false,
+      "locked_description": "example_unlock_statement",
+      "open": true,
+      "open_description": "example_door_open_statement."
+    }
+  },
+
+  "sleep": {
+    "example_bed": "example_bed text"
+  },
+  "triggers": {
+    "example_trigger_action": {
+      "example_trigger_type": {
+        "change_key": "change_value"
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "command": {
+    "trigger-type": {
+      "description": "Message to be displayed on trigger."
+    }
+  }
+}
