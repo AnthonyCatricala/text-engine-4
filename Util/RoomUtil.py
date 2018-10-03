@@ -192,20 +192,36 @@ def illuminate_object(item=None, room=None):
     # @author Dakotah Jones
     # @date 09/26/2018
     # ##
-    if room is not None:
-        room["illuminated"] = True
-    if item is not None:
-        item["illuminated"] = False
+    if item or room:
+        if "illuminated" in item or "illuminated" in room:
+            if "illuminated" in item:
+                if not item["illuminated"]:
+                    item["illuminated"] = True
+                else:
+                    # TODO Error handling for "Item is already illuminated."
+                    print()
+            if "illuminated" in room:
+                if not room["illuminated"]:
+                    room["illuminated"] = True
+                else:
+                    # TODO Error handling for "Room is already illuminated."
+                    print()
+        else:
+            # TODO Error handling for "Object/Room supplied cannot be illuminated".
+            # TODO Was the object/room supplied in fact a room or object?
+            print()
+    else:
+        # TODO Error handling for "No room or object supplied."
+        print()
 
 
-def create_room(
-        room_name="",
-        room_file="",
-        description="",
-        illuminated=True,
-        inventory=None,
-        exits=None,
-        triggers=None):
+def create_room(room_name="",
+                room_file="",
+                description="",
+                illuminated=True,
+                inventory=None,
+                exits=None,
+                triggers=None):
     # ##
     # Creates a room to be further manipulated via the other room API functions.
     # Base room creation function.
