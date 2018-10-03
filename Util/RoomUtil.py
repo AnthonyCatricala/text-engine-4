@@ -116,16 +116,15 @@ def remove_all_room_descriptions(room=None):
         room["look"] = dict()
 
 
-def create_object(
-        object_name=None,
-        object_description=None,
-        take_description=None,
-        drop_description=None,
-        read_description=None,
-        eat_description=None,
-        drink_description=None,
-        is_illuminated=False,
-        is_container=False):
+def create_object(object_name=None,
+                  object_description=None,
+                  take_description=None,
+                  drop_description=None,
+                  read_description=None,
+                  eat_description=None,
+                  drink_description=None,
+                  is_illuminated=False,
+                  is_container=False):
     # ##
     # Creates an object that the player can interact with.
     #
@@ -200,11 +199,13 @@ def illuminate_object(item=None, room=None):
 
 
 def create_room(
-        room_name="New Room",
-        init_text="You walk into a newly-created empty room. "
-                  "You have a feeling you are the first person to ever set foot in this room.",
-        enter_text="You walk into the room.",
-        illuminated=True,):
+        room_name="",
+        room_file="",
+        description="",
+        illuminated=True,
+        inventory=None,
+        exits=None,
+        triggers=None):
     # ##
     # Creates a room to be further manipulated via the other room API functions.
     # Base room creation function.
@@ -214,15 +215,37 @@ def create_room(
     # ##
 
     room_dict = dict()
-    room_dict["room_name"] = room_name
-    room_dict["init"] = init_text
-    room_dict["enter"] = enter_text
-    room_dict["illuminated"] = illuminated
-    room_dict["look"] = dict()
-    room_dict["inventory"] = dict()
-    room_dict["sleep"] = dict()
-    room_dict["go"] = dict()
-    room_dict["triggers"] = dict()
+    if room_name:
+        room_dict["room_name"] = room_name
+        if not room_file:
+            room_file = "./Rooms/{}.room".format(room_name.replace(" ", "_"))
+        room_dict["room_file"] = room_file
+
+        if not description:
+            # TODO Error handling for room without description.
+            print()
+
+        room_dict["description"] = description
+        room_dict["illuminated"] = illuminated
+
+        if not inventory:
+            room_dict["inventory"] = dict()
+        else:
+            room_dict["inventory"] = inventory
+
+        if not exits:
+            room_dict["exits"] = dict()
+        else:
+            room_dict["exits"] = exits
+
+        if not triggers:
+            room_dict["triggers"] = dict()
+        else:
+            room_dict["triggers"] = triggers
+
+    else:
+        # TODO Error handling for no name entered.
+        print()
 
     return room_dict
 
