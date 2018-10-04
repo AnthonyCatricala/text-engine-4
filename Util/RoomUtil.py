@@ -171,8 +171,8 @@ def add_light_to_room(room=None):
     # @author Dakotah Jones
     # @date 09/26/2018
     # ##
-    if room is not None:
-        room["illuminated"] = True
+
+    illuminate_object(room=room)
 
 
 def remove_light_from_room(room=None):
@@ -182,8 +182,16 @@ def remove_light_from_room(room=None):
     # @author Dakotah Jones
     # @date 09/26/2018
     # ##
-    if room is not None:
-        room["illuminated"] = False
+
+    if room:
+        if "illuminated" in room:
+            room["illuminated"] = False
+        else:
+            # TODO Error handling for "Illegal room object supplied."
+            print()
+    else:
+        # TODO Error handling for "No room object supplied."
+        print()
 
 
 def illuminate_object(item=None, room=None):
