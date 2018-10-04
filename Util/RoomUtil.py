@@ -270,20 +270,57 @@ def create_room(room_name="",
     return room_dict
 
 
-def load_room(room_name=None):
-    if room_name is not None:
-        input_room_name = room_name.replace(" ", "_")
-        if ".room" not in input_room_name:
-            input_room_name = "{}.room".format(input_room_name)
-        file_path = "./Rooms/{}".format(input_room_name)
+def load_room(room_name=None, room_file=None):
+    # ##
+    # Load a json formatted room file.
+    #
+    # @author Dakotah Jones
+    # @date 10/03/2018
+    # ##
 
-        with open(file_path) as f:
-            room = json.load(f)
-        f.close()
-        return room
+    out = None
+    if room_name or room_file:
+        if not (room_name and room_file):
+            if room_name:
+                file_path = "./Rooms/{}.room".format(room_name.replace(" ", "_"))
+                if os.path.isfile(file_path):
+                    with open(file_path) as f:
+                        out = json.load(f)
+                    f.close()
+                else:
+                    # TODO Error handling for "File does not exist."
+                    print()
+
+            if room_file:
+                if "../" not in room_file and not room_file.startswith("/"):
+                    if os.path.isfile(room_file):
+                        with open(room_file) as f:
+                            out = json.load(f)
+                        f.close()
+                    else:
+                        # TODO Error handling for "File does not exist."
+                        print()
+                else:
+                    # TODO Error handling for "Illegal file path supplied."
+                    print()
+        else:
+            # TODO Error handling for too many arguments supplied. (One or the other.)
+            print()
+    else:
+        # TODO Error handling for no arguments supplied.
+        print()
+
+    return out
 
 
 def save_room(room=None):
+    # ##
+    # Save a json formatted room file to the file system.
+    #
+    # @author Dakotah Jones
+    # @date 10/03/2018
+    # ##
+
     if room:
         if "room_file" in room:
             room_file = room["room_file"]
