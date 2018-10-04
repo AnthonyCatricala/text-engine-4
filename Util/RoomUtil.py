@@ -119,49 +119,94 @@ def remove_all_room_descriptions(room=None):
 
 def create_object(object_name=None,
                   object_description=None,
-                  take_description=None,
-                  drop_description=None,
-                  read_description=None,
-                  eat_description=None,
-                  drink_description=None,
-                  is_illuminated=False,
-                  is_container=False):
+                  alias=None,
+                  illuminated=False,
+                  obtainable=True,
+                  inventory=None,
+                  door=None,
+                  triggers=None):
     # ##
     # Creates an object that the player can interact with.
     #
     # @author Dakotah Jones
     # @date 09/26/2018
     # ##
+    out = None
 
-    if object_name is not None:
-        obj_wrapper = dict()
-        obj_wrapper[object_name] = dict()
-        obj = obj_wrapper[object_name]
+    if object_name:
+        out = dict()
+        out[object_name] = dict()
+        obj = out[object_name]
 
-        if object_description is not None:
-            obj["examine"] = object_description
+        if object_description:
+            if type(object_description) is str:
+                obj["description"] = object_description
 
-        if read_description is not None:
-            obj["read"] = read_description
+                if alias and type(alias) is list:
+                    obj["alias"] = alias
+                else:
+                    obj["alias"] = []
+                    if type(alias) is not list:
+                        # TODO Error handling for "Invalid type supplied to alias argument."
+                        print()
 
-        if take_description is not None:
-            obj["take"] = take_description
+                if type(illuminated) is bool:
+                    obj["illuminated"] = illuminated
+                else:
+                    obj["illuminated"] = False
+                    # TODO Error handling for "Invalid type supplied to illuminated argument."
+                    print()
 
-        if eat_description is not None:
-            obj["eat"] = eat_description
+                if type(obtainable) is bool:
+                    obj["obtainable"] = obtainable
+                else:
+                    obj["obtainable"] = True
+                    # TODO Error handling for "Invalid type supplied to obtainable argument."
+                    print()
 
-        if drink_description is not None:
-            obj["drink"] = drink_description
+                if inventory:
+                    if type(inventory) is dict:
+                        # TODO Add checks for correct input.
+                        for key, value in inventory.items():
+                            obj["inventory"] = inventory
+                    else:
+                        # TODO Error handling for "Invalid type supplied for inventory argument."
+                        print()
+                else:
+                    obj["inventory"] = dict()
 
-        if drop_description is not None:
-            obj["drop"] = drop_description
+                if door:
+                    if type(door) is dict:
+                        # TODO Add checks for correct input.
+                        obj["door"] = door
+                    else:
+                        # TODO Error handling for "Invalid type supplied for door argument."
+                        print()
+                else:
+                    obj["door"] = dict()
 
-        obj["illuminated"] = is_illuminated
-        obj["container"] = is_container
-        obj["triggers"] = dict()
-        obj["inventory"] = dict()
+                if triggers:
+                    if type(triggers) is dict:
+                        # TODO Add checks for correct input.
+                        for key, value in triggers.items():
+                            obj["triggers"][key] = value
+                    else:
+                        # TODO Error handling for "Invalid type supplied for triggers argument."
+                        print()
+                else:
+                    obj["triggers"] = dict()
 
-        return obj_wrapper
+            else:
+                # TODO Error handling for "Invalid type supplied for object description."
+                print()
+        else:
+            # TODO Error handling for "No object description supplied."
+            print()
+    else:
+        # TODO Error handling for "No object name supplied."
+        print()
+
+    return out
 
 
 def add_light_to_room(room=None):
