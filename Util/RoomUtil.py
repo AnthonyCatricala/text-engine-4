@@ -1,4 +1,5 @@
 import json
+import os
 
 
 def update_room_name(room=None, room_name=None):
@@ -193,23 +194,26 @@ def illuminate_object(item=None, room=None):
     # @date 09/26/2018
     # ##
     if item or room:
-        if "illuminated" in item or "illuminated" in room:
+        if item:
             if "illuminated" in item:
                 if not item["illuminated"]:
                     item["illuminated"] = True
                 else:
                     # TODO Error handling for "Item is already illuminated."
                     print()
+            else:
+                # TODO Error handling for "Item supplied cannot be illuminated."
+                print()
+        if room:
             if "illuminated" in room:
                 if not room["illuminated"]:
                     room["illuminated"] = True
                 else:
                     # TODO Error handling for "Room is already illuminated."
                     print()
-        else:
-            # TODO Error handling for "Object/Room supplied cannot be illuminated".
-            # TODO Was the object/room supplied in fact a room or object?
-            print()
+            else:
+                # TODO Error handling for "Room supplied cannot be illuminated"
+                print()
     else:
         # TODO Error handling for "No room or object supplied."
         print()
@@ -280,13 +284,43 @@ def load_room(room_name=None):
 
 
 def save_room(room=None):
-    if room is not None:
-        room_name = room["room_name"].replace(" ", "_")
-        file_name = "./Rooms/{}.room".format(room_name)
-        room_json = json.dumps(room, indent=4)
-        with open(file_name, "w+") as f:
-            f.write(room_json)
-        f.close()
+    if room:
+        if "room_file" in room:
+            room_file = room["room_file"]
+            room_json = json.dumps(room, indent=4)
+            if "../" not in room_file and room_file.endswith(".room"):
+                if os.path.isfile(room_file):
+                    yes = ["y", "yes"]
+                    no = ["n", "no"]
+                    overwrite = input(
+                        "Room file already exists, would you like to overwrite {}: ".format(room["room_name"]))
+
+                    while overwrite not in yes and overwrite not in no:
+                        overwrite = input("Invalid option supplied, overwrite (y/n): ")
+
+                    if overwrite in yes:
+                        tmp_file = "{}.tmp".format(room_file)
+                        with open(tmp_file, "w") as f:
+                            f.write(room_json)
+                        f.close()
+                        os.remove(room_file)
+                        os.rename(tmp_file, room_file)
+                    else:
+                        # TODO Notify the user that the room data has not been saved.
+                        print()
+                else:
+                    with open(room_file, "w+") as f:
+                        f.write(room_json)
+                    f.close()
+            else:
+                # TODO Error handling for "Invalid file name."
+                print()
+        else:
+            # TODO Error handling for "Invalid object supplied as room argument."
+            print()
+    else:
+        # TODO Error handling for "No object supplied as room argument."
+        print()
 
 
 def add_object_to_room(room=None, item=None):
