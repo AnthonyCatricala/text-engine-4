@@ -160,7 +160,7 @@ def create_object(object_name=None,
 
 def add_light_to_room(room=None):
     # ##
-    # Adds light to a room preventing darkness.
+    # Adds light to a room.
     #
     # @author Dakotah Jones
     # @date 09/26/2018
@@ -182,7 +182,7 @@ def add_light_to_room(room=None):
 
 def remove_light_from_room(room=None):
     # ##
-    # Removes light from a room causing darkness.
+    # Removes light from a room.
     #
     # @author Dakotah Jones
     # @date 09/26/2018
@@ -471,14 +471,19 @@ def apply_alias_list_to_object(obj=None, alias_list=None):
     # ##
     if obj:
         if type(obj) is dict:
-            if "alias" in obj:
-                if type(alias_list) is list:
-                    obj["alias"] = alias_list
-                else:
-                    # TODO Error Handling for 'Illegal type supplied for alias list argument.
-                    print()
+            if len(obj) == 1:
+                for key, value in obj.items():
+                    if "alias" in value:
+                        if type(alias_list) is list:
+                            value["alias"] = alias_list
+                        else:
+                            # TODO Error Handling for 'Illegal type supplied for alias list argument.
+                            print()
+                    else:
+                        # TODO Error Handling for 'Invalid object supplied to obj argument.'
+                        print()
             else:
-                # TODO Error Handling for 'Invalid object supplied to obj argument.'
+                # TODO Error Handling for 'Too many objects supplied within obj argument.'
                 print()
         else:
             # TODO Error Handling for 'Illegal type supplied to obj argument.'
@@ -496,50 +501,62 @@ def add_alias_to_object(obj=None, alias=None):
     # @date 10/07/2018
     # ##
     if obj:
-        if "alias" in obj:
-            if alias:
-                if type(alias) is str:
-                    object_alias = obj["alias"]
-                    object_alias.append(alias)
-                else:
-                    # TODO Error Handling for 'Illegal type supplied for alias argument.'
-                    print()
+        if type(obj) is dict:
+            if len(obj) == 1:
+                for key, value in obj.items():
+                    if "alias" in value:
+                        if alias:
+                            if type(alias) is str:
+                                value["alias"].append(alias)
+                            else:
+                                # TODO Error Handling for 'Illegal type supplied for alias argument.'
+                                print()
+                        else:
+                            # TODO Error Handling for 'No string supplied as alias argument.'
+                            print()
+                    else:
+                        # TODO Error Handling for 'Invalid object supplied as obj argument.'
+                        print()
             else:
-                # TODO Error Handling for 'No string supplied as alias argument.'
+                # TODO Error Handling for 'Too many objects supplied within obj argument.'
                 print()
         else:
-            # TODO Error Handling for 'Invalid object supplied as obj argument.'
+            # TODO Error Handling for 'Illegal type supplied to obj argument.'
             print()
     else:
         # TODO Error Handling for 'No object supplied as obj argument.'
         print()
 
 
-def remove_an_alias_from_object(obj=None, alias=None):
+def remove_alias_from_object(obj=None, alias=None):
     # ##
-    # Remove an alias to an object.
+    # Add an alias to an object.
     #
     # @author Dakotah Jones
     # @date 10/07/2018
     # ##
     if obj:
-        if type(obj) is dict and "alias" in obj:
-            if alias:
-                if type(alias) is str:
-                    object_alias_list = obj["alias"]
-                    if alias in object_alias_list:
-                        object_alias_list.remove(alias)
+        if type(obj) is dict:
+            if len(obj) == 1:
+                for key, value in obj.items():
+                    if "alias" in value:
+                        if alias:
+                            if type(alias) is str:
+                                value["alias"].remove(alias)
+                            else:
+                                # TODO Error Handling for 'Illegal type supplied for alias argument.'
+                                print()
+                        else:
+                            # TODO Error Handling for 'No string supplied as alias argument.'
+                            print()
                     else:
-                        # TODO Error Handling for 'Alias supplied was not an alias of this object.'
+                        # TODO Error Handling for 'Invalid object supplied as obj argument.'
                         print()
-                else:
-                    # TODO Error Handling for 'Illegal type supplied for alias argument.'
-                    print()
             else:
-                # TODO Error Handling for 'No string supplied as alias argument.'
+                # TODO Error Handling for 'Too many objects supplied within obj argument.'
                 print()
         else:
-            # TODO Error Handling for 'Invalid object supplied as obj argument.'
+            # TODO Error Handling for 'Illegal type supplied to obj argument.'
             print()
     else:
         # TODO Error Handling for 'No object supplied as obj argument.'
@@ -554,9 +571,17 @@ def clear_object_alias_list(obj=None):
     # @date 10/07/2018
     # ##
     if obj:
-        if type(obj) is dict and "alias" in obj:
-            object_alias_list = obj["alias"]
-            object_alias_list = []
+        if type(obj) is dict:
+            if len(obj) == 1:
+                for key, value in obj.items():
+                    if "alias" in value:
+                        value["alias"] = []
+                    else:
+                        # TODO Error Handling for 'Invalid object supplied within obj argument.'
+                        print()
+            else:
+                # TODO Error Handling for 'Too many objects supplied within obj argument.'
+                print()
         else:
             # TODO Error Handling for 'Invalid object supplied as obj argument.'
             print()
