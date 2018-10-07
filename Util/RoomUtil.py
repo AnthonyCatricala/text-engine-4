@@ -367,6 +367,179 @@ def add_object_to_room(room=None, item=None):
             room["inventory"][key] = value
 
 
+def create_alias_list():
+    # ##
+    # Simple return an empty list function.
+    #
+    # @author Dakotah Jones
+    # @date 10/07/2018
+    # ##
+    return []
+
+
+def add_alias_to_alias_list(alias=None, alias_list=None):
+    # ##
+    # Add an alias to a standalone alias list.
+    #
+    # @author Dakotah Jones
+    # @date 10/07/2018
+    # ##
+    if alias_list:
+        if type(alias_list) is list:
+            if alias:
+                if type(alias) is str:
+                    alias_list.append(alias)
+                else:
+                    # TODO Error Handling for "Illegal type supplied to alias argument"
+                    print()
+            else:
+                # TODO Error Handling for "No string supplied to alias argument"
+                print()
+        else:
+            # TODO Error Handling for "Illegal type supplied to alias list argument"
+            print()
+    else:
+        # TODO Error Handling for "No alias list supplied to alias list argument"
+        print()
+
+
+def remove_alias_to_alias_list(alias=None, alias_list=None):
+    # ##
+    # Remove an alias to from a standalone alias list.
+    #
+    # @author Dakotah Jones
+    # @date 10/07/2018
+    # ##
+    if alias_list:
+        if type(alias_list) is list:
+            if alias:
+                if type(alias) is str:
+                    if alias in alias_list:
+                        alias_list.remove(alias)
+                    else:
+                        # TODO Error Handling for "Alias supplied was not part of the alias list."
+                        print()
+                else:
+                    # TODO Error Handling for "Illegal type supplied to alias argument"
+                    print()
+            else:
+                # TODO Error Handling for "No string supplied to alias argument"
+                print()
+        else:
+            # TODO Error Handling for "Illegal type supplied to alias list argument"
+            print()
+    else:
+        # TODO Error Handling for "No alias list supplied to alias list argument"
+        print()
+
+
+def apply_alias_list_to_object(obj=None, alias_list=None):
+    # ##
+    # Sets an alias list to the supplied object
+    #
+    # @author Dakotah Jones
+    # @date 10/07/2018
+    # ##
+    if obj:
+        if type(obj) is dict:
+            if "alias" in obj:
+                if alias_list:
+                    if type(alias_list) is list:
+                        obj["alias"] = alias_list
+                    else:
+                        # TODO Error Handling for 'Illegal type supplied for alias list argument.
+                        print()
+                else:
+                    # TODO Error Handling for 'No list supplied to alias list argument.'
+                    print()
+            else:
+                # TODO Error Handling for 'Invalid object supplied to obj argument.'
+                print()
+        else:
+            # TODO Error Handling for 'Illegal type supplied to obj argument.'
+            print()
+    else:
+        # TODO Error Handling for 'No object supplied to obj argument.'
+        print()
+
+
+def add_alias_to_object(obj=None, alias=None):
+    # ##
+    # Add an alias to an object.
+    #
+    # @author Dakotah Jones
+    # @date 10/07/2018
+    # ##
+    if obj:
+        if "alias" in obj:
+            if alias:
+                if type(alias) is str:
+                    object_alias = obj["alias"]
+                    object_alias.append(alias)
+                else:
+                    # TODO Error Handling for 'Illegal type supplied for alias argument.'
+                    print()
+            else:
+                # TODO Error Handling for 'No string supplied as alias argument.'
+                print()
+        else:
+            # TODO Error Handling for 'Invalid object supplied as obj argument.'
+            print()
+    else:
+        # TODO Error Handling for 'No object supplied as obj argument.'
+        print()
+
+
+def remove_an_alias_from_object(obj=None, alias=None):
+    # ##
+    # Remove an alias to an object.
+    #
+    # @author Dakotah Jones
+    # @date 10/07/2018
+    # ##
+    if obj:
+        if type(obj) is dict and "alias" in obj:
+            if alias:
+                if type(alias) is str:
+                    object_alias_list = obj["alias"]
+                    if alias in object_alias_list:
+                        object_alias_list.remove(alias)
+                    else:
+                        # TODO Error Handling for 'Alias supplied was not an alias of this object.'
+                        print()
+                else:
+                    # TODO Error Handling for 'Illegal type supplied for alias argument.'
+                    print()
+            else:
+                # TODO Error Handling for 'No string supplied as alias argument.'
+                print()
+        else:
+            # TODO Error Handling for 'Invalid object supplied as obj argument.'
+            print()
+    else:
+        # TODO Error Handling for 'No object supplied as obj argument.'
+        print()
+
+
+def clear_object_alias_list(obj=None):
+    # ##
+    # Remove an alias to an object.
+    #
+    # @author Dakotah Jones
+    # @date 10/07/2018
+    # ##
+    if obj:
+        if type(obj) is dict and "alias" in obj:
+            object_alias_list = obj["alias"]
+            object_alias_list = []
+        else:
+            # TODO Error Handling for 'Invalid object supplied as obj argument.'
+            print()
+    else:
+        # TODO Error Handling for 'No object supplied as obj argument.'
+        print()
+
+
 # TODO This one is going to be harder than originally expected.
 # TODO Map this out before starting.
 def link_two_rooms(start_room=None, direction=None, destination_room=None, locked=False, door_open=True, open_description="", locked_description="", door_key=""):
