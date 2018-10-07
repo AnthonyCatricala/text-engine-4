@@ -1,3 +1,4 @@
+from Util.ItemUtil import *
 import json
 import os
 
@@ -112,7 +113,6 @@ def remove_light_from_room(room=None):
 
 
 def create_room(room_name="",
-                room_file="",
                 description="",
                 illuminated=True,
                 inventory=None,
@@ -126,40 +126,39 @@ def create_room(room_name="",
     # @date 09/26/2018
     # ##
 
-    room_dict = dict()
+    out = None
     if room_name:
-        room_dict["room_name"] = room_name
-        if not room_file:
-            room_file = "./Rooms/{}.room".format(room_name.replace(" ", "_"))
-        room_dict["room_file"] = room_file
+        out = dict()
+        out["room_name"] = room_name
+        out["room_file"] = "./Rooms/{}.room".format(room_name.replace(" ", "_"))
 
         if not description:
             # TODO Error handling for room without description.
             print()
 
-        room_dict["description"] = description
-        room_dict["illuminated"] = illuminated
+        out["description"] = description
+        out["illuminated"] = illuminated
 
         if not inventory:
-            room_dict["inventory"] = dict()
+            out["inventory"] = dict()
         else:
-            room_dict["inventory"] = inventory
+            out["inventory"] = inventory
 
         if not exits:
-            room_dict["exits"] = dict()
+            out["exits"] = dict()
         else:
-            room_dict["exits"] = exits
+            out["exits"] = exits
 
         if not triggers:
-            room_dict["triggers"] = dict()
+            out["triggers"] = dict()
         else:
-            room_dict["triggers"] = triggers
+            out["triggers"] = triggers
 
     else:
         # TODO Error handling for no name entered.
         print()
 
-    return room_dict
+    return out
 
 
 def load_room(room_name=None, room_file=None):
@@ -309,6 +308,94 @@ def remove_object_from_room(room=None, obj_name=None):
             print()
     else:
         # TODO Error handling for 'No object supplied as room argument.'
+        print()
+
+
+def create_door(is_open=False,
+                lock=None,
+                triggers=None):
+    # ##
+    # Create a door that can then be placed on containers or exits.
+    #
+    # @author Dakotah Jones
+    # @date 10/03/2018
+    # ##
+    out = dict()
+    out["open"] = is_open
+    if lock:
+        out["lock"] = lock
+    else:
+        out["lock"] = dict()
+
+    if triggers:
+        out["triggers"] = triggers
+    else:
+        out["triggers"] = dict()
+
+
+def create_lock_and_key(key_name="",
+                        key_description="",
+                        is_locked=True,
+                        triggers=None):
+    lock = None
+    key = None
+
+    if key_name and type(key_name) is str:
+        if key_description and type(key_description) is str:
+            lock = dict()
+            lock["key"] = key_name
+            lock["locked"] = is_locked
+            lock["triggers"] = triggers
+
+            key = create_object(key_name, key_description)
+
+        else:
+            # TODO Error handling for 'A key description is required to create a lock.'
+            print()
+    else:
+        # TODO Error handling for 'A key name is required to create a lock.'
+        print()
+
+    return lock, key
+
+
+def apply_lock_to_door(lock=None, door=None):
+    if lock:
+        if type(lock) is dict:
+            if door:
+                if type(door) is dict:
+                    if "lock" in door:
+                        door["lock"] = lock
+                    else:
+                        # TODO Error handling for 'Illegal door format supplied withing door argument.'
+                        print()
+                else:
+                    # TODO Error handling for 'Invalid type supplied for door argument.'
+                    print()
+            else:
+                # TODO Error handling for 'No object supplied for door argument.'
+                print()
+        else:
+            # TODO Error handling for 'Invalid type supplied for lock argument.'
+            print()
+    else:
+        # TODO Error handling for 'No object supplied for lock argument.'
+        print()
+
+
+def remove_lock_from_door(door=None):
+    if door:
+        if type(door) is dict:
+            if "lock" in door:
+                door["lock"] = dict()
+            else:
+                # TODO Error handling for 'Illegal door format supplied withing door argument.'
+                print()
+        else:
+            # TODO Error handling for 'Invalid type supplied for door argument.'
+            print()
+    else:
+        # TODO Error handling for 'No object supplied for door argument.'
         print()
 
 
