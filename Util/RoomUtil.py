@@ -252,10 +252,64 @@ def save_room(room=None):
         print()
 
 
-def add_object_to_room(room=None, item=None):
-    if room is not None and item is not None:
-        for key, value in item.items():
-            room["inventory"][key] = value
+def add_object_to_room(room=None, obj=None):
+    if room:
+        if type(room) is dict:
+            if "inventory" in room:
+                inventory = room["inventory"]
+                if type(inventory) is dict:
+                    if type(obj) is dict:
+                        if len(obj) == 1:
+                            for key, value in obj.items():
+                                inventory[key] = value
+                        else:
+                            # TODO Error handling for 'Too many object supplied within obj argument.'
+                            print()
+                    else:
+                        # TODO Error handling for 'Invalid type supplied as obj argument.'
+                        print()
+                else:
+                    # TODO Error handling for 'Illegal inventory format within room argument.'
+                    print()
+            else:
+                # TODO Error handling for 'Invalid object supplied as room argument.'
+                print()
+        else:
+            # TODO Error handling for 'Invalid type supplied as room argument.'
+            print()
+    else:
+        # TODO Error handling for 'No object supplied as room argument.'
+        print()
+
+
+def remove_object_from_room(room=None, obj_name=None):
+    if room:
+        if type(room) is dict:
+            if "inventory" in room:
+                inventory = room["inventory"]
+                if type(inventory) is dict:
+                    if type(obj_name) is str:
+                        if obj_name in inventory:
+                            # TODO Take quantity into account, drop quantity till zero then delete. [Dakotah]
+                            del(inventory[obj_name])
+                        else:
+                            # TODO Error handling for 'Object is not present within the rooms inventory.'
+                            print()
+                    else:
+                        # TODO Error handling for 'Invalid type supplied as obj name argument.'
+                        print()
+                else:
+                    # TODO Error handling for 'Illegal inventory format within room argument.'
+                    print()
+            else:
+                # TODO Error handling for 'Invalid object supplied as room argument.'
+                print()
+        else:
+            # TODO Error handling for 'Invalid type supplied as room argument.'
+            print()
+    else:
+        # TODO Error handling for 'No object supplied as room argument.'
+        print()
 
 
 # TODO This one is going to be harder than originally expected.
