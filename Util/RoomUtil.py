@@ -165,7 +165,19 @@ def add_light_to_room(room=None):
     # @author Dakotah Jones
     # @date 09/26/2018
     # ##
-    illuminate_object(room=room)
+    if room:
+        if type(room) is dict:
+            if "illuminated" in room:
+                room["illuminated"] = True
+            else:
+                # TODO Error handling for 'Invalid object supplied to room argument.'
+                print()
+        else:
+            # TODO Error handling for 'Invalid type supplied for room argument.'
+            print()
+    else:
+        # TODO Error handling for 'No object supplied for room argument.'
+        print()
 
 
 def remove_light_from_room(room=None):
@@ -177,44 +189,69 @@ def remove_light_from_room(room=None):
     # ##
 
     if room:
-        if "illuminated" in room:
-            room["illuminated"] = False
+        if type(room) is dict:
+            if "illuminated" in room:
+                room["illuminated"] = False
+            else:
+                # TODO Error handling for 'Invalid object supplied for room argument.'
+                print()
         else:
-            # TODO Error handling for "Illegal room object supplied."
+            # TODO Error handling for 'Invalid type supplied for room argument.'
             print()
     else:
-        # TODO Error handling for "No room object supplied."
+        # TODO Error handling for 'No object supplied for room argument.'
         print()
 
 
-def illuminate_object(item=None, room=None):
+def add_light_to_object(obj=None):
     # ##
-    # Adds light to a room or object preventing darkness.
+    # Adds light to an object.
     #
     # @author Dakotah Jones
-    # @date 09/26/2018
+    # @date 10/07/2018
     # ##
-    if item or room:
-        if item:
-            if "illuminated" in item:
-                if not item["illuminated"]:
-                    item["illuminated"] = True
-                else:
-                    # TODO Error handling for "Item is already illuminated."
-                    print()
+    if obj:
+        if type(obj) is dict:
+            if len(obj) == 1:
+                for key, value in obj.items():
+                    if "illuminated" in value:
+                        value["illuminated"] = True
+                    else:
+                        # TODO Error handling for 'Invalid object supplied for room argument.'
+                        print()
             else:
-                # TODO Error handling for "Item supplied cannot be illuminated."
+                # TODO Error handling for 'Too many objects supplied within obj argument.'
                 print()
-        if room:
-            if "illuminated" in room:
-                if not room["illuminated"]:
-                    room["illuminated"] = True
-                else:
-                    # TODO Error handling for "Room is already illuminated."
-                    print()
+        else:
+            # TODO Error handling for 'Invalid type supplied for room argument.'
+            print()
+    else:
+        # TODO Error handling for "No room or object supplied."
+        print()
+
+
+def remove_light_from_object(obj=None):
+    # ##
+    # Removes light from an object.
+    #
+    # @author Dakotah Jones
+    # @date 10/07/2018
+    # ##
+    if obj:
+        if type(obj) is dict:
+            if len(obj) == 1:
+                for key, value in obj.items():
+                    if "illuminated" in value:
+                        value["illuminated"] = False
+                    else:
+                        # TODO Error handling for 'Invalid object supplied for room argument.'
+                        print()
             else:
-                # TODO Error handling for "Room supplied cannot be illuminated"
+                # TODO Error handling for 'Too many objects supplied within obj argument.'
                 print()
+        else:
+            # TODO Error handling for 'Invalid type supplied for room argument.'
+            print()
     else:
         # TODO Error handling for "No room or object supplied."
         print()
