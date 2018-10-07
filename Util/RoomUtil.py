@@ -31,59 +31,6 @@ def change_room_name(room=None, room_name=None):
         # TODO Error handling for 'No room supplied'
         print()
 
-'''
-def update_initial_room_message(room=None, init_text=""):
-    # ##
-    # Updates a rooms initial message.
-    # This message will be displayed when the user
-    # loads the room for the first time.
-    #
-    # @author Dakotah Jones
-    # @date 09/26/2018
-    # ##
-    if room is not None:
-        room["init"] = init_text
-
-
-def remove_initial_room_message(room=None):
-    # ##
-    # Removes a rooms initial message.
-    # This message will be displayed when the user
-    # loads the room for the first time.
-    #
-    # @author Dakotah Jones
-    # @date 09/26/2018
-    # ##
-    if room is not None:
-        room["init"] = ""
-
-
-def update_entering_room_message(room=None, enter_text=""):
-    # ##
-    # Updates a rooms enter message.
-    # This message will be displayed when the user
-    # enters the room from another room.
-    #
-    # @author Dakotah Jones
-    # @date 09/26/2018
-    # ##
-    if room is not None:
-        room["enter"] = enter_text
-
-
-def remove_entering_room_message(room=None):
-    # ##
-    # Removes a rooms enter message.
-    # This message will be displayed when the user
-    # enters the room from another room.
-    #
-    # @author Dakotah Jones
-    # @date 09/26/2018
-    # ##
-    if room is not None:
-        room["enter"] = ""
-'''
-
 
 def set_room_description(room=None, room_description=None):
     # ##
@@ -117,56 +64,6 @@ def change_room_description(room=None, room_description=None):
     else:
         # TODO Error handling for 'No room supplied'
         print()
-
-''' 
-def add_a_group_of_room_descriptions(room=None, room_description_group=None):
-    # ##
-    # Adds a group of room descriptions to a room.
-    # These messages will be displayed when a user supplies a 'look' command.
-    #
-    # @author Dakotah Jones
-    # @date 09/26/2018
-    # ##
-    if room is not None and room_description_group is not None:
-        for key,value in room_description_group.items():
-            room["look"][key] = value
-
-
-def add_a_single_room_description(room=None, room_description=None, description_initially_visible=True):
-    # ##
-    # Adds a single room description to a room.
-    # This message will be displayed when a user supplies a 'look' command.
-    #
-    # @author Dakotah Jones
-    # @date 09/26/2018
-    # ##
-    if room is not None and room_description is not None:
-        room["look"][room_description] = description_initially_visible
-
-
-def remove_a_single_room_description(room=None, room_description=None):
-    # ##
-    # Removes a single room description to a room.
-    # This message will be displayed when a user supplies a 'look' command.
-    #
-    # @author Dakotah Jones
-    # @date 09/26/2018
-    # ##
-    if room is not None and room_description is not None:
-        del room["look"][room_description]
-
-
-def remove_all_room_descriptions(room=None):
-    # ##
-    # Removes all room descriptions from a room.
-    # No messages will be displayed when a user supplies a 'look' command.
-    #
-    # @author Dakotah Jones
-    # @date 09/26/2018
-    # ##
-    if room is not None:
-        room["look"] = dict()
-'''
 
 
 def create_object(object_name=None,
