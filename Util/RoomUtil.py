@@ -11,9 +11,25 @@ def update_room_name(room=None, room_name=None):
     # @author Dakotah Jones
     # @date 09/26/2018
     # ##
-    if room is not None and room_name is not None:
-        if len(room_name) > 0:
-            room["room_name"] = room_name
+
+    if room:
+        if "room_name" in room:
+            if room_name:
+                # Updating room name and the reference to the room file.
+                room["room_name"] = room_name
+                room["room_file"] = "./Rooms/{}.room".format(room_name.replace(" ", "_"))
+
+                # TODO Recursively find/update all exit references in other rooms. [Dakotah]
+
+            else:
+                # TODO Error handling for 'No room name was supplied.'.
+                print()
+        else:
+            # TODO Error handling for 'Invalid room format supplied'.
+            print()
+    else:
+        # TODO Error handling for 'No room supplied'
+        print()
 
 
 def update_initial_room_message(room=None, init_text=""):
