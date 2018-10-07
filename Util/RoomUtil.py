@@ -2,7 +2,7 @@ import json
 import os
 
 
-def update_room_name(room=None, room_name=None):
+def change_room_name(room=None, room_name=None):
     # ##
     # Updates a rooms name.
     # The room name is displayed when entering a room.
@@ -31,7 +31,7 @@ def update_room_name(room=None, room_name=None):
         # TODO Error handling for 'No room supplied'
         print()
 
-
+'''
 def update_initial_room_message(room=None, init_text=""):
     # ##
     # Updates a rooms initial message.
@@ -82,8 +82,43 @@ def remove_entering_room_message(room=None):
     # ##
     if room is not None:
         room["enter"] = ""
+'''
 
 
+def set_room_description(room=None, room_description=None):
+    # ##
+    # Changes a room description to a room.
+    # This message will be displayed when a user supplies a 'look' command.
+    #
+    # @author Dakotah Jones
+    # @date 10/07/2018
+    # ##
+    change_room_description(room, room_description)
+
+
+def change_room_description(room=None, room_description=None):
+    # ##
+    # Changes a room description to a room.
+    # This message will be displayed when a user supplies a 'look' command.
+    #
+    # @author Dakotah Jones
+    # @date 10/07/2018
+    # ##
+    if room:
+        if "description" in room:
+            if room_description:
+                room["description"] = room_description
+            else:
+                # TODO Error handling for 'No room description was supplied'
+                print()
+        else:
+            # TODO Error handling for 'Invalid room format supplied'.
+            print()
+    else:
+        # TODO Error handling for 'No room supplied'
+        print()
+
+''' 
 def add_a_group_of_room_descriptions(room=None, room_description_group=None):
     # ##
     # Adds a group of room descriptions to a room.
@@ -131,6 +166,7 @@ def remove_all_room_descriptions(room=None):
     # ##
     if room is not None:
         room["look"] = dict()
+'''
 
 
 def create_object(object_name=None,
@@ -232,7 +268,6 @@ def add_light_to_room(room=None):
     # @author Dakotah Jones
     # @date 09/26/2018
     # ##
-
     illuminate_object(room=room)
 
 
