@@ -384,22 +384,18 @@ def add_alias_to_alias_list(alias=None, alias_list=None):
     # @author Dakotah Jones
     # @date 10/07/2018
     # ##
-    if alias_list:
-        if type(alias_list) is list:
-            if alias:
-                if type(alias) is str:
-                    alias_list.append(alias)
-                else:
-                    # TODO Error Handling for "Illegal type supplied to alias argument"
-                    print()
+    if type(alias_list) is list:
+        if alias:
+            if type(alias) is str:
+                alias_list.append(alias)
             else:
-                # TODO Error Handling for "No string supplied to alias argument"
+                # TODO Error Handling for "Illegal type supplied to alias argument"
                 print()
         else:
-            # TODO Error Handling for "Illegal type supplied to alias list argument"
+            # TODO Error Handling for "No string supplied to alias argument"
             print()
     else:
-        # TODO Error Handling for "No alias list supplied to alias list argument"
+        # TODO Error Handling for "Illegal type supplied to alias list argument"
         print()
 
 
@@ -410,26 +406,22 @@ def remove_alias_to_alias_list(alias=None, alias_list=None):
     # @author Dakotah Jones
     # @date 10/07/2018
     # ##
-    if alias_list:
-        if type(alias_list) is list:
-            if alias:
-                if type(alias) is str:
-                    if alias in alias_list:
-                        alias_list.remove(alias)
-                    else:
-                        # TODO Error Handling for "Alias supplied was not part of the alias list."
-                        print()
+    if type(alias_list) is list:
+        if alias:
+            if type(alias) is str:
+                if alias in alias_list:
+                    alias_list.remove(alias)
                 else:
-                    # TODO Error Handling for "Illegal type supplied to alias argument"
+                    # TODO Error Handling for "Alias supplied was not part of the alias list."
                     print()
             else:
-                # TODO Error Handling for "No string supplied to alias argument"
+                # TODO Error Handling for "Illegal type supplied to alias argument"
                 print()
         else:
-            # TODO Error Handling for "Illegal type supplied to alias list argument"
+            # TODO Error Handling for "No string supplied to alias argument"
             print()
     else:
-        # TODO Error Handling for "No alias list supplied to alias list argument"
+        # TODO Error Handling for "Illegal type supplied to alias list argument"
         print()
 
 
@@ -443,14 +435,10 @@ def apply_alias_list_to_object(obj=None, alias_list=None):
     if obj:
         if type(obj) is dict:
             if "alias" in obj:
-                if alias_list:
-                    if type(alias_list) is list:
-                        obj["alias"] = alias_list
-                    else:
-                        # TODO Error Handling for 'Illegal type supplied for alias list argument.
-                        print()
+                if type(alias_list) is list:
+                    obj["alias"] = alias_list
                 else:
-                    # TODO Error Handling for 'No list supplied to alias list argument.'
+                    # TODO Error Handling for 'Illegal type supplied for alias list argument.
                     print()
             else:
                 # TODO Error Handling for 'Invalid object supplied to obj argument.'
