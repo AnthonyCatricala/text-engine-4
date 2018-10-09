@@ -155,6 +155,7 @@ def create_alias_list():
     # ##
     return []
 
+
 def add_alias_to_alias_list(alias=None, alias_list=None):
     # ##
     # Add an alias to a standalone alias list.
@@ -165,21 +166,21 @@ def add_alias_to_alias_list(alias=None, alias_list=None):
     if type(alias_list) is list:
         if alias:
             if type(alias) is str:
-                alias_list.append(alias)
+                alias_list.append(alias.lower())
             else:
-                # TODO Error Handling for "Illegal type supplied to alias argument"
+                # TODO Error handling for "Illegal type supplied to alias argument"
                 print()
         else:
-            # TODO Error Handling for "No string supplied to alias argument"
+            # TODO Error handling for "No string supplied to alias argument"
             print()
     else:
-        # TODO Error Handling for "Illegal type supplied to alias list argument"
+        # TODO Error handling for "Illegal type supplied to alias list argument"
         print()
 
 
-def remove_alias_to_alias_list(alias=None, alias_list=None):
+def remove_alias_from_alias_list(alias=None, alias_list=None):
     # ##
-    # Remove an alias to from a standalone alias list.
+    # Remove an alias from a standalone alias list.
     #
     # @author Dakotah Jones
     # @date 10/07/2018
@@ -190,16 +191,16 @@ def remove_alias_to_alias_list(alias=None, alias_list=None):
                 if alias in alias_list:
                     alias_list.remove(alias)
                 else:
-                    # TODO Error Handling for "Alias supplied was not part of the alias list."
+                    # TODO Error handling for "Alias supplied was not part of the alias list."
                     print()
             else:
-                # TODO Error Handling for "Illegal type supplied to alias argument"
+                # TODO Error handling for "Illegal type supplied to alias argument"
                 print()
         else:
-            # TODO Error Handling for "No string supplied to alias argument"
+            # TODO Error handling for "No string supplied to alias argument"
             print()
     else:
-        # TODO Error Handling for "Illegal type supplied to alias list argument"
+        # TODO Error handling for "Illegal type supplied to alias list argument"
         print()
 
 
@@ -216,21 +217,22 @@ def apply_alias_list_to_object(obj=None, alias_list=None):
                 for key, value in obj.items():
                     if "alias" in value:
                         if type(alias_list) is list:
-                            value["alias"] = alias_list
+                            for alias in alias_list:
+                                value["alias"].append(alias)
                         else:
-                            # TODO Error Handling for 'Illegal type supplied for alias list argument.
+                            # TODO Error handling for 'Illegal type supplied for alias list argument.
                             print()
                     else:
-                        # TODO Error Handling for 'Invalid object supplied to obj argument.'
+                        # TODO Error handling for 'Invalid object supplied to obj argument.'
                         print()
             else:
-                # TODO Error Handling for 'Too many objects supplied within obj argument.'
+                # TODO Error handling for 'Too many objects supplied within obj argument.'
                 print()
         else:
-            # TODO Error Handling for 'Illegal type supplied to obj argument.'
+            # TODO Error handling for 'Illegal type supplied to obj argument.'
             print()
     else:
-        # TODO Error Handling for 'No object supplied to obj argument.'
+        # TODO Error handling for 'No object supplied to obj argument.'
         print()
 
 
@@ -248,24 +250,24 @@ def add_alias_to_object(obj=None, alias=None):
                     if "alias" in value:
                         if alias:
                             if type(alias) is str:
-                                value["alias"].append(alias)
+                                value["alias"].append(alias.lower())
                             else:
-                                # TODO Error Handling for 'Illegal type supplied for alias argument.'
+                                # TODO Error handling for 'Illegal type supplied for alias argument.'
                                 print()
                         else:
-                            # TODO Error Handling for 'No string supplied as alias argument.'
+                            # TODO Error handling for 'No string supplied as alias argument.'
                             print()
                     else:
-                        # TODO Error Handling for 'Invalid object supplied as obj argument.'
+                        # TODO Error handling for 'Invalid object supplied as obj argument.'
                         print()
             else:
-                # TODO Error Handling for 'Too many objects supplied within obj argument.'
+                # TODO Error handling for 'Too many objects supplied within obj argument.'
                 print()
         else:
-            # TODO Error Handling for 'Illegal type supplied to obj argument.'
+            # TODO Error handling for 'Illegal type supplied to obj argument.'
             print()
     else:
-        # TODO Error Handling for 'No object supplied as obj argument.'
+        # TODO Error handling for 'No object supplied as obj argument.'
         print()
 
 
@@ -283,24 +285,28 @@ def remove_alias_from_object(obj=None, alias=None):
                     if "alias" in value:
                         if alias:
                             if type(alias) is str:
-                                value["alias"].remove(alias)
+                                if alias in value["alias"]:
+                                    value["alias"].remove(alias)
+                                else:
+                                    # TODO Error handling for 'The alias supplied is not an alias of the object.'
+                                    print()
                             else:
-                                # TODO Error Handling for 'Illegal type supplied for alias argument.'
+                                # TODO Error handling for 'Illegal type supplied for alias argument.'
                                 print()
                         else:
-                            # TODO Error Handling for 'No string supplied as alias argument.'
+                            # TODO Error handling for 'No string supplied as alias argument.'
                             print()
                     else:
-                        # TODO Error Handling for 'Invalid object supplied as obj argument.'
+                        # TODO Error handling for 'Invalid object supplied as obj argument.'
                         print()
             else:
-                # TODO Error Handling for 'Too many objects supplied within obj argument.'
+                # TODO Error handling for 'Too many objects supplied within obj argument.'
                 print()
         else:
-            # TODO Error Handling for 'Illegal type supplied to obj argument.'
+            # TODO Error handling for 'Illegal type supplied to obj argument.'
             print()
     else:
-        # TODO Error Handling for 'No object supplied as obj argument.'
+        # TODO Error handling for 'No object supplied as obj argument.'
         print()
 
 
@@ -318,14 +324,14 @@ def clear_object_alias_list(obj=None):
                     if "alias" in value:
                         value["alias"] = []
                     else:
-                        # TODO Error Handling for 'Invalid object supplied within obj argument.'
+                        # TODO Error handling for 'Invalid object supplied within obj argument.'
                         print()
             else:
-                # TODO Error Handling for 'Too many objects supplied within obj argument.'
+                # TODO Error handling for 'Too many objects supplied within obj argument.'
                 print()
         else:
-            # TODO Error Handling for 'Invalid object supplied as obj argument.'
+            # TODO Error handling for 'Invalid object supplied as obj argument.'
             print()
     else:
-        # TODO Error Handling for 'No object supplied as obj argument.'
+        # TODO Error handling for 'No object supplied as obj argument.'
         print()
