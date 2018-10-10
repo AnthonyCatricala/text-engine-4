@@ -15,23 +15,21 @@
     }
   },
   "exits": {
-      "compass_direction": {
-        "links-to": "./Rooms/Example_Room_2.room",
-        "description": "This is a description of the exit and/or door.",
-        "blocked": false,
-        "door": {
-          "door": {
-            "open": false,
-            "lock": {
-              "locked": false,
-              "key": "key name",
-              "triggers": {}
-            },
-            "triggers": {}
-          }
+    "compass_direction": {
+      "links-to": "./Rooms/Example_Room_2.room",
+      "description": "This is a description of the exit and/or door.",
+      "blocked": false,
+      "door": {
+        "open": false,
+        "lock": {
+          "locked": false,
+          "key": "key name",
+          "triggers": {}
         },
         "triggers": {}
       }
+    },
+    "triggers": {}
   },
   "triggers": {
     "command": {
