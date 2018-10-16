@@ -1,2 +1,0 @@
-class UserParser:
-    print("hi")
