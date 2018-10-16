@@ -8,3 +8,7 @@ class Trigger:
 
     def __init__(self, command, trigger_dict):
         self.command = command
+
+    def to_json(self):
+        # TODO Fill this out
+        print()
