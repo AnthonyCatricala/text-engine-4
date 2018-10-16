@@ -33,12 +33,15 @@ def change_room_name(room=None, room_name=None):
                 save_room(room)
             else:
                 # TODO Error handling for 'No room name was supplied.'.
+                error_handler("change_room_name", "no name")
                 print()
         else:
             # TODO Error handling for 'Invalid room format supplied'.
+            error_handler("change_room_name", "invalid format")
             print()
     else:
         # TODO Error handling for 'No room supplied'
+        error_handler("change_room_name", "no room")
         print()
 
 
@@ -67,12 +70,15 @@ def change_room_description(room=None, room_description=None):
                 room["description"] = room_description
             else:
                 # TODO Error handling for 'No room description was supplied'
+                error_handler("change_room_description", "no description")
                 print()
         else:
             # TODO Error handling for 'Invalid room format supplied'.
+            error_handler("change_room_description", "invalid format")
             print()
     else:
         # TODO Error handling for 'No room supplied'
+        error_handler("change_room_description", "no room")
         print()
 
 
@@ -89,12 +95,15 @@ def add_light_to_room(room=None):
                 room["illuminated"] = True
             else:
                 # TODO Error handling for 'Invalid object supplied to room argument.'
+                error_handler("add_light_to_room", "invalid object")
                 print()
         else:
             # TODO Error handling for 'Invalid type supplied for room argument.'
+            error_handler("add_light_to_room", "invalid type")
             print()
     else:
         # TODO Error handling for 'No object supplied for room argument.'
+        error_handler("add_light_to_room", "no object")
         print()
 
 
@@ -111,12 +120,15 @@ def remove_light_from_room(room=None):
             if "illuminated" in room:
                 room["illuminated"] = False
             else:
+                error_handler("remove_light_from_room", "invalid object")
                 # TODO Error handling for 'Invalid object supplied for room argument.'
                 print()
         else:
             # TODO Error handling for 'Invalid type supplied for room argument.'
+            error_handler("remove_light_from_room", "invalid type")
             print()
     else:
+        error_handler("remove_light_from_room", "no object")
         # TODO Error handling for 'No object supplied for room argument.'
         print()
 
@@ -143,6 +155,7 @@ def create_room(room_name="",
 
         if not description:
             # TODO Error handling for room without description.
+            error_handler("create_room", "no description")
             print()
 
         out["description"] = description
@@ -166,6 +179,7 @@ def create_room(room_name="",
         save_room(out)
 
     else:
+        error_handler("create_room", "no name")
         # TODO Error handling for no name entered.
         print()
 
@@ -190,6 +204,8 @@ def load_room(room_name=None, room_file=None):
                         out = json.load(f)
                     f.close()
                 else:
+
+                    error_handler("load_room", "file does not exist")
                     # TODO Error handling for "File does not exist."
                     print()
 
@@ -200,15 +216,19 @@ def load_room(room_name=None, room_file=None):
                             out = json.load(f)
                         f.close()
                     else:
+                        error_handler("load_room", "file does not exist")
                         # TODO Error handling for "File does not exist."
                         print()
                 else:
+                    error_handler("load_room", "illegal file path")
                     # TODO Error handling for "Illegal file path supplied."
                     print()
         else:
+            error_handler("load_room", "too many arguments")
             # TODO Error handling for too many arguments supplied. (One or the other.)
             print()
     else:
+        error_handler("load_room", "no argumments")
         # TODO Error handling for no arguments supplied.
         print()
 
@@ -244,7 +264,7 @@ def save_room(room=None):
                         f.close()
                         os.remove(room_file)
                         os.rename(tmp_file, room_file)
-                    else:
+                    else:x
                         # TODO Notify the user that the room data has not been saved.
                         print()
                 else:
