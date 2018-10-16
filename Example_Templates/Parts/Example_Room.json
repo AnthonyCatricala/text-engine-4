@@ -1,0 +1,9 @@
+{
+  "room_name": "Example Room",
+  "room_file": "./Rooms/Example_Room.room",
+  "description": "This is a description of the room.",
+  "illuminated": false,
+  "inventory": {},
+  "exits": {},
+  "triggers": {}
+}

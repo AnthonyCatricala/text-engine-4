@@ -1,0 +1,7 @@
+{
+  "door": {
+    "open": false,
+    "lock": {},
+    "triggers": {}
+  }
+}
