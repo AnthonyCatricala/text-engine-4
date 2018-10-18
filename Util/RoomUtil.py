@@ -281,7 +281,7 @@ def create_door(is_open=False,
     else:
         door_dict["triggers"] = dict()
 
-    out = Door(door_dict)
+    out = Door.from_dict(door_dict)
 
     return out
 
