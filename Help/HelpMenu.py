@@ -45,4 +45,3 @@ def help_look():
     desc = "\nUse the look command to look at the surroundings of the room you are in as well as its contents.\n"
     print(use)
     print(desc)
-    
