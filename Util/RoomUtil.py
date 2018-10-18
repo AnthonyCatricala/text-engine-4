@@ -1,4 +1,5 @@
 from Util.ItemUtil import *
+from Util.ErrorUtil import *
 from Objects.Room import Room
 from Objects.Door import Door
 from Objects.Lock import Lock
@@ -24,11 +25,9 @@ def change_room_name(room=None, room_name=None):
             room.room_name = room_name
             room.save()
         else:
-            # TODO Error handling for 'No room name was supplied.'.
-            print()
+            error_handler("change_room_name", "no name")
     else:
-        # TODO Error handling for 'No/Invalid room supplied.'
-        print()
+        error_handler("change_room_name", "no room")
 
 
 def set_room_description(room=None, room_description=None):
@@ -38,7 +37,7 @@ def set_room_description(room=None, room_description=None):
     #
     # @author Dakotah Jones
     # @date 10/07/2018
-    # 
+    #
     # @arg room WhatIF Room Object
     # @arg room_description String describing the room.
 
@@ -54,17 +53,15 @@ def change_room_description(room=None, room_description=None):
     # @author Dakotah Jones
     # @date 10/07/2018
     # ##
-    
+
     if room and type(room) is Room:
         if room_description:
             room.description = room_description
         else:
-            # TODO Error handling for 'No room description was supplied'
-            print()
+            error_handler("change_room_description", "invalid format")
     else:
-        # TODO Error handling for 'No/Invalid room supplied'
-        print()
-        
+        error_handler("change_room_description", "no room")
+
 
 def add_light_to_room(room=None):
     # ##
@@ -76,8 +73,7 @@ def add_light_to_room(room=None):
     if room and type(room) is Room:
         room.illuminated = True
     else:
-        # TODO Error handling for 'No/Invalid room supplied'
-        print()
+        error_handler("add_light_to_room", "no object")
 
 
 def remove_light_from_room(room=None):
@@ -91,8 +87,7 @@ def remove_light_from_room(room=None):
     if room and type(room) is Room:
         room.illuminated = False
     else:
-        # TODO Error handling for 'No/Invalid room supplied'
-        print()
+        error_handler("remove_light_from_room", "no object")
 
 
 def create_room(room_name="",
@@ -116,8 +111,7 @@ def create_room(room_name="",
         room_dict["room_file"] = "./Rooms/{}.room".format(room_name.replace(" ", "_"))
 
         if not description:
-            # TODO Error handling for room without description.
-            print()
+            error_handler("create_room", "no description")
 
         room_dict["description"] = description
         room_dict["illuminated"] = illuminated
@@ -141,8 +135,7 @@ def create_room(room_name="",
         out.save()
 
     else:
-        # TODO Error handling for no name entered.
-        print()
+        error_handler("create_room", "no name")
 
     return out
 
@@ -169,8 +162,7 @@ def load_room(room_name=None, room_file=None):
                         out = json.load(f)
                     f.close()
                 else:
-                    # TODO Error handling for "File does not exist."
-                    print()
+                    error_handler("load_room", "file does not exist")
 
             if room_file:
                 if "../" not in room_file and not room_file.startswith("/"):
@@ -179,18 +171,14 @@ def load_room(room_name=None, room_file=None):
                             out = json.load(f)
                         f.close()
                     else:
-                        # TODO Error handling for "File does not exist."
-                        print()
+                        error_handler("load_room", "file does not exist")
                 else:
-                    # TODO Error handling for "Illegal file path supplied."
-                    print()
+                    error_handler("load_room", "illegal file path")
             out = Room(out)
         else:
-            # TODO Error handling for too many arguments supplied. (One or the other.)
-            print()
+            error_handler("load_room", "too many arguments")
     else:
-        # TODO Error handling for no arguments supplied.
-        print()
+        error_handler("load_room", "no argumments")
 
     return out
 
