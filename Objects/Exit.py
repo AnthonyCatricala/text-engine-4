@@ -10,13 +10,24 @@ class Exit:
     door = None
     triggers = None
 
-    def __init__(self, compass_direction, exit_dict):
+    def __init__(self, compass_direction, links_to, description, blocked, door, triggers):
         self.compass_direction = compass_direction
-        self.links_to = exit_dict['links-to']
-        self.description = exit_dict['description']
-        self.blocked = exit_dict['blocked']
-        self.door = Door(exit_dict['door'])
-        self.triggers = self.__fill_triggers(exit_dict['triggers'])
+        self.links_to = links_to
+        self.description = description
+        self.blocked = blocked
+        self.door = door
+        self.triggers = triggers
+
+    @classmethod
+    def from_dict(cls, compass_direction, exit_dict):
+        compass_direction = compass_direction
+        links_to = exit_dict['links-to']
+        description = exit_dict['description']
+        blocked = exit_dict['blocked']
+        door = Door.from_dict(exit_dict['door'])
+        triggers = cls.__fill_triggers(exit_dict['triggers'])
+
+        return cls(compass_direction, links_to, description, blocked, door, triggers)
 
     @staticmethod
     def __fill_triggers(triggers_dict=None):
@@ -43,3 +54,17 @@ class Exit:
             value[k] = v
 
         return key, value
+
+    def open_door(self):
+        if self.door:
+            self.door.open()
+        else:
+            # TODO Flavor text for 'This exit does not have a door.
+            print()
+
+    def close_door(self):
+        if self.door:
+            self.door.close()
+        else:
+            # TODO Flavor text for 'This exit does not have a door.
+            print()

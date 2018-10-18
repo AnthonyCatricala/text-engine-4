@@ -15,14 +15,25 @@ class Room:
     exits = None
     triggers = None
 
-    def __init__(self, room_dict):
-        self.room_name = room_dict['room_name']
-        self.room_file = room_dict['room_file']
-        self.description = room_dict['description']
-        self.illuminated = room_dict['illuminated']
-        self.inventory = self.__fill_inventory(room_dict['inventory'])
-        self.exits = self.__fill_exits(room_dict['exits'])
-        self.triggers = self.__fill_triggers(room_dict['triggers'])
+    def __init__(self, room_name, room_file, description, illuminated, inventory, exits, triggers):
+        self.room_name = room_name
+        self.room_file = room_file
+        self.description = description
+        self.illuminated = illuminated
+        self.inventory = inventory
+        self.exits = exits
+        self.triggers = triggers
+
+    @classmethod
+    def from_dict(cls, room_dict):
+        room_name = room_dict['room_name']
+        room_file = room_dict['room_file']
+        description = room_dict['description']
+        illuminated = room_dict['illuminated']
+        inventory = cls.__fill_inventory(room_dict['inventory'])
+        exits = cls.__fill_exits(room_dict['exits'])
+        triggers = cls.__fill_triggers(room_dict['triggers'])
+        return cls(room_name, room_file, description, illuminated, inventory, exits, triggers)
 
     @staticmethod
     def __fill_inventory(inventory_dict):
@@ -34,10 +45,29 @@ class Room:
         return out
 
     @staticmethod
-    def __fill_exits(exits_dict):
+    def __fill_exits(exits=None):
+        if not exits:
+            exits = dict()
+
         out = []
-        for key, value in exits_dict.items():
-            out.append(Exit(key, value))
+
+        if type(exits) is dict:
+            for key, value in exits.items():
+                out.append(Exit(key, value))
+        elif type(exits) is list:
+            for e in exits:
+                if type(e) is Exit:
+                    out.append(e)
+                else:
+                    out = []
+                    # TODO Error handling for 'Exits supplied are not the right format.'
+                    print()
+                    break
+
+        else:
+            # TODO Error handling for 'Exits supplied are not the right format.'
+            print()
+
         return out
 
     @staticmethod
@@ -73,6 +103,10 @@ class Room:
             out[key] = value
 
         room_json = json.dumps(out, indent=4)
+
+        if not os.path.isdir("./Rooms/"):
+            os.makedirs("./Rooms/")
+
         if "../" not in self.room_file and self.room_file.endswith(".room"):
             if os.path.isfile(self.room_file):
                 yes = ["y", "yes"]
@@ -100,3 +134,6 @@ class Room:
         else:
             # TODO Error handling for "Invalid file name."
             print()
+
+    def look(self):
+        print(self.description)

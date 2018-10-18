@@ -111,33 +111,34 @@ def create_room(room_name="",
 
     out = None
     if room_name:
-        out = dict()
-        out["room_name"] = room_name
-        out["room_file"] = "./Rooms/{}.room".format(room_name.replace(" ", "_"))
+        room_dict = dict()
+        room_dict["room_name"] = room_name
+        room_dict["room_file"] = "./Rooms/{}.room".format(room_name.replace(" ", "_"))
 
         if not description:
             # TODO Error handling for room without description.
             print()
 
-        out["description"] = description
-        out["illuminated"] = illuminated
+        room_dict["description"] = description
+        room_dict["illuminated"] = illuminated
 
         if not inventory:
-            out["inventory"] = dict()
+            room_dict["inventory"] = dict()
         else:
-            out["inventory"] = inventory
+            room_dict["inventory"] = inventory
 
         if not exits:
-            out["exits"] = dict()
+            room_dict["exits"] = dict()
         else:
-            out["exits"] = exits
+            room_dict["exits"] = exits
 
         if not triggers:
-            out["triggers"] = dict()
+            room_dict["triggers"] = dict()
         else:
-            out["triggers"] = triggers
+            room_dict["triggers"] = triggers
 
-        save_room(out)
+        out = Room.from_dict(room_dict)
+        out.save()
 
     else:
         # TODO Error handling for no name entered.
@@ -311,7 +312,7 @@ def create_lock_and_key(key_name="",
             lock_dict["locked"] = is_locked
             lock_dict["triggers"] = triggers
 
-            lock = Lock(lock_dict)
+            lock = Lock.from_dict(lock_dict)
 
             key = create_object(key_name, key_description)
 
