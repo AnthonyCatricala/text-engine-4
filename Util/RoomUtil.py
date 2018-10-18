@@ -1,14 +1,12 @@
 from Util.ItemUtil import *
+from Util.ErrorUtil import *
+from Objects.Room import Room
+from Objects.Door import Door
+from Objects.Lock import Lock
 import json
 import os
 
-# TODO Create Room Python Object.
 # TODO Create Item Python Object.
-# TODO Create Trigger Python Object.
-# TODO Create Exit Python Object.
-# TODO Create Door Python Object.
-# TODO Create Lock Python Object.
-
 # TODO Create Checks For Object Validity.
 
 
@@ -22,27 +20,14 @@ def change_room_name(room=None, room_name=None):
     # @date 09/26/2018
     # ##
 
-    if room:
-        if "room_name" in room:
-            if room_name:
-                # Updating room name and the reference to the room file.
-                room["room_name"] = room_name
-                room["room_file"] = "./Rooms/{}.room".format(room_name.replace(" ", "_"))
-
-                # TODO Recursively find/update all exit references in other rooms. [Dakotah]
-                save_room(room)
-            else:
-                # TODO Error handling for 'No room name was supplied.'.
-                error_handler("change_room_name", "no name")
-                print()
+    if room and type(room) is Room:
+        if room_name and type(room_name) is str:
+            room.room_name = room_name
+            room.save()
         else:
-            # TODO Error handling for 'Invalid room format supplied'.
-            error_handler("change_room_name", "invalid format")
-            print()
+            error_handler("change_room_name", "no name")
     else:
-        # TODO Error handling for 'No room supplied'
         error_handler("change_room_name", "no room")
-        print()
 
 
 def set_room_description(room=None, room_description=None):
@@ -52,6 +37,10 @@ def set_room_description(room=None, room_description=None):
     #
     # @author Dakotah Jones
     # @date 10/07/2018
+    #
+    # @arg room WhatIF Room Object
+    # @arg room_description String describing the room.
+
     # ##
     change_room_description(room, room_description)
 
@@ -64,22 +53,14 @@ def change_room_description(room=None, room_description=None):
     # @author Dakotah Jones
     # @date 10/07/2018
     # ##
-    if room:
-        if "description" in room:
-            if room_description:
-                room["description"] = room_description
-            else:
-                # TODO Error handling for 'No room description was supplied'
-                error_handler("change_room_description", "no description")
-                print()
+
+    if room and type(room) is Room:
+        if room_description:
+            room.description = room_description
         else:
-            # TODO Error handling for 'Invalid room format supplied'.
             error_handler("change_room_description", "invalid format")
-            print()
     else:
-        # TODO Error handling for 'No room supplied'
         error_handler("change_room_description", "no room")
-        print()
 
 
 def add_light_to_room(room=None):
@@ -89,22 +70,10 @@ def add_light_to_room(room=None):
     # @author Dakotah Jones
     # @date 09/26/2018
     # ##
-    if room:
-        if type(room) is dict:
-            if "illuminated" in room:
-                room["illuminated"] = True
-            else:
-                # TODO Error handling for 'Invalid object supplied to room argument.'
-                error_handler("add_light_to_room", "invalid object")
-                print()
-        else:
-            # TODO Error handling for 'Invalid type supplied for room argument.'
-            error_handler("add_light_to_room", "invalid type")
-            print()
+    if room and type(room) is Room:
+        room.illuminated = True
     else:
-        # TODO Error handling for 'No object supplied for room argument.'
         error_handler("add_light_to_room", "no object")
-        print()
 
 
 def remove_light_from_room(room=None):
@@ -115,22 +84,10 @@ def remove_light_from_room(room=None):
     # @date 09/26/2018
     # ##
 
-    if room:
-        if type(room) is dict:
-            if "illuminated" in room:
-                room["illuminated"] = False
-            else:
-                error_handler("remove_light_from_room", "invalid object")
-                # TODO Error handling for 'Invalid object supplied for room argument.'
-                print()
-        else:
-            # TODO Error handling for 'Invalid type supplied for room argument.'
-            error_handler("remove_light_from_room", "invalid type")
-            print()
+    if room and type(room) is Room:
+        room.illuminated = False
     else:
         error_handler("remove_light_from_room", "no object")
-        # TODO Error handling for 'No object supplied for room argument.'
-        print()
 
 
 def create_room(room_name="",
@@ -149,39 +106,36 @@ def create_room(room_name="",
 
     out = None
     if room_name:
-        out = dict()
-        out["room_name"] = room_name
-        out["room_file"] = "./Rooms/{}.room".format(room_name.replace(" ", "_"))
+        room_dict = dict()
+        room_dict["room_name"] = room_name
+        room_dict["room_file"] = "./Rooms/{}.room".format(room_name.replace(" ", "_"))
 
         if not description:
-            # TODO Error handling for room without description.
             error_handler("create_room", "no description")
-            print()
 
-        out["description"] = description
-        out["illuminated"] = illuminated
+        room_dict["description"] = description
+        room_dict["illuminated"] = illuminated
 
         if not inventory:
-            out["inventory"] = dict()
+            room_dict["inventory"] = dict()
         else:
-            out["inventory"] = inventory
+            room_dict["inventory"] = inventory
 
         if not exits:
-            out["exits"] = dict()
+            room_dict["exits"] = dict()
         else:
-            out["exits"] = exits
+            room_dict["exits"] = exits
 
         if not triggers:
-            out["triggers"] = dict()
+            room_dict["triggers"] = dict()
         else:
-            out["triggers"] = triggers
+            room_dict["triggers"] = triggers
 
-        save_room(out)
+        out = Room.from_dict(room_dict)
+        out.save()
 
     else:
         error_handler("create_room", "no name")
-        # TODO Error handling for no name entered.
-        print()
 
     return out
 
@@ -192,6 +146,10 @@ def load_room(room_name=None, room_file=None):
     #
     # @author Dakotah Jones
     # @date 10/03/2018
+    #
+    # @arg room_name The room name spelled correctly with spaces.
+    # @arg room_file The URL of the room file on disk.
+    # @returns WhatIF Room Object.
     # ##
 
     out = None
@@ -204,10 +162,7 @@ def load_room(room_name=None, room_file=None):
                         out = json.load(f)
                     f.close()
                 else:
-
                     error_handler("load_room", "file does not exist")
-                    # TODO Error handling for "File does not exist."
-                    print()
 
             if room_file:
                 if "../" not in room_file and not room_file.startswith("/"):
@@ -217,20 +172,13 @@ def load_room(room_name=None, room_file=None):
                         f.close()
                     else:
                         error_handler("load_room", "file does not exist")
-                        # TODO Error handling for "File does not exist."
-                        print()
                 else:
                     error_handler("load_room", "illegal file path")
-                    # TODO Error handling for "Illegal file path supplied."
-                    print()
+            out = Room(out)
         else:
             error_handler("load_room", "too many arguments")
-            # TODO Error handling for too many arguments supplied. (One or the other.)
-            print()
     else:
         error_handler("load_room", "no argumments")
-        # TODO Error handling for no arguments supplied.
-        print()
 
     return out
 
@@ -241,44 +189,14 @@ def save_room(room=None):
     #
     # @author Dakotah Jones
     # @date 10/03/2018
+    #
+    # @arg room A WhatIF Room Object.
     # ##
 
-    if room:
-        if "room_file" in room:
-            room_file = room["room_file"]
-            room_json = json.dumps(room, indent=4)
-            if "../" not in room_file and room_file.endswith(".room"):
-                if os.path.isfile(room_file):
-                    yes = ["y", "yes"]
-                    no = ["n", "no"]
-                    overwrite = input(
-                        "Room file already exists, would you like to overwrite {}: ".format(room["room_name"]))
-
-                    while overwrite not in yes and overwrite not in no:
-                        overwrite = input("Invalid option supplied, overwrite (y/n): ")
-
-                    if overwrite in yes:
-                        tmp_file = "{}.tmp".format(room_file)
-                        with open(tmp_file, "w") as f:
-                            f.write(room_json)
-                        f.close()
-                        os.remove(room_file)
-                        os.rename(tmp_file, room_file)
-                    else:x
-                        # TODO Notify the user that the room data has not been saved.
-                        print()
-                else:
-                    with open(room_file, "w+") as f:
-                        f.write(room_json)
-                    f.close()
-            else:
-                # TODO Error handling for "Invalid file name."
-                print()
-        else:
-            # TODO Error handling for "Invalid object supplied as room argument."
-            print()
+    if room and type(room) is Room:
+        room.save()
     else:
-        # TODO Error handling for "No object supplied as room argument."
+        # TODO Error handling for No/Invalid room object supplied.
         print()
 
 
@@ -351,17 +269,19 @@ def create_door(is_open=False,
     # @author Dakotah Jones
     # @date 10/03/2018
     # ##
-    out = dict()
-    out["open"] = is_open
+    door_dict = dict()
+    door_dict["open"] = is_open
     if lock:
-        out["lock"] = lock
+        door_dict["lock"] = lock
     else:
-        out["lock"] = dict()
+        door_dict["lock"] = dict()
 
     if triggers:
-        out["triggers"] = triggers
+        door_dict["triggers"] = triggers
     else:
-        out["triggers"] = dict()
+        door_dict["triggers"] = dict()
+
+    out = Door(door_dict)
 
     return out
 
@@ -375,10 +295,12 @@ def create_lock_and_key(key_name="",
 
     if key_name and type(key_name) is str:
         if key_description and type(key_description) is str:
-            lock = dict()
-            lock["key"] = key_name
-            lock["locked"] = is_locked
-            lock["triggers"] = triggers
+            lock_dict = dict()
+            lock_dict["key"] = key_name
+            lock_dict["locked"] = is_locked
+            lock_dict["triggers"] = triggers
+
+            lock = Lock.from_dict(lock_dict)
 
             key = create_object(key_name, key_description)
 
