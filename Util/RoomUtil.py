@@ -3,6 +3,7 @@ from Util.ErrorUtil import *
 from Objects.Room import Room
 from Objects.Door import Door
 from Objects.Lock import Lock
+from Objects.Exit import Exit
 import json
 import os
 
@@ -399,6 +400,8 @@ def create_room_exit(compass_direction="",
                                         room_exit["triggers"] = triggers
                                     else:
                                         room_exit["triggers"] = dict()
+
+                                    out = Exit.from_dict(compass_direction, room_exit)
 
                                 else:
                                     # TODO Error handling for 'Invalid type supplied for description argument.'

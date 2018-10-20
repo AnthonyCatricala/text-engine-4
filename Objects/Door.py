@@ -12,7 +12,6 @@ class Door:
         self.lock = lock
         self.triggers = triggers
 
-
     @classmethod
     def from_dict(cls, door_dict):
         is_open = door_dict['open']

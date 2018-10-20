@@ -24,7 +24,13 @@ class Exit:
         links_to = exit_dict['links-to']
         description = exit_dict['description']
         blocked = exit_dict['blocked']
-        door = Door.from_dict(exit_dict['door'])
+
+        door_dict = exit_dict['door']
+        if door_dict:
+            door = Door.from_dict(door_dict)
+        else:
+            door = None
+
         triggers = cls.__fill_triggers(exit_dict['triggers'])
 
         return cls(compass_direction, links_to, description, blocked, door, triggers)

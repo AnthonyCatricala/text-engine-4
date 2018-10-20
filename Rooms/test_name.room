@@ -1,0 +1,9 @@
+{
+    "room_name": "test_name",
+    "room_file": "./Rooms/test_name.room",
+    "description": "its an empty room, like pats soul.",
+    "illuminated": true,
+    "exits": {},
+    "inventory": {},
+    "triggers": {}
+}
