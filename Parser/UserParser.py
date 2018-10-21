@@ -1,14 +1,15 @@
 import re
-
 import Util.RoomUtil
+import Objects.Exit
 import json
 import os
+
 
 class UserParser:
     room = None
 
-    def __init__(self, room_name):
-        self.room = Util.RoomUtil.load_room(room_name)
+    def __init__(self, room_name = Util.RoomUtil.Room):
+        self.room = room_name
 
     def remove_user_error(self, input_str):
         ##
@@ -20,7 +21,7 @@ class UserParser:
         out = re.sub(r" {2,}", " ", out)
         return out
 
-    def com_check(self, com_given, com_check):
+    def com_check(self, com_given = [], com_check = []):
         ##
         # Author: Lucy Oliverio
         # Description: Given an array of the user's input and an array of valid inputs,
@@ -51,10 +52,35 @@ class UserParser:
         if i == 0 or i > 1:
             s = None
         return s
+
+    def cut_off_str(self, input_str, inp_cutoff_word):
+        object_str = []
+        x = ""
+        while x != inp_cutoff_word:
+            object_str.append(x)
+            x = input_str.pop()
+        return object_str[1:]
+
     def simplify_command(self, input_string):
         str = self.remove_user_error(input_string).split(" ")
-        s = self.com_check(str, ["haha"])
-        return s
+        #TODO fill out rest of the commands that are available
+        chosen_command = self.com_check(str, ["look"])
+        if chosen_command is "":
+            return "Not a command"
+
+        #object 1
+        str = self.cut_off_str(str, chosen_command)
+        str.reverse()
+        if (chosen_command is 'look') and (self.room.illuminated is False):
+            #TODO check to see if the player or any visible objects emit light
+            return "Its too dark"
+        #TODO everything else
+        return ""
+
+    def testing_method(self, inp_str):
+            ex = self.room.exits[0]
+            print(ex.links_to)
+
 
 
 
