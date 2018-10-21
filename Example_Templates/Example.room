@@ -29,8 +29,7 @@
         "triggers": {}
       },
       "triggers": {}
-    },
-    "triggers": {}
+    }
   },
   "triggers": {
     "command": {
