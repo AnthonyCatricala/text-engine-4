@@ -53,7 +53,7 @@ class Room:
 
         if type(exits) is dict:
             for key, value in exits.items():
-                out.append(Exit(key, value))
+                out.append(Exit.from_dict(key, value))
         elif type(exits) is list:
             for e in exits:
                 if type(e) is Exit:
