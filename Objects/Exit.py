@@ -24,7 +24,6 @@ class Exit:
         links_to = exit_dict['links-to']
         description = exit_dict['description']
         blocked = exit_dict['blocked']
-
         door_dict = exit_dict['door']
         if door_dict:
             door = Door.from_dict(door_dict)

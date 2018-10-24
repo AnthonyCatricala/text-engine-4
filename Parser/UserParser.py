@@ -79,7 +79,7 @@ class UserParser:
 
     def testing_method(self, inp_str):
             ex = self.room.exits[0]
-            print(ex.links_to)
+            print(ex.blocked)
 
 
 

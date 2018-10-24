@@ -52,8 +52,9 @@ class Room:
         out = []
 
         if type(exits) is dict:
+            temp_array = []
             for key, value in exits.items():
-                out.append(Exit(key, value))
+                out.append(Exit.from_dict(key, value))
         elif type(exits) is list:
             for e in exits:
                 if type(e) is Exit:
