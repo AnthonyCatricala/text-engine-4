@@ -18,7 +18,7 @@ class Door:
         if door_dict['lock']:
             lock = Lock.from_dict(door_dict['lock'])
         else:
-            lock = dict()
+            lock = None
         triggers = cls.__fill_triggers(door_dict['triggers'])
         return cls(is_open, lock, triggers)
 
