@@ -8,7 +8,6 @@ import json
 import os
 
 # TODO Create Item Python Object.
-# TODO Create Checks For Object Validity.
 
 
 def change_room_name(room=None, room_name=None):
@@ -231,6 +230,7 @@ def add_object_to_room(room=None, obj=None):
         print()
 
 
+# TODO Combe back to this when Items have been created.
 def remove_object_from_room(room=None, obj_name=None):
     if room:
         if type(room) is dict:
@@ -287,6 +287,7 @@ def create_door(is_open=False,
     return out
 
 
+# TODO Come back to this when Items have been created.
 def create_lock_and_key(key_name="",
                         key_description="",
                         is_locked=True,
@@ -317,14 +318,10 @@ def create_lock_and_key(key_name="",
 
 def apply_lock_to_door(door=None, lock=None):
     if lock:
-        if type(lock) is dict:
+        if type(lock) is Lock:
             if door:
-                if type(door) is dict:
-                    if "lock" in door:
-                        door["lock"] = lock
-                    else:
-                        # TODO Error handling for 'Illegal door format supplied withing door argument.'
-                        print()
+                if type(door) is Door:
+                    door.lock = lock
                 else:
                     # TODO Error handling for 'Invalid type supplied for door argument.'
                     print()
@@ -341,11 +338,11 @@ def apply_lock_to_door(door=None, lock=None):
 
 def remove_lock_from_door(door=None):
     if door:
-        if type(door) is dict:
-            if "lock" in door:
-                door["lock"] = dict()
+        if type(door) is Door:
+            if door.lock:
+                door.lock = None
             else:
-                # TODO Error handling for 'Illegal door format supplied withing door argument.'
+                # TODO Error handling for 'There is no lock on that door.'
                 print()
         else:
             # TODO Error handling for 'Invalid type supplied for door argument.'
@@ -433,24 +430,11 @@ def create_room_exit(compass_direction="",
 
 def apply_door_to_exit(room_exit=None, door=None):
     if room_exit:
-        if type(room_exit) is dict:
-            if len(room_exit) == 1:
-                for key, value in room_exit.items():
-                    if "door" in value:
-                        if door:
-                            if type(door) is dict:
-                                value["door"] = door
-                            else:
-                                # TODO Error handling for 'Invalid type supplied for compass direction argument.'
-                                print()
-                        else:
-                            # TODO Error handling for 'No object supplied for door argument.'
-                            print()
-                    else:
-                        # TODO Error handling for 'Invalid room exit format supplied for room exit argument.'
-                        print()
+        if type(room_exit) is Exit:
+            if type(door) is Door:
+                room_exit.door = door
             else:
-                # TODO Error handling for 'Too many object supplied within the room exit argument.'
+                # TODO Error handling for 'Invalid type supplied for door argument.'
                 print()
         else:
             # TODO Error handling for 'Invalid type supplied for room exit argument.'
@@ -462,16 +446,11 @@ def apply_door_to_exit(room_exit=None, door=None):
 
 def remove_door_from_exit(room_exit=None):
     if room_exit:
-        if type(room_exit) is dict:
-            if len(room_exit) == 1:
-                for key, value in room_exit.items():
-                    if "door" in value:
-                        value["door"] = dict()
-                    else:
-                        # TODO Error handling for 'Invalid room exit format supplied for room exit argument.'
-                        print()
+        if type(room_exit) is Exit:
+            if room_exit.door:
+                room_exit.door = None
             else:
-                # TODO Error handling for 'Too many object supplied within the room exit argument.'
+                # TODO Error handling for 'No door exists on that exit.'
                 print()
         else:
             # TODO Error handling for 'Invalid type supplied for room exit argument.'
@@ -483,25 +462,15 @@ def remove_door_from_exit(room_exit=None):
 
 def apply_exit_to_room(room=None, room_exit=None):
     if room:
-        if type(room) is dict:
-            if "exits" in room:
-
-                if room_exit:
-                    if type(room_exit) is dict:
-                        if len(room_exit) == 1:
-                            for key, value in room_exit.items():
-                                room["exits"][key] = value
-                        else:
-                            # TODO Error handling for 'Too many object supplied within the room exit argument.'
-                            print()
-                    else:
-                        # TODO Error handling for 'Invalid type supplied for room exit argument.'
-                        print()
+        if type(room) is Room:
+            if room_exit:
+                if type(room_exit) is Exit:
+                    room.exits.append(room_exit)
                 else:
-                    # TODO Error handling for 'No object supplied for the room exit argument.'
+                    # TODO Error handling for 'Invalid type supplied for room exit argument.'
                     print()
             else:
-                # TODO Error handling for 'Invalid room format supplied for room argument.'
+                # TODO Error handling for 'No object supplied for the room exit argument.'
                 print()
         else:
             # TODO Error handling for 'Invalid type supplied for room argument.'
@@ -523,32 +492,29 @@ def remove_exit_from_room(room=None, compass_direction=None):
                           "northwest"]
 
     if room:
-        if type(room) is dict:
-            if "exits" in room:
-
-                if compass_direction:
-                    if type(compass_direction) is str:
-                        room_exits = room["exits"]
-                        if compass_direction in compass_directions:
-                            if compass_direction in room_exits:
-                                del(room_exits[compass_direction])
-                            else:
-                                # TODO Error handling for 'No exit in compass direction specified.'
-                                print()
-                        else:
-                            # TODO Error handling for 'Invalid string supplied to compass direction argument.'
+        if type(room) is Room:
+            if compass_direction:
+                if type(compass_direction) is str:
+                    room_exits = room.exits
+                    if compass_direction in compass_directions:
+                        exit_found = False
+                        for e in room_exits:
+                            if e.compass_direction == compass_direction:
+                                room_exits.remove(e)
+                        if not exit_found:
+                            # TODO Error handling for 'No exit in compass direction specified.'
                             print()
                     else:
-                        # TODO Error handling for 'Invalid type supplied for compass direction argument.'
+                        # TODO Error handling for 'Invalid string supplied to compass direction argument.'
                         print()
                 else:
-                    # TODO Error handling for 'No object supplied for the compass direction argument.'
+                    # TODO Error handling for 'Invalid type supplied for compass direction argument.'
                     print()
             else:
-                # TODO Error handling for 'Invalid room format supplied for room argument.'
+                # TODO Error handling for 'No object supplied for the compass direction argument.'
                 print()
         else:
-            # TODO Error handling for 'Invalid type supplied for room argument.'
+            # TODO Error handling for 'Invalid room format supplied for room argument.'
             print()
     else:
         # TODO Error handling for 'No object supplied for the room argument.'
