@@ -29,7 +29,6 @@ class UserParser:
         ##
         par_giv_com = com_given
         i = 0
-        ch_item = None
         s = ""
 
         #   checks each individual command with the user's input, if it is there it increases
@@ -72,7 +71,11 @@ class UserParser:
         chosen_object = ""
         preposition = ""
         second_chosen_object = ""
-        user_str = self.remove_user_error(input_string).split(" ")
+        input_str = self.remove_user_error(input_string)
+        input_str = input_str.replace("run", "go")
+        input_str = input_str.replace("walk", "go")
+        input_str = input_str.replace("move", "go")
+        user_str = input_str.split(" ")
 
         #TODO fill out rest of the commands that are available
         chosen_command = self.com_check(user_str, ["look", "go", "open", "close"])
@@ -93,7 +96,7 @@ class UserParser:
             #TODO check objects for look command
         if len(self.room.exits) != 0:
             temp_arr = self.turn_into_array(self.room.exits)
-            chosen_object = self.com_check(main_obj, temp_arr)
+            chosen_object = self.com_check(main_obj[:], temp_arr)
             #TODO remove open and look from the if statement below when items are created
             if (chosen_command in ["open", "close"]) and (chosen_object != ""):
                 return [chosen_command, "door", "from", chosen_object]
