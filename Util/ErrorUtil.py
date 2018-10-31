@@ -1,4 +1,5 @@
 import os
+import subprocess, sys
 
 def error_handler(fct, reason):
      # ##
@@ -109,8 +110,16 @@ def error_handler(fct, reason):
     see_tutorial = input().lower()
 
     if see_tutorial == "y" or "yes" or "":
-        tutorial = "./Documentation/{}.txt".format(function)
-        os.startfile(tutorial)
+        tutorial = "./Documentation/{}.txt".format(fct)
+        platform = sys.platform
+        if platform == 'win32':
+            os.startfile(tutorial)
+        elif platform == 'darwin':
+            opener = "open"
+            subprocess.call([opener, tutorial])
+        elif platform == 'linux':
+            opener = "xdg-open"
+            subprocess.call([opener, tutorial])
         exit()
     else:
         exit()
