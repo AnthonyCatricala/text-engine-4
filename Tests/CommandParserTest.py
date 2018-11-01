@@ -12,7 +12,7 @@ class CommandParserTest(unittest.TestCase):
     command_parser = None
 
     def test(self):
-        self.room = load_room('Test_Room')
+        self.room = load_room('Test Room')
         self.command_parser = UserParser(self.room)
 
         self.test_empty()
