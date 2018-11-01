@@ -66,14 +66,44 @@ class UserParser:
             list_of_exits.append(exit.compass_direction)
         return list_of_exits
 
+    def refine_input(self, inp_com, temp_str1, temp_str2):
+        ##
+        # Author: Lucy Oliverio
+        # description: Given a string, the program will replaces all key words with the correct words and spacing
+        ##
+        com = self.remove_user_error(inp_com)
+        par_com = com.split(" ")
+        i = 0
+        com = ""
+        is_there = False
+        for x in par_com:
+            for xx in temp_str1:
+                for xxx in xx:
+                    if x == xxx:
+                        com = com + " " + temp_str2[i]
+                        is_there = True
+                        continue
+                i = i + 1
+            i = 0
+            if is_there is False:
+                com = com + " " + x
+            elif is_there is True:
+                is_there = False
+        del temp_str1, temp_str2, par_com, is_there, i
+        return com[1:].split()
+
     #TODO make it so doors = compass door
     def simplify_command(self, input_string):
         chosen_command = ""
         chosen_object = ""
         preposition = ""
         second_chosen_object = ""
-        user_str = self.remove_user_error(input_string).split(" ")
-
+        temp_str1 = {"go", "walk", "run", "enter", "g"}, {"look", "l"}, {"examine", "exam"}, {"north", "n", "northern"}, {
+                        "south", "s", "southern"}, {"east", "e", "eastern"}, {"west", "w", "western"}
+        temp_str2 = ["go", "look", "examine", "north", "south", "east", "west"]
+        user_str = self.refine_input(input_string, temp_str1, temp_str2)
+        del temp_str1, temp_str2
+        print(user_str)
         #TODO fill out rest of the commands that are available
         chosen_command = self.com_check(user_str, ["look", "go", "open", "close"])
         if chosen_command == "":
@@ -93,7 +123,7 @@ class UserParser:
             #TODO check objects for look command
         if len(self.room.exits) != 0:
             temp_arr = self.turn_into_array(self.room.exits)
-            chosen_object = self.com_check(main_obj, temp_arr)
+            chosen_object = self.com_check(main_obj[:], temp_arr)
             #TODO remove open and look from the if statement below when items are created
             if (chosen_command in ["open", "close"]) and (chosen_object != ""):
                 return [chosen_command, "door", "from", chosen_object]
