@@ -4,20 +4,14 @@ from Parser.UserParser import UserParser
 import os
 import unittest
 
-os.chdir("..")
+# TODO The project should run from any directory.
+PROJECT_DIR = os.path.abspath(os.path.join(os.path.join(__file__, os.pardir), os.pardir))
+os.chdir(PROJECT_DIR)
 
 
-class CommandParserTest(unittest.TestCase):
-    room = None
-    command_parser = None
-
-    def test(self):
-        self.room = load_room('Test Room')
-        self.command_parser = UserParser(self.room)
-
-        self.test_empty()
-        self.test_look()
-        self.test_go()
+class TestCommandParser(unittest.TestCase):
+    room = load_room('Test Room')
+    command_parser = UserParser(room)
 
     # Testing empty input.
     def test_empty(self):
@@ -182,3 +176,7 @@ class CommandParserTest(unittest.TestCase):
         test_input = 'look go'
         test_output = self.command_parser.simplify_command(test_input)
         self.assertEqual(test_output, test_answer)
+
+
+if __name__ == "__main__":
+    unittest.main()
