@@ -103,7 +103,6 @@ class UserParser:
         temp_str2 = ["go", "look", "examine", "north", "south", "east", "west"]
         user_str = self.refine_input(input_string, temp_str1, temp_str2)
         del temp_str1, temp_str2
-        print(user_str)
         #TODO fill out rest of the commands that are available
         chosen_command = self.com_check(user_str, ["look", "go", "open", "close"])
         if chosen_command == "":
@@ -116,10 +115,6 @@ class UserParser:
             return ["look", "", "", ""]
         if len(main_obj) == 0:
             return ["error", "no object", "", ""]
-        if chosen_command == "look":
-            chosen_object = self.com_check(main_obj, ["north", "south", "east", "west"])
-            if chosen_object != "":
-                return [chosen_command, chosen_object, "", ""]
             #TODO check objects for look command
         if len(self.room.exits) != 0:
             temp_arr = self.turn_into_array(self.room.exits)
@@ -140,7 +135,10 @@ class UserParser:
                 if ("lock" in user_str) and (self.room.exits[place_of_obj].door.lock is None):
                     return ["Error", "no lock", "", ""]
                 return [chosen_command, "exit", "from", chosen_object]
-
+        if chosen_command == "look":
+            chosen_object = self.com_check(main_obj, ["north", "south", "east", "west"])
+            if chosen_object != "":
+                return [chosen_command, chosen_object, "", ""]
         return [chosen_command, chosen_object, preposition, second_chosen_object]
 
     def testing_method(self, inp_str):
