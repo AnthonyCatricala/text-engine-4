@@ -1,0 +1,41 @@
+{
+  "room_name": "Example Room",
+  "room_file": "./Rooms/Example_Room.room",
+  "description": "This is a description of the room.",
+  "illuminated": false,
+  "inventory": {
+    "item_name": {
+      "alias": ["list", "of", "names"],
+      "description": "This is a description of the item.",
+      "illuminated": false,
+      "obtainable": false,
+      "inventory": {},
+      "door": {},
+      "triggers": {}
+    }
+  },
+  "exits": {
+    "compass_direction": {
+      "links-to": "./Rooms/Example_Room_2.room",
+      "description": "This is a description of the exit and/or door.",
+      "blocked": false,
+      "door": {
+        "open": false,
+        "lock": {
+          "locked": false,
+          "key": "key name",
+          "triggers": {}
+        },
+        "triggers": {}
+      },
+      "triggers":{}
+    }
+  },
+  "triggers": {
+    "command": {
+      "trigger-type": {
+        "description": "Message to be displayed on trigger."
+      }
+    }
+  }
+}

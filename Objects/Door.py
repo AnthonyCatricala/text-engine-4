@@ -18,7 +18,7 @@ class Door:
         if door_dict['lock']:
             lock = Lock.from_dict(door_dict['lock'])
         else:
-            lock = dict()
+            lock = None
         triggers = cls.__fill_triggers(door_dict['triggers'])
         return cls(is_open, lock, triggers)
 
@@ -35,12 +35,17 @@ class Door:
     def to_json(self):
         out = dict()
         out['open'] = self.is_open
-        out['lock'] = self.lock.to_json()
+
+        if self.lock:
+            out['lock'] = self.lock.to_json()
+        else:
+            out['lock'] = dict()
 
         out['triggers'] = dict()
-        for t in self.triggers:
-            key, value = t.to_json()
-            out[key] = value
+        if self.triggers:
+            for t in self.triggers:
+                key, value = t.to_json()
+                out[key] = value
 
         return out
 
@@ -60,7 +65,7 @@ class Door:
 
     def open(self):
         if not self.is_open:
-            if not self.lock or not self.lock.locked:
+            if not self.lock or not self.lock.is_locked:
                 # If there is no lock or it is unlocked.
                 self.is_open = True
                 # TODO Flavor text for door opening.

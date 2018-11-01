@@ -88,19 +88,22 @@ class Room:
         out['illuminated'] = self.illuminated
 
         out['exits'] = dict()
-        for e in self.exits:
-            key, value = e.to_json()
-            out[key] = value
+        if self.exits:
+            for e in self.exits:
+                key, value = e.to_json()
+                out['exits'][key] = value
 
         out['inventory'] = dict()
-        for i in self.inventory:
-            key, value = i.to_json()
-            out[key] = value
+        if self.inventory:
+            for i in self.inventory:
+                key, value = i.to_json()
+                out['inventory'][key] = value
 
         out['triggers'] = dict()
-        for t in self.triggers:
-            key, value = t.to_json()
-            out[key] = value
+        if self.triggers:
+            for t in self.triggers:
+                key, value = t.to_json()
+                out['triggers'][key] = value
 
         room_json = json.dumps(out, indent=4)
 
@@ -112,7 +115,7 @@ class Room:
                 yes = ["y", "yes"]
                 no = ["n", "no"]
                 overwrite = input(
-                    "Room file already exists, would you like to overwrite {}: ".format(self.room_name))
+                    "Overwrite existing room file for {}: ".format(self.room_name))
 
                 while overwrite not in yes and overwrite not in no:
                     overwrite = input("Invalid option supplied, overwrite (y/n): ")

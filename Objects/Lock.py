@@ -7,7 +7,7 @@ class Lock:
     triggers = None
 
     def __init__(self, locked, key, triggers):
-        self.locked = locked
+        self.is_locked = locked
         self.key = key
         self.triggers = triggers
 
@@ -30,26 +30,27 @@ class Lock:
 
     def to_json(self):
         out = dict()
-        out['locked'] = self.locked
+        out['locked'] = self.is_locked
         out['key'] = self.key
         out['triggers'] = dict()
 
-        for t in self.triggers:
-            key, value = t.to_json()
-            out[key] = value
+        if self.triggers:
+            for t in self.triggers:
+                key, value = t.to_json()
+                out[key] = value
 
         return out
 
     def unlock(self):
-        if self.locked:
-            self.locked = False
+        if self.is_locked:
+            self.is_locked = False
         else:
             # TODO Flavor text for the door is already unlocked.
             print()
 
     def lock(self):
-        if not self.locked:
-            self.locked = True
+        if not self.is_locked:
+            self.is_locked = True
         else:
             # TODO Flavor text for the door is already locked.
             print()
