@@ -1,11 +1,10 @@
-from Parser.UserParser import UserParser
+from Util.RoomUtil import load_room
 from Objects.Room import Room
-from Objects.Exit import Exit
 
 
 class CommandExecutor:
-
-    parsed_string = UserParser.user_parser
+    room = None
+    player = None
 
     def __init__(self, room, player):
         self.room = room
@@ -13,37 +12,59 @@ class CommandExecutor:
 
     def executor(self, parsed_string):
 
-        if parsed_string[0] == "Look":
-            self.look_function(self.room)
-        elif parsed_string[0] == "Move":
-            self.move_function(self.parsed_string, self.room)
-        elif parsed_string[0] == "Examine":
-            self.examine_function(self.parsed_string, self.room)
-#        elif parsed_string[0] == "Get":
+        if parsed_string[0] == "look":
+            self.look_function()
+        elif parsed_string[0] == "go":
+            self.move_function(parsed_string)
+        elif parsed_string[0] == "examine":
+            self.examine_function(parsed_string)
+#        elif parsed_string[0] == "take":
 #            self.get_function() TODO add this with items
 
-    def look_function(self, room):
+    def look_function(self):
+        self.room.look()
 
-        print(room.description)
-        for x in room.inventory:
+        # TODO Come back to this when objects have been created.
+        for x in self.room.inventory:
             print(x)
 
-    def move_function(self, parsed_string, room):
 
-        Exit.compass_direction = parsed_string[1]
+    def move_function(self, parsed_string):
+        compass_direction = parsed_string[1]
+        room_exits = self.room.exits
 
-        if Exit.compass_direction in room.exits:
-                if Exit.compass_direction.blocked:
-                    print("There is something in the way.")
-                    if Exit.door:
-                        print("A door blocks the path.")
+        applicable_exit = None
+        exit_exists = False
+
+        for e in room_exits:
+            if e.compass_direction == compass_direction:
+                exit_exists = True
+                if not e.blocked:
+                    if e.door:
+                        if e.door.is_open:
+                            applicable_exit = e
+                            break
+                        elif e.door.lock and e.door.lock.is_locked:
+                            print("The door seems to be locked.")
+                        elif e.door.lock and not e.door.lock.is_locked:
+                            print("The door is closed, but it doesn't seem to be locked.")
+                        else:
+                            print("The door blocks your path.")
+                    else:
+                        applicable_exit = e
+                        break
                 else:
-                    Room.room_file = Exit.links_to
-                    print("You move to " +Room.room_name+ ".")
-        else:
+                    print("There is something in the way.")
+
+        if not exit_exists:
             print("There is no exit in that direction.")
 
-    def examine_function(self, parsed_string, room):
+        if applicable_exit:
+            self.room = load_room(room_file=applicable_exit.links_to)
+            print("You move to {}.".format(self.room.room_name))
+
+
+    def examine_function(self, parsed_string):
 
         examined_item = parsed_string[1]
 

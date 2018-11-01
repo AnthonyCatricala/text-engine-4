@@ -1,0 +1,62 @@
+{
+    "room_name": "Test Room",
+    "room_file": "./Rooms/Test_Room.room",
+    "description": "This is the room's description",
+    "illuminated": true,
+    "exits": {
+        "north": {
+            "links-to": "./Rooms/Test_Room.room",
+            "description": "To example room.",
+            "blocked": false,
+            "door": {
+                "open": true,
+                "lock": {},
+                "triggers": {}
+            },
+            "triggers": {}
+        },
+        "south": {
+            "links-to": "./Rooms/Test_Room.room",
+            "description": "To example room.",
+            "blocked": false,
+            "door": {
+                "open": false,
+                "lock": {},
+                "triggers": {}
+            },
+            "triggers": {}
+        },
+        "east": {
+            "links-to": "./Rooms/Test_Room.room",
+            "description": "To example room.",
+            "blocked": false,
+            "door": {
+                "open": false,
+                "lock": {
+                    "locked": true,
+                    "key": "test key",
+                    "triggers": {}
+                },
+                "triggers": {}
+            },
+            "triggers": {}
+        },
+        "west": {
+            "links-to": "./Rooms/Test_Room.room",
+            "description": "To example room.",
+            "blocked": false,
+            "door": {
+                "open": true,
+                "lock": {
+                    "locked": true,
+                    "key": "test key",
+                    "triggers": {}
+                },
+                "triggers": {}
+            },
+            "triggers": {}
+        }
+    },
+    "inventory": {},
+    "triggers": {}
+}

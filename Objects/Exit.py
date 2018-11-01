@@ -51,12 +51,16 @@ class Exit:
         value['links-to'] = self.links_to
         value['description'] = self.description
         value['blocked'] = self.blocked
-        value['door'] = self.door.to_json()
+        if self.door:
+            value['door'] = self.door.to_json()
+        else:
+            value['door'] = dict()
 
         value['triggers'] = dict()
-        for t in self.triggers:
-            k, v = t.to_json()
-            value[k] = v
+        if self.triggers:
+            for t in self.triggers:
+                k, v = t.to_json()
+                value[k] = v
 
         return key, value
 
