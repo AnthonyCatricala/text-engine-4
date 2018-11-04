@@ -1,6 +1,11 @@
 from Parser.CommandExecuter import *
 from Parser.UserParser import *
 
+import os
+
+# TODO The project should run from any directory.
+PROJECT_DIR = os.path.abspath(os.path.join(__file__, os.pardir))
+os.chdir(PROJECT_DIR)
 
 def play():
     start_room = load_room('Test Room')
