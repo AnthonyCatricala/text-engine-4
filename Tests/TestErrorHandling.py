@@ -32,14 +32,6 @@ class TestErrorHandling(unittest.TestCase):
 
         return str(test_std_out)
 
-    def hold(self):
-        test_function = ''
-        expected_output_header = ''
-
-        test_reason = ''
-        expected_output = expected_output_header + ''
-        self.assertEqual(expected_output, self.get_output_string(test_function, test_reason))
-
     def test_change_room_name(self):
         test_function = 'change_room_name'
         expected_output_header = 'It looks like you\'re trying to change the name of a room, '

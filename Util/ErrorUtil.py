@@ -92,11 +92,10 @@ def error_handler(fct, reason, testing=False):
             print("but you haven't put any arguments in your function.")
 
     if not testing:
-        print("Would you like to see the tutorial for loading rooms? [y/n]")
 
-        see_tutorial = input().lower()
+        see_tutorial = input("Would you like to see the tutorial for loading rooms [y/n]: ").lower()
 
-        if see_tutorial == "y" or "yes" or "":
+        if see_tutorial in ["yes", "y", ""]:
             tutorial = "./Documentation/{}.txt".format(fct)
             platform = sys.platform
             if platform == 'win32':
@@ -107,6 +106,3 @@ def error_handler(fct, reason, testing=False):
             elif platform == 'linux':
                 opener = "xdg-open"
                 subprocess.call([opener, tutorial])
-            exit()
-        else:
-            exit()

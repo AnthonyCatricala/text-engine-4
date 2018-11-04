@@ -174,11 +174,12 @@ def load_room(room_name=None, room_file=None):
                         error_handler("load_room", "file does not exist")
                 else:
                     error_handler("load_room", "illegal file path")
-            out = Room.from_dict(out)
+            if out:
+                out = Room.from_dict(out)
         else:
             error_handler("load_room", "too many arguments")
     else:
-        error_handler("load_room", "no argumments")
+        error_handler("load_room", "no arguments")
 
     return out
 
