@@ -2,7 +2,7 @@ import os
 import subprocess, sys
 
 
-def error_handler(fct, reason):
+def error_handler(fct, reason, testing=False):
     # ##
     # Is called whenever an error occurs.
     # Asks the user if they'd like to see documentation for the errored function.
@@ -32,7 +32,7 @@ def error_handler(fct, reason):
     elif fct == "change_room_description":
         print("It looks like you're trying to change a room's description, ", end= "")
 
-        if reason == "no discription":
+        if reason == "no description":
             print("but haven't given a new description for the room.")
         elif reason == "invalid format":
             print("but did not use the command in the correct format.")
@@ -85,29 +85,28 @@ def error_handler(fct, reason):
         if reason == "file does not exist":
             print("but the file you're trying to load doesn't exist.")
         elif reason == "illegal file path":
-            print("but you've given an invalid file path")
+            print("but you've given an invalid file path.")
         elif reason == "too many arguments":
             print("but you've given too many arguments in your function.")
         elif reason == "no arguments":
             print("but you haven't put any arguments in your function.")
 
-    print("Would you like to see the tutorial for loading rooms? [y/n]")
+    if not testing:
+        print("Would you like to see the tutorial for loading rooms? [y/n]")
 
-#--------------------------------------------------------------------------------
-    
-    see_tutorial = input().lower()
+        see_tutorial = input().lower()
 
-    if see_tutorial == "y" or "yes" or "":
-        tutorial = "./Documentation/{}.txt".format(fct)
-        platform = sys.platform
-        if platform == 'win32':
-            os.startfile(tutorial)
-        elif platform == 'darwin':
-            opener = "open"
-            subprocess.call([opener, tutorial])
-        elif platform == 'linux':
-            opener = "xdg-open"
-            subprocess.call([opener, tutorial])
-        exit()
-    else:
-        exit()
+        if see_tutorial == "y" or "yes" or "":
+            tutorial = "./Documentation/{}.txt".format(fct)
+            platform = sys.platform
+            if platform == 'win32':
+                os.startfile(tutorial)
+            elif platform == 'darwin':
+                opener = "open"
+                subprocess.call([opener, tutorial])
+            elif platform == 'linux':
+                opener = "xdg-open"
+                subprocess.call([opener, tutorial])
+            exit()
+        else:
+            exit()
