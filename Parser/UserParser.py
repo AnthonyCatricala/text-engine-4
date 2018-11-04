@@ -103,7 +103,6 @@ class UserParser:
         temp_str2 = ["go", "look", "examine", "north", "south", "east", "west"]
         user_str = self.refine_input(input_string, temp_str1, temp_str2)
         del temp_str1, temp_str2
-        print(user_str)
         #TODO fill out rest of the commands that are available
         chosen_command = self.com_check(user_str, ["look", "go", "open", "close"])
         if chosen_command == "":
