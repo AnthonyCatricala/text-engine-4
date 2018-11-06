@@ -98,7 +98,7 @@ class UserParser:
         chosen_object = ""
         preposition = ""
         second_chosen_object = ""
-        temp_str1 = {"go", "walk", "run", "enter", "g"}, {"look", "l"}, {"examine", "exam"}, {"north", "n", "northern"}, {
+        temp_str1 = {"go", "walk", "run", "enter", "g", "move"}, {"look", "l"}, {"examine", "exam"}, {"north", "n", "northern"}, {
                         "south", "s", "southern"}, {"east", "e", "eastern"}, {"west", "w", "western"}
         temp_str2 = ["go", "look", "examine", "north", "south", "east", "west"]
         user_str = self.refine_input(input_string, temp_str1, temp_str2)
@@ -106,7 +106,7 @@ class UserParser:
         #TODO fill out rest of the commands that are available
         chosen_command = self.com_check(user_str, ["look", "go", "open", "close"])
         if chosen_command == "":
-            return ["error", "not a command", "", ""]
+            return ["", "", "", ""]
         #if the command is valid
         main_obj = self.cut_off_str(user_str.copy(), chosen_command)
         main_obj.reverse()
