@@ -22,6 +22,7 @@ def change_room_name(room=None, room_name=None):
 
     if room and type(room) is Room:
         if room_name and type(room_name) is str:
+            room.room_file = room.room_file.replace(room.room_name.replace(" ", "_"), room_name.replace(" ", "_"))
             room.room_name = room_name
             room.save()
         else:

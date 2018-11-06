@@ -98,7 +98,7 @@ class UserParser:
         chosen_object = ""
         preposition = ""
         second_chosen_object = ""
-        temp_str1 = {"go", "walk", "run", "enter", "g"}, {"look", "l"}, {"examine", "exam"}, {"north", "n", "northern"}, {
+        temp_str1 = {"go", "walk", "run", "enter", "g", "move"}, {"look", "l"}, {"examine", "exam"}, {"north", "n", "northern"}, {
                         "south", "s", "southern"}, {"east", "e", "eastern"}, {"west", "w", "western"}
         temp_str2 = ["go", "look", "examine", "north", "south", "east", "west"]
         user_str = self.refine_input(input_string, temp_str1, temp_str2)
