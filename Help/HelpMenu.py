@@ -1,6 +1,6 @@
 
 
-def help_main():
+def help_move():
     move = [
             "Go"
             "go"
