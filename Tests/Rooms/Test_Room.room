@@ -1,6 +1,6 @@
 {
     "room_name": "Test Room",
-    "room_file": "./Rooms/Test_Room.room",
+    "room_file": "./Tests/Rooms/Test_Room.room",
     "description": "This is the room's description",
     "illuminated": true,
     "exits": {
@@ -11,11 +11,9 @@
             "door": {
                 "open": true,
                 "lock": {},
-                "triggers": {},
-                "user_scripts": {}
+                "triggers": {}
             },
-            "triggers": {},
-            "user_scripts": {}
+            "triggers": {}
         },
         "south": {
             "links-to": "./Rooms/Test_Room.room",
@@ -24,11 +22,9 @@
             "door": {
                 "open": false,
                 "lock": {},
-                "triggers": {},
-                "user_scripts": {}
+                "triggers": {}
             },
-            "triggers": {},
-            "user_scripts": {}
+            "triggers": {}
         },
         "east": {
             "links-to": "./Rooms/Test_Room.room",
@@ -39,14 +35,11 @@
                 "lock": {
                     "locked": true,
                     "key": "test key",
-                    "triggers": {},
-                    "user_scripts": {}
+                    "triggers": {}
                 },
-                "triggers": {},
-                "user_scripts": {}
+                "triggers": {}
             },
-            "triggers": {},
-            "user_scripts": {}
+            "triggers": {}
         },
         "west": {
             "links-to": "./Rooms/Test_Room.room",
@@ -57,17 +50,13 @@
                 "lock": {
                     "locked": true,
                     "key": "test key",
-                    "triggers": {},
-                    "user_scripts": {}
+                    "triggers": {}
                 },
-                "triggers": {},
-                "user_scripts": {}
+                "triggers": {}
             },
-            "triggers": {},
-            "user_scripts": {}
+            "triggers": {}
         }
     },
     "inventory": {},
-    "triggers": {},
-    "user_scripts": {}
+    "triggers": {}
 }
