@@ -11,9 +11,11 @@
             "door": {
                 "open": true,
                 "lock": {},
-                "triggers": {}
+                "triggers": {},
+                "user_scripts": {}
             },
-            "triggers": {}
+            "triggers": {},
+            "user_scripts": {}
         },
         "south": {
             "links-to": "./Rooms/Test_Room.room",
@@ -22,9 +24,11 @@
             "door": {
                 "open": false,
                 "lock": {},
-                "triggers": {}
+                "triggers": {},
+                "user_scripts": {}
             },
-            "triggers": {}
+            "triggers": {},
+            "user_scripts": {}
         },
         "east": {
             "links-to": "./Rooms/Test_Room.room",
@@ -35,11 +39,14 @@
                 "lock": {
                     "locked": true,
                     "key": "test key",
-                    "triggers": {}
+                    "triggers": {},
+                    "user_scripts": {}
                 },
-                "triggers": {}
+                "triggers": {},
+                "user_scripts": {}
             },
-            "triggers": {}
+            "triggers": {},
+            "user_scripts": {}
         },
         "west": {
             "links-to": "./Rooms/Test_Room.room",
@@ -50,13 +57,17 @@
                 "lock": {
                     "locked": true,
                     "key": "test key",
-                    "triggers": {}
+                    "triggers": {},
+                    "user_scripts": {}
                 },
-                "triggers": {}
+                "triggers": {},
+                "user_scripts": {}
             },
-            "triggers": {}
+            "triggers": {},
+            "user_scripts": {}
         }
     },
     "inventory": {},
-    "triggers": {}
+    "triggers": {},
+    "user_scripts": {}
 }

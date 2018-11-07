@@ -22,7 +22,7 @@ class StdOut(object):
 
 
 class TestCommandParser(unittest.TestCase):
-    room = load_room(room_file='Tests/Rooms/Test_Room.room')
+    room = load_room("Test_Room")
     ce = CommandExecutor(room, None)
 
     def get_output_string(self, test_input):
