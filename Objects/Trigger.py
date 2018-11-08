@@ -1,7 +1,7 @@
 # TODO Work out how new triggers will work with the CommandExecutor.
 
 
-class Trigger:
+class Trigger():
     command = None
     trigger_type = None
     description = None
@@ -12,3 +12,6 @@ class Trigger:
     def to_json(self):
         # TODO Fill this out
         print()
+
+class UserScript(Trigger):
+    content = ""
