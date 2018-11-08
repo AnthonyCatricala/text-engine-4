@@ -11,14 +11,13 @@ class UserScript:
 
     @classmethod
     def from_dict(cls, script_dict):
-        script = "script"
 
         for key, value in script_dict.items():
             trigger_command = key
 
-            before = script_dict[key]['before'][script]
-            instead = script_dict[key]['instead'][script]
-            after = script_dict[key]['after'][script]
+            before = script_dict[key]['before']
+            instead = script_dict[key]['instead']
+            after = script_dict[key]['after']
 
             return cls(trigger_command, before, instead, after)
 
