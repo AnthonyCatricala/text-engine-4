@@ -34,3 +34,13 @@ class UserScript:
     def trigger_after(self):
         exec(self.after)
     '''
+
+    def to_json(self):
+        out_key = self.trigger_command
+
+        out_value = dict()
+        out_value['before'] = self.before
+        out_value['instead'] = self.instead
+        out_value['after'] = self.after
+
+        return out_key, out_value

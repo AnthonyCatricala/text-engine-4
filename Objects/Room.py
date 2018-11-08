@@ -125,6 +125,12 @@ class Room:
                 key, value = t.to_json()
                 out['triggers'][key] = value
 
+        out['user-scripts'] = dict()
+        if self.user_scripts:
+            for s in self.user_scripts:
+                key, value = s.to_json()
+                out['user-scripts'][key] = value
+
         room_json = json.dumps(out, indent=4)
 
         if not os.path.isdir("./Rooms/"):
