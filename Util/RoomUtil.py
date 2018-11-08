@@ -4,6 +4,8 @@ from Objects.Room import Room
 from Objects.Door import Door
 from Objects.Lock import Lock
 from Objects.Exit import Exit
+from Objects.UserScript import UserScript
+
 import json
 import os
 
@@ -96,7 +98,8 @@ def create_room(room_name="",
                 illuminated=True,
                 inventory=None,
                 exits=None,
-                triggers=None):
+                triggers=None,
+                user_scripts=None):
     # ##
     # Creates a room to be further manipulated via the other room API functions.
     # Base room creation function.
@@ -131,6 +134,11 @@ def create_room(room_name="",
             room_dict["triggers"] = dict()
         else:
             room_dict["triggers"] = triggers
+
+        if not user_scripts:
+            room_dict['user-scripts'] = dict()
+        else:
+            room_dict['user-scripts'] = user_scripts
 
         out = Room.from_dict(room_dict)
         out.save()
@@ -252,7 +260,8 @@ def remove_object_from_room(room=None, obj_name=None):
 
 def create_door(is_open=False,
                 lock=None,
-                triggers=None):
+                triggers=None,
+                user_scripts=None):
     # ##
     # Create a door that can then be placed on containers or exits.
     #
@@ -271,6 +280,11 @@ def create_door(is_open=False,
     else:
         door_dict["triggers"] = dict()
 
+    if not user_scripts:
+        door_dict['user-scripts'] = dict()
+    else:
+        door_dict['user-scripts'] = user_scripts
+
     out = Door.from_dict(door_dict)
 
     return out
@@ -280,7 +294,8 @@ def create_door(is_open=False,
 def create_lock_and_key(key_name="",
                         key_description="",
                         is_locked=True,
-                        triggers=None):
+                        triggers=None,
+                        user_scripts=None):
     lock = None
     key = None
 
@@ -289,7 +304,16 @@ def create_lock_and_key(key_name="",
             lock_dict = dict()
             lock_dict["key"] = key_name
             lock_dict["locked"] = is_locked
-            lock_dict["triggers"] = triggers
+
+            if triggers:
+                lock_dict["triggers"] = triggers
+            else:
+                lock_dict["triggers"] = dict()
+
+            if user_scripts:
+                lock_dict['user-scripts'] = user_scripts
+            else:
+                lock_dict["user-scripts"] = dict()
 
             lock = Lock.from_dict(lock_dict)
 
@@ -338,7 +362,8 @@ def create_room_exit(compass_direction="",
                      description="",
                      is_blocked=False,
                      door=None,
-                     triggers=None):
+                     triggers=None,
+                     user_scripts=None):
 
     compass_direction = compass_direction.lower()
     compass_directions = ["north",
@@ -378,6 +403,11 @@ def create_room_exit(compass_direction="",
                                         room_exit["triggers"] = triggers
                                     else:
                                         room_exit["triggers"] = dict()
+
+                                    if user_scripts:
+                                        room_exit["user-scripts"] = user_scripts
+                                    else:
+                                        room_exit["user-scripts"] = dict()
 
                                     out = Exit.from_dict(compass_direction, room_exit)
 
@@ -478,3 +508,74 @@ def remove_exit_from_room(room=None, compass_direction=None):
             error_handler("remove_exit_from_room", "invalid room type")
     else:
         error_handler("remove_exit_from_room", "no room object")
+
+
+def create_user_script(trigger_command="", before="", instead="", after=""):
+    out = None
+    if type(trigger_command) is str:
+        if type(before) is str:
+            if type(instead) is str:
+                if type(after) is str:
+                    out = UserScript(trigger_command, before, instead, after)
+                else:
+                    # TODO Error handling; Wrong type (String)
+                    print()
+            else:
+                # TODO Error handling; Wrong type (String)
+                print()
+        else:
+            # TODO Error handling; Wrong type (String)
+            print()
+    else:
+        # TODO Error handling; Wrong type (String)
+        print()
+
+    return out
+
+
+def apply_user_script_to_room(room=None, user_script=None):
+    if type(room) is Room:
+        apply_user_script(room, user_script)
+    else:
+        # TODO Error handling; Wrong type (Room)
+        print()
+
+
+def apply_user_script_to_exit(exit=None, user_script=None):
+    if type(exit) is Exit:
+        apply_user_script(exit, user_script)
+    else:
+        # TODO Error handling; Wrong type (Exit)
+        print()
+
+
+def apply_user_script_to_door(door=None, user_script=None):
+    if type(door) is Door:
+        apply_user_script(door, user_script)
+    else:
+        # TODO Error handling; Wrong type (Door)
+        print()
+
+
+def apply_user_script_to_lock(lock=None, user_script=None):
+    if type(lock) is Lock:
+        apply_user_script(lock, user_script)
+    else:
+        # TODO Error handling; Wrong type (Lock)
+        print()
+
+
+def apply_user_script(obj=None, user_script=None):
+    applicable_objects = [Room, Exit, Door, Lock]
+    if type(obj) in applicable_objects:
+        if type(user_script) is UserScript:
+            obj.user_scripts.append(user_script)
+        else:
+            # TODO Error handling; Wrong type (UserScript)
+            print()
+    else:
+        # TODO Error handling; Wrong type (Room, Exit, Door, Lock, etc)
+        print()
+
+
+

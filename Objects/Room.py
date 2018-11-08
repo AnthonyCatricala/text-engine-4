@@ -1,6 +1,7 @@
 from Objects.Exit import Exit
 #from Objects.Item import Item
 from Objects.Trigger import Trigger
+from Objects.UserScript import *
 
 import os
 import json
@@ -14,8 +15,9 @@ class Room:
     inventory = None
     exits = None
     triggers = None
+    user_scripts = None
 
-    def __init__(self, room_name, room_file, description, illuminated, inventory, exits, triggers):
+    def __init__(self, room_name, room_file, description, illuminated, inventory, exits, triggers, user_scripts):
         self.room_name = room_name
         self.room_file = room_file
         self.description = description
@@ -23,6 +25,7 @@ class Room:
         self.inventory = inventory
         self.exits = exits
         self.triggers = triggers
+        self.user_scripts = user_scripts
 
     @classmethod
     def from_dict(cls, room_dict):
@@ -33,7 +36,9 @@ class Room:
         inventory = cls.__fill_inventory(room_dict['inventory'])
         exits = cls.__fill_exits(room_dict['exits'])
         triggers = cls.__fill_triggers(room_dict['triggers'])
-        return cls(room_name, room_file, description, illuminated, inventory, exits, triggers)
+        user_scripts = cls.__fill_user_scripts(room_dict["user-scripts"])
+
+        return cls(room_name, room_file, description, illuminated, inventory, exits, triggers, user_scripts)
 
     @staticmethod
     def __fill_inventory(inventory_dict):
@@ -80,6 +85,21 @@ class Room:
             out.append(Trigger(key, value))
         return out
 
+    @staticmethod
+    def __fill_user_scripts(user_script_dict=None):
+        if not user_script_dict:
+            user_script_dict = dict()
+
+        out = []
+
+        for key, value in user_script_dict:
+            wrapper = dict()
+            wrapper[key] = value
+
+            out.append(UserScript.from_dict(wrapper))
+
+        return out
+
     def save(self):
         out = dict()
         out['room_name'] = self.room_name
@@ -104,6 +124,12 @@ class Room:
             for t in self.triggers:
                 key, value = t.to_json()
                 out['triggers'][key] = value
+
+        out['user-scripts'] = dict()
+        if self.user_scripts:
+            for s in self.user_scripts:
+                key, value = s.to_json()
+                out['user-scripts'][key] = value
 
         room_json = json.dumps(out, indent=4)
 
