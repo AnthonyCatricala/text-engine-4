@@ -42,7 +42,7 @@ class Door:
 
         out = []
 
-        for key, value in user_script_dict:
+        for key, value in user_script_dict.items():
             wrapper = dict()
             wrapper[key] = value
 
