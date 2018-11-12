@@ -9,7 +9,7 @@ os.chdir(PROJECT_DIR)
 
 
 def play():
-    start_room = load_room('Test Room')
+    start_room = load_room('Missing Flag Room')
 
     cp = UserParser(start_room)
     ce = CommandExecutor(start_room, None)

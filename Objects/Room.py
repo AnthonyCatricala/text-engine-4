@@ -1,7 +1,9 @@
 from Objects.Exit import Exit
 #from Objects.Item import Item
-from Objects.Trigger import Trigger
+from Objects.Trigger import *
 from Objects.UserScript import *
+
+from Util.ErrorUtil import *
 
 import os
 import json
@@ -25,6 +27,8 @@ class Room:
         self.inventory = inventory
         self.exits = exits
         self.triggers = triggers
+        for trigger in self.triggers:
+            trigger.connected_to = self
         self.user_scripts = user_scripts
 
     @classmethod
@@ -81,8 +85,10 @@ class Room:
             triggers_dict = dict()
 
         out = []
-        for key, value in triggers_dict.items():
-            out.append(Trigger(key, value))
+        for trigger_command, trigger_wrapper in triggers_dict.items():
+            for trigger_type, args_wrapper in trigger_wrapper.items():
+                if trigger_type == "print":
+                    out.append(PrintTrigger(trigger_command, args_wrapper['description']))
         return out
 
     @staticmethod
@@ -138,31 +144,80 @@ class Room:
 
         if "../" not in self.room_file and self.room_file.endswith(".room"):
             if os.path.isfile(self.room_file):
-                yes = ["y", "yes"]
-                no = ["n", "no"]
-                overwrite = input(
-                    "Overwrite existing room file for {}: ".format(self.room_name))
+                print("Overwriting {}".format(self.room_name))
+                os.remove(self.room_file)
 
-                while overwrite not in yes and overwrite not in no:
-                    overwrite = input("Invalid option supplied, overwrite (y/n): ")
+            tmp_file = "{}.tmp".format(self.room_file)
+            with open(tmp_file, "w+") as f:
+                f.write(room_json)
+            f.close()
 
-                if overwrite in yes:
-                    tmp_file = "{}.tmp".format(self.room_file)
-                    with open(tmp_file, "w") as f:
-                        f.write(room_json)
-                    f.close()
-                    os.remove(self.room_file)
-                    os.rename(tmp_file, self.room_file)
-                else:
-                    # TODO Notify the user that the room data has not been saved.
-                    print()
-            else:
-                with open(self.room_file, "w+") as f:
-                    f.write(room_json)
-                f.close()
+            os.rename(tmp_file, self.room_file)
+
         else:
             # TODO Error handling for "Invalid file name."
             print()
+
+    def load(self, room_file):
+        # ##
+        # Load a json formatted room file.
+        #
+        # @author Dakotah Jones
+        # @date 10/03/2018
+        #
+        # @arg room_name The room name spelled correctly with spaces.
+        # @arg room_file The URL of the room file on disk.
+        # @returns WhatIF Room Object.
+        # ##
+
+        room_dict = None
+
+        if room_file:
+            if "../" not in room_file and not room_file.startswith("/"):
+                if os.path.isfile(room_file):
+                    with open(room_file) as f:
+                        room_dict = json.load(f)
+                    f.close()
+                else:
+                    error_handler("load_room", "file does not exist")
+            else:
+                error_handler("load_room", "illegal file path")
+
+        if room_dict:
+            self.room_name = room_dict['room_name']
+            self.room_file = room_dict['room_file']
+            self.description = room_dict['description']
+            self.illuminated = room_dict['illuminated']
+            self.inventory = self.__fill_inventory(room_dict['inventory'])
+            self.exits = self.__fill_exits(room_dict['exits'])
+            self.triggers = self.__fill_triggers(room_dict['triggers'])
+            self.user_scripts = self.__fill_user_scripts(room_dict["user-scripts"])
+
+    def get_exit(self, compass_direction: str):
+        compass_directions = [
+            "north",
+            "south",
+            "east",
+            "west"
+        ]
+
+        compass_direction = compass_direction.lower()
+
+        out = None
+        if compass_direction in compass_directions:
+            for e in self.exits:
+                if e.compass_direction == compass_direction:
+                    out = e
+                    break
+        else:
+            # TODO Error handling for "Invalid compass direction supplied."
+            print()
+
+        if not out:
+            # TODO Error handling for "No exit in that direction."
+            print()
+
+        return out
 
     def look(self):
         print(self.description)

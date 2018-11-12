@@ -12,7 +12,7 @@ class Exit:
     triggers = None
     user_scripts = None
 
-    def __init__(self, compass_direction, links_to, description, blocked, door, triggers, user_scripts):
+    def __init__(self, compass_direction, links_to, description, blocked=False, door=None, triggers=[], user_scripts=[]):
         self.compass_direction = compass_direction
         self.links_to = links_to
         self.description = description
@@ -102,3 +102,9 @@ class Exit:
         else:
             # TODO Flavor text for 'This exit does not have a door.
             print()
+
+    def block(self):
+        self.blocked = True
+
+    def unblock(self):
+        self.blocked = False
