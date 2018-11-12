@@ -123,7 +123,7 @@ class TestCommandParser(unittest.TestCase):
         test_output = self.command_parser.simplify_command(test_input)
         self.assertEqual(test_output, test_answer)
 
-        test_answer = ['go', 'west', '', '']
+        test_answer = ['go', 'east', '', '']
         test_input = 'run west'
         test_output = self.command_parser.simplify_command(test_input)
         self.assertEqual(test_output, test_answer)

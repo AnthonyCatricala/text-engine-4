@@ -38,15 +38,16 @@ class CommandExecutor:
                 if (e.door is not None) and (e.door.lock is not None) and e.door.lock.is_locked:
                     s = "The door seems to be locked."
                     pass
-                if (not e.door.is_open) and e.door.lock and (not e.door.lock.is_locked):
+                elif (not e.door.is_open) and e.door.lock and (not e.door.lock.is_locked):
                     s = "The door is closed, but it doesn't seem to be locked."
                     pass
-                if e.door.is_open:
+                elif e.door.is_open:
                     self.room = load_room(room_file=e.links_to)
                     s = ("You move to {}.".format(self.room.room_name))
                     pass
-                s = "The door blocks your path."
-                pass
+                else:
+                    s = "The door blocks your path."
+                    pass
         if s == "":
             s = "There is no exit in that direction."
         print(s)
@@ -84,7 +85,6 @@ class CommandExecutor:
         if applicable_exit:
             self.room = load_room(room_file=applicable_exit.links_to)
             print("You move to {}.".format(self.room.room_name))
-
 
     def examine_function(self, parsed_string):
 

@@ -5,7 +5,7 @@ import Util.RoomUtil
 
 room = Util.RoomUtil.load_room("Test_Room")
 cp = CommandExecutor(room)
-ar = ["go","north", "", ""]
+ar = ["go","west", "", ""]
 cp.new_move_function(ar)
 print("\n")
 cp.move_function(ar)
