@@ -578,6 +578,7 @@ def apply_user_script(obj=None, user_script=None):
         # TODO Error handling; Wrong type (Room, Exit, Door, Lock, etc)
         print()
 
+
 def apply_trigger(obj: (Room, Exit, Door, Lock), trigger: Trigger):
     applicable_objects = [Room, Exit, Door, Lock]
     if type(obj) in applicable_objects:
