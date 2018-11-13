@@ -1,6 +1,6 @@
 {
     "room_name": "Test Room",
-    "room_file": "./Rooms/Test_Room.room",
+    "room_file": "./Tests/Rooms/Test_Room.room",
     "description": "This is the room's description",
     "illuminated": true,
     "exits": {

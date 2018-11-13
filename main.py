@@ -7,6 +7,7 @@ import os
 PROJECT_DIR = os.path.abspath(os.path.join(__file__, os.pardir))
 os.chdir(PROJECT_DIR)
 
+
 def play():
     start_room = load_room('Test Room')
 
