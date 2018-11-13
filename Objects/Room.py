@@ -224,39 +224,32 @@ class Room:
 
     # TODO Implement this for gathering all applicable triggers dependent on a command.
     # TODO Work In Progress; Do Not Use!
-    def get_triggers(self, command):
-        command_object = Command(command)
+    def get_triggers(self, primary_command):
         trigger_list = []
 
         # All triggers in the room.
         for t in self.triggers:
-            if t.trigger_command == command_object:
+            if t.trigger_command == primary_command:
                 trigger_list.append(t)
 
-        # TODO Get all triggers from the Items within the inventory
-        '''
-        for i in self.inventory:
-            for t in i.triggers:
-                if t.trigger_command == command_object:
-                    trigger_list.append(t)
-        '''
-        
         # All triggers from all exits
         for e in self.exits:
 
             # All triggers from the exit
             for t in e.triggers:
-                if t.trigger_command == command_object:
+                if t.trigger_command == primary_command:
                     trigger_list.append(t)
 
             # All triggers from the door
             if e.door:
                 for t in e.door.triggers:
-                    if t.trigger_command == command_object:
+                    if t.trigger_command == primary_command:
                         trigger_list.append(t)
 
-            # All triggers from the lock.
-            if e.door.lock:
-                for t in e.door.lock.triggers:
-                    if t.trigger_command == command_object:
-                        trigger_list.append(t)
+                # All triggers from the lock.
+                if e.door.lock:
+                    for t in e.door.lock.triggers:
+                        if t.trigger_command == primary_command:
+                            trigger_list.append(t)
+
+        return trigger_list

@@ -6,12 +6,13 @@ class CommandExecutor:
     room = None
     player = None
 
-    def __init__(self, room, player):
+    def __init__(self, room, player=None):
         self.room = room
         self.player = player
 
     def executor(self, parsed_string):
-
+        if parsed_string != ['', '', '', '']:
+            print("\n{}".format(self.room.room_name))
         if parsed_string[0] == "look":
             self.look_function()
         elif parsed_string[0] == "go":
@@ -25,9 +26,31 @@ class CommandExecutor:
         self.room.look()
 
         # TODO Come back to this when objects have been created.
-        for x in self.room.inventory:
-            print(x)
+        #for x in self.room.inventory:
+         #   print(x)
 
+    def new_move_function(self, parsed_string):
+        s = ""
+        for e in self.room.exits:
+            if e.compass_direction == parsed_string[1]:
+                if e.blocked:
+                    s = "There is something in the way."
+                    pass
+                if (e.door is not None) and (e.door.lock is not None) and e.door.lock.is_locked:
+                    s = "The door seems to be locked."
+                    pass
+                if (not e.door.is_open) and e.door.lock and (not e.door.lock.is_locked):
+                    s = "The door is closed, but it doesn't seem to be locked."
+                    pass
+                if e.door.is_open:
+                    self.room = load_room(room_file=e.links_to)
+                    s = ("You move to {}.".format(self.room.room_name))
+                    pass
+                s = "The door blocks your path."
+                pass
+        if s == "":
+            s = "There is no exit in that direction."
+        print(s)
 
     def move_function(self, parsed_string):
         compass_direction = parsed_string[1]
