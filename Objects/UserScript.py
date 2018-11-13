@@ -1,7 +1,7 @@
 class UserScript:
-    before = ""
-    instead = ""
-    after = ""
+    before = None
+    instead = None
+    after = None
 
     def __init__(self, trigger_command="", before="", instead="", after=""):
         self.trigger_command = trigger_command
@@ -20,19 +20,6 @@ class UserScript:
             after = script_dict[key]['after']
 
             return cls(trigger_command, before, instead, after)
-
-    # TODO Look into scoping for room and player access
-    # TODO As of right now we will have to exec these strings from the engine for changes to the room and player to take place.
-    ''' 
-    def trigger_before(self):
-        exec(self.before)
-
-    def trigger_instead(self):
-        exec(self.instead)
-
-    def trigger_after(self):
-        exec(self.after)
-    '''
 
     def to_json(self):
         out_key = self.trigger_command

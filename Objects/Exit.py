@@ -103,6 +103,24 @@ class Exit:
             # TODO Flavor text for 'This exit does not have a door.
             print()
 
+    def lock_door(self, key=None):
+        # TODO implement key item into function
+
+        if self.door:
+            if self.door.lock:
+                self.door.lock.lock()
+            else:
+                print("That door doesn't have a lock")
+        else:
+            print("There is no door to open.")
+
+    def unlock_door(self, key=None):
+        # TODO implement key item into function
+
+        if self.door:
+            if self.door.lock:
+                self.door.lock.unlock()
+
     def block(self):
         self.blocked = True
 

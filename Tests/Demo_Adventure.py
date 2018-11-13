@@ -124,6 +124,3 @@ rooms = [start_room,
 
 for room in rooms:
     room.save()
-
-# TODO Remove this; for testing purposes only.
-print()
