@@ -10,7 +10,7 @@ os.chdir(PROJECT_DIR)
 
 
 class TestCommandParser(unittest.TestCase):
-    room = load_room('Test Room')
+    room = load_room("RoomTester")
     command_parser = UserParser(room)
 
     # Testing empty input.
@@ -45,88 +45,12 @@ class TestCommandParser(unittest.TestCase):
     def test_go(self):
         # Go [compass direction] should result in output primary command being go,
         # and primary object being the compass direction.
-        test_answer = ['go', 'north', '', '']
-        test_input = 'go north'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        test_answer = ['go', 'south', '', '']
-        test_input = 'go south'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        test_answer = ['go', 'east', '', '']
-        test_input = 'go east'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        test_answer = ['go', 'west', '', '']
-        test_input = 'go west'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        # Move commands should map to go primary commands.
-        test_answer = ['go', 'north', '', '']
-        test_input = 'move north'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        test_answer = ['go', 'south', '', '']
-        test_input = 'move south'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        test_answer = ['go', 'east', '', '']
-        test_input = 'move east'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        test_answer = ['go', 'west', '', '']
-        test_input = 'move west'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        # Walk commands should map to go primary commands.
-        test_answer = ['go', 'north', '', '']
-        test_input = 'walk north'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        test_answer = ['go', 'south', '', '']
-        test_input = 'walk south'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        test_answer = ['go', 'east', '', '']
-        test_input = 'walk east'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        test_answer = ['go', 'west', '', '']
-        test_input = 'walk west'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        # Move commands should map to go primary commands.
-        test_answer = ['go', 'north', '', '']
-        test_input = 'run north'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        test_answer = ['go', 'south', '', '']
-        test_input = 'run south'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        test_answer = ['go', 'east', '', '']
-        test_input = 'run east'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
-
-        test_answer = ['go', 'east', '', '']
-        test_input = 'run west'
-        test_output = self.command_parser.simplify_command(test_input)
-        self.assertEqual(test_output, test_answer)
+        for x in ["go", "move", "walk", "run"]:
+            for y in ["north", "south", "east", "west", "exit 1",  "exit 2",  "exit 3",  "exit 4",  "exit 5"]:
+                test_answer = ["go", y.replace(" ", "_"), "", ""]
+                test_input = x + " " + y
+                test_output = self.command_parser.simplify_command(test_input)
+                self.assertEqual(test_output, test_answer)
 
     # Tests for mis-spelled primary commands.
     def test_spelling(self):
@@ -177,6 +101,21 @@ class TestCommandParser(unittest.TestCase):
         test_output = self.command_parser.simplify_command(test_input)
         self.assertEqual(test_output, test_answer)
 
+    def test_open_close(self):
+        for x in ['open', 'close']:
+            for y in ["north", "south", "east", "west", "exit 1",  "exit 2",  "exit 3",  "exit 4",  "exit 5"]:
+                test_answer = [x, y.replace(" ", "_"), "", ""]
+                test_input = x + " " + y
+                test_output = self.command_parser.simplify_command(test_input)
+                self.assertEqual(test_output, test_answer)
+
+    def test_lock_unlock(self):
+        for x in ["lock", "unlock"]:
+            for y in ["north", "south", "east", "west", "exit 1",  "exit 2",  "exit 3",  "exit 4",  "exit 5"]:
+                test_answer = [x, y.replace(" ", "_"), "", ""]
+                test_input = x + " " + y
+                test_output = self.command_parser.simplify_command(test_input)
+                self.assertEqual(test_output, test_answer)
 
 if __name__ == "__main__":
     unittest.main()

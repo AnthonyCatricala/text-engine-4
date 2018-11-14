@@ -91,17 +91,27 @@ class Exit:
 
     def open_door(self):
         if self.door:
-            self.door.open()
+            print(self.compass_direction, self.door.open())
         else:
-            # TODO Flavor text for 'This exit does not have a door.
-            print()
+            print(self.compass_direction, "does not have a door.")
 
     def close_door(self):
         if self.door:
-            self.door.close()
+            print(self.compass_direction, self.door.close())
         else:
-            # TODO Flavor text for 'This exit does not have a door.
-            print()
+            print(self.compass_direction, "does not have a door.")
+
+    def lock_door(self):
+        if self.door:
+            print(self.compass_direction, self.door.lock_door())
+        else:
+            print(self.compass_direction, "does not have a door to lock.")
+
+    def unlock_door(self):
+        if self.door:
+            print(self.compass_direction, self.door.unlock_door())
+        else:
+            print(self.compass_direction, "does not have a door to unlock.")
 
     def block(self):
         self.blocked = True

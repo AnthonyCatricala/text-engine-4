@@ -75,35 +75,33 @@ class Door:
 
     def lock_door(self):
         if self.lock:
-            self.lock.lock()
+            return self.lock.lock()
         else:
-            # TODO Flavor text for 'There is no lock on this door.'
-            print()
+            return "door has no lock."
 
     def unlock_door(self):
         if self.lock:
-            self.lock.unlock()
+            return self.lock.unlock()
         else:
-            # TODO Flavor text for 'There is no lock on this door.'
-            print()
+            return "door has no lock."
 
     def open(self):
         if not self.is_open:
             if not self.lock or not self.lock.is_locked:
                 # If there is no lock or it is unlocked.
                 self.is_open = True
-                # TODO Flavor text for door opening.
+                return "door is now open."
             else:
-                # TODO Flavor text for 'The door is locked'
-                print()
+                return "door was locked closed."
         else:
-            # TODO Flavor text for 'The door is already open.'
-            print()
+            return "door was already open."
 
     def close(self):
         if self.is_open:
-            self.is_open = False
-            # TODO Flavor text for the door closing.
+            if not self.lock or not self.lock.is_locked:
+                self.is_open = False
+                return "door is now closed."
+            else:
+                return "door was locked open."
         else:
-            # TODO Flavor text for 'The door is already closed'
-            print()
+            return "door was already closed."

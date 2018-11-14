@@ -90,27 +90,32 @@ class UserParser:
 
     #TODO make it so doors = compass door
     def simplify_command(self, input_string):
+        ##
+        # Author: Lucy Oliverio
+        # description: Given a string, returns
+        ##
         if input_string == "":
             return ["", "", "", ""]
-        temp_str1 = {"go", "walk", "run", "enter", "g", "move"}, {"look", "l"}, {"examine", "exam"}, {"north", "n", "northern"}, {
+        temp_str1 = {"go", "travel", "walk", "run", "enter", "g", "move"}, {"look", "l"}, {"examine", "exam"}, {"north", "n", "northern"}, {
                         "south", "s", "southern"}, {"east", "e", "eastern"}, {"west", "w", "western"}
         temp_str2 = ["go", "look", "examine", "north", "south", "east", "west"]
         user_str = self.refine_input(input_string, temp_str1, temp_str2)
         del temp_str1, temp_str2
-        chosen_command = self.com_check(user_str, ["look", "go", "open", "close"])
+        #commands
+        chosen_command = self.com_check(user_str, ["look", "go", "open", "close", "lock", "unlock"])
         if chosen_command == "":
             return ["error", "not a command", "", ""]
+        #takes the second half of the string (the one that recieves the action)
         main_obj = self.cut_off_str(user_str.copy(), chosen_command)
         main_obj.reverse()
+        #if the command is look only
         if (chosen_command == "look") and ((len(user_str) == 1) or (main_obj == ["around"])):
             return ["look", "", "", ""]
         if len(self.room.exits) != 0:
             temp_arr = self.turn_into_array(self.room.exits)
-            chosen_object = self.com_check(main_obj[:], temp_arr)
-            if (chosen_command == "go") and (chosen_object != ""):
-                return ["go", chosen_object, "", ""]
-            if chosen_command == "look" and chosen_object != "":
-                return [chosen_command, chosen_object, "", ""]
+            chosen_object = self.com_check(main_obj, temp_arr)
+            if (chosen_command in ["go", "look", "open", "close", "lock", "unlock"]) and (chosen_object != ""):
+                return [chosen_command, chosen_object.replace(" ", "_"), "", ""]
         chosen_object = self.com_check(main_obj, ["north", "south", "east", "west"])
         if chosen_object == "":
             return ["error", "not a command", "", ""]

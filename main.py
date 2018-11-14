@@ -20,7 +20,7 @@ def play():
         if user_command == 'q':
             break;
         parsed_command = cp.simplify_command(user_command)
-        ce.executor(parsed_command)
+        print(ce.executor(parsed_command))
 
 
 if __name__ == "__main__":

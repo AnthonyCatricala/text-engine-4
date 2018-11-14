@@ -70,13 +70,14 @@ class Lock:
     def unlock(self):
         if self.is_locked:
             self.is_locked = False
+            return "door is now unlocked."
         else:
-            # TODO Flavor text for the door is already unlocked.
-            print()
+            return "door was already unlocked."
 
     def lock(self):
         if not self.is_locked:
             self.is_locked = True
+            return "door is now locked."
         else:
             # TODO Flavor text for the door is already locked.
-            print()
+            return "door was already locked."
