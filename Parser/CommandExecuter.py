@@ -86,22 +86,31 @@ class CommandExecutor:
                    # print (Item.item_description)
 
     def open_close_function(self, parsed_string):
+        worked = False
         for x in self.room.exits:
             if x.compass_direction == parsed_string[1]:
                 if parsed_string[0] == "open":
                     x.open_door()
                 elif parsed_string[0] == "close":
                     x.close_door()
-                #print(x.compass_direction, "door is open.")
-                break;
+                worked = True
+                break
+        if not worked:
+            print("That is not a valid exit, thus there was no door.")
 
     def lock_unlock_function(self, parsed_string):
+        worked = False
         for x in self.room.exits:
             if x.compass_direction == parsed_string[1]:
                 if parsed_string[0] == "lock":
                     x.lock_door()
                 elif parsed_string[0] == "unlock":
                     x.unlock_door()
+                worked = True
+                break
+        if not worked:
+            print("That is not a valid exit, thus there was no door.")
+
 
 
 #   def get_function(self, parsed_string, room):

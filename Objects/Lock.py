@@ -79,5 +79,4 @@ class Lock:
             self.is_locked = True
             return "door is now locked."
         else:
-            # TODO Flavor text for the door is already locked.
             return "door was already locked."

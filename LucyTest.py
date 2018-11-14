@@ -6,5 +6,5 @@ from Parser.UserParser import *
 start_room = load_room("RoomTester")
 
 cp = UserParser(start_room)
-ce = CommandExecutor(start_room, None)
-ce.executor(['unlock', 'exit_3', '', ''])
+eh = "go exit 1".split()
+print(cp.simplify_command("go north to the"))

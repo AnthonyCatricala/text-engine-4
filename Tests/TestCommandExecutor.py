@@ -76,6 +76,9 @@ class TestCommandParser(unittest.TestCase):
         test_input = ['go', 'exit_4', '', '']
         expected_output = 'The door blocks your path.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['go', 'exit_5', '', '']
+        expected_output = 'There is something in the way.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
 
     def test_open(self):
         test_input = ['open', 'exit_1', '', '']
@@ -89,6 +92,12 @@ class TestCommandParser(unittest.TestCase):
         self.assertEqual(self.get_output_string(test_input), expected_output)
         test_input = ['open', 'exit_4', '', '']
         expected_output = 'exit_4 door is now open.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['open', 'invalid exit', '', '']
+        expected_output = 'That is not a valid exit, thus there was no door.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['open', 'exit_5', '', '']
+        expected_output = 'exit_5 does not have a door.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
 
     def test_close(self):
@@ -104,6 +113,12 @@ class TestCommandParser(unittest.TestCase):
         test_input = ['close', 'exit_4', '', '']
         expected_output = 'exit_4 door was already closed.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['close', 'invalid exit', '', '']
+        expected_output = 'That is not a valid exit, thus there was no door.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['close', 'exit_5', '', '']
+        expected_output = 'exit_5 does not have a door.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
 
     def test_lock(self):
         test_input = ['lock', 'exit_1', '', '']
@@ -118,6 +133,12 @@ class TestCommandParser(unittest.TestCase):
         test_input = ['lock', 'exit_4', '', '']
         expected_output = 'exit_4 door has no lock.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['lock', 'invalid exit', '', '']
+        expected_output = 'That is not a valid exit, thus there was no door.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['open', 'exit_5', '', '']
+        expected_output = 'exit_5 does not have a door.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
 
     def test_unlock(self):
         test_input = ['unlock', 'exit_1', '', '']
@@ -131,6 +152,12 @@ class TestCommandParser(unittest.TestCase):
         #self.assertEqual(self.get_output_string(test_input), expected_output)
         test_input = ['unlock', 'exit_4', '', '']
         expected_output = 'exit_4 door has no lock.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['unlock', 'invalid exit', '', '']
+        expected_output = 'That is not a valid exit, thus there was no door.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['unlock', 'exit_5', '', '']
+        expected_output = 'exit_5 does not have a door.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
 
 if __name__ == "__main__":

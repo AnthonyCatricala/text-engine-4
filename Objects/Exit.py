@@ -105,13 +105,13 @@ class Exit:
         if self.door:
             print(self.compass_direction, self.door.lock_door())
         else:
-            print(self.compass_direction, "does not have a door to lock.")
+            print(self.compass_direction, "does not have a door.")
 
     def unlock_door(self):
         if self.door:
             print(self.compass_direction, self.door.unlock_door())
         else:
-            print(self.compass_direction, "does not have a door to unlock.")
+            print(self.compass_direction, "does not have a door.")
 
     def block(self):
         self.blocked = True

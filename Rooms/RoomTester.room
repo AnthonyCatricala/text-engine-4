@@ -78,6 +78,24 @@
             "door": {},
             "triggers": {},
             "user-scripts": {}
+        },
+        "exit_6": {
+            "links-to": "./Rooms/RoomTester.room",
+            "description": "To example room.",
+            "blocked": true,
+            "door": {
+                "open": true,
+                "lock": {
+                    "locked": true,
+                    "key": "test key",
+                    "triggers": {},
+                    "user-scripts": {}
+                },
+                "triggers": {},
+                "user-scripts": {}
+            },
+            "triggers": {},
+            "user-scripts": {}
         }
     },
     "inventory": {},
