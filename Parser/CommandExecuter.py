@@ -62,7 +62,7 @@ class CommandExecutor:
             print("There is no exit in that direction.")
 
         if applicable_exit:
-            self.room = load_room(room_file=applicable_exit.links_to)
+            self.room.load(applicable_exit.links_to)
             print("You move to {}.".format(self.room.room_name))
 
     def examine_function(self, parsed_string):

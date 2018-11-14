@@ -1,0 +1,93 @@
+
+  "room_name": "Test Room",
+  "room_file": "./Rooms/RoomTester.room",
+  "description": "This is a description of the room.",
+  "illuminated": false,
+  "inventory": {
+    "item_name": {
+      "alias": ["list", "of", "names"],
+      "description": "This is a description of the item.",
+      "illuminated": false,
+      "obtainable": false,
+      "inventory": {},
+      "door": {},
+      "triggers": {}
+    }
+  },
+  "exits": {
+    "locked open": {
+      "links-to": "./Rooms/Example_Room_2.room",
+      "description": "door is locked open",
+      "blocked": false,
+      "door": {
+        "open": true,
+        "lock": {
+          "locked": true,
+          "key": "key name",
+          "triggers": {}
+        },
+        "triggers": {}
+      },
+      "triggers":{}
+    },
+    "locked closed": {
+      "links-to": "./Rooms/Example_Room_2.room",
+      "description": "door is locked open",
+      "blocked": false,
+      "door": {
+        "open": false,
+        "lock": {
+          "locked": true,
+          "key": "key name",
+          "triggers": {}
+        },
+        "triggers": {}
+      },
+      "triggers":{}
+    },
+    "open": {
+      "links-to": "./Rooms/Example_Room_2.room",
+      "description": "door is locked open",
+      "blocked": false,
+      "door": {
+        "open": true,
+        "lock": {
+          "locked": false,
+          "key": "key name",
+          "triggers": {}
+        },
+        "triggers": {}
+      },
+      "triggers":{}
+    },
+    "closed": {
+      "links-to": "./Rooms/Example_Room_2.room",
+      "description": "door is locked open",
+      "blocked": false,
+      "door": {
+        "open": false,
+        "lock": {},
+        "triggers": {}
+      },
+      "triggers":{}
+    }
+    "blocked": {
+      "links-to": "./Rooms/Example_Room_2.room",
+      "description": "door is locked open",
+      "blocked": true,
+      "door": {
+        "open": true,
+        "lock": {},
+        "triggers": {}
+      },
+      "triggers":{}
+    }
+  },
+  "triggers": {
+    "command": {
+      "trigger-type": {
+        "description": "Message to be displayed on trigger."
+      }
+    }
+  }
+}
