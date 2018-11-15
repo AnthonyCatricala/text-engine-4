@@ -19,7 +19,7 @@ class CommandExecutor:
         if parsed_string[0] == "error":
             print(parsed_string[0],":", parsed_string[1])
         elif parsed_string[0] == "look":
-            self.look_function()
+            self.look_function(parsed_string)
         elif parsed_string[ 0] == "go":
             self.move_function(parsed_string)
         elif parsed_string[0] == "examine":
@@ -32,9 +32,18 @@ class CommandExecutor:
 #            self.get_function() TODO add this with items
 
     def look_function(self, parsed_string):
+        s = ""
         if parsed_string[1] == "":
-            print(self.room.look())
-        self.room.look()
+            s = self.room.description
+        else:
+            for x in self.room.exits:
+                if x.compass_direction == parsed_string[3]:
+                    if parsed_string[1] == "exit":
+                        s = x.description
+                    break
+            if s == "":
+                s = "No description."
+        print(s)
 
         # TODO Come back to this when objects have been created.
         #for x in self.room.inventory:

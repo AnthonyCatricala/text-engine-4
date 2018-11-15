@@ -219,5 +219,5 @@ class Room:
 
         return out
 
-    def look(self):
-        print(self.description)
+    #def look(self, ):
+    #    print(self.description)

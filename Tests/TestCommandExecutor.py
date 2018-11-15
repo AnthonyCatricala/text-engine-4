@@ -47,6 +47,19 @@ class TestCommandParser(unittest.TestCase):
         test_input = ['look', '', '', '']
         expected_output = 'This is the room\'s description\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ["look", "lock", "from", "north"]
+        expected_output = 'No description.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ["look", "door", "from", "north"]
+        expected_output = 'No description.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ["look", "exit", "from", "north"]
+        expected_output = 'No description.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ["look", "exit", "from", "exit_1"]
+        expected_output = 'To example room.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+
 
     def test_go(self):
         test_input = ['go', 'north', '', '']
