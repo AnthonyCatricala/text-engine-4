@@ -2,7 +2,7 @@ from Objects.Exit import Exit
 #from Objects.Item import Item
 from Objects.Trigger import *
 from Objects.UserScript import *
-from Objects.Command import *
+
 from Util.ErrorUtil import *
 
 import os
@@ -219,8 +219,8 @@ class Room:
 
         return out
 
-    def look(self):
-        print(self.description)
+    #def look(self, ):
+    #    print(self.description)
 
     # TODO Implement this for gathering all applicable triggers dependent on a command.
     # TODO Work In Progress; Do Not Use!
