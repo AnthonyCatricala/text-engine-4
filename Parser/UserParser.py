@@ -109,6 +109,10 @@ class UserParser:
                 return ["lock", chosen_object.replace(" ", "_"), "", ""]
             elif (chosen_command == "unlock") and (("door" in main_obj) or ("lock" in main_obj)):
                 return ["unlock", chosen_object.replace(" ", "_"), "", ""]
+            elif chosen_command == "block":
+                return ["block", chosen_object.replace(" ", "_"), "", ""]
+            elif chosen_command == "unblock":
+                return ["unblock", chosen_object.replace(" ", "_"), "", ""]
     #TODO make it so doors = compass door
     def simplify_command(self, input_string):
         ##
@@ -123,15 +127,15 @@ class UserParser:
         user_str = self.refine_input(input_string, temp_str1, temp_str2)
         del temp_str1, temp_str2
         #commands
-        chosen_command = self.com_check(user_str, ["look", "go", "open", "close", "lock", "unlock"])
+        chosen_command = self.com_check(user_str, ["look", "go", "open", "close", "lock", "unlock", "block", "unblock"])
         if chosen_command == "":
             return ["error", "not a command", "", ""]
         elif chosen_command == "error":
-            if self.com_check(user_str, ["go", "open", "close"]) == "error":
+            if self.com_check(user_str, ["go", "open", "close", "block", "unblock", "unlock"]) == "error":
                 return ["error", "not a command", "", ""]
-            if self.com_check(user_str, ["look", "go", "open", "close", "unlock"]) == "look":
+            if self.com_check(user_str, ["look", "go", "open", "close", "unlock", "block", "unblock"]) == "look":
                 chosen_command = "look"
-            elif self.com_check(user_str, ["look", "go", "open", "close", "unlock"]) == "unlock":
+            elif self.com_check(user_str, ["look", "go", "open", "close", "unlock", "block", "unblock"]) == "unlock":
                 chosen_command = "unlock"
             else:
                 chosen_command = "lock"

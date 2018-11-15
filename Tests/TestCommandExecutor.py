@@ -48,16 +48,22 @@ class TestCommandParser(unittest.TestCase):
         expected_output = 'This is the room\'s description\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
         test_input = ["look", "lock", "from", "north"]
-        expected_output = 'No description.\n'
+        expected_output = 'No description given.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
         test_input = ["look", "door", "from", "north"]
-        expected_output = 'No description.\n'
+        expected_output = 'No description given.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
         test_input = ["look", "exit", "from", "north"]
-        expected_output = 'No description.\n'
+        expected_output = 'No description given.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
         test_input = ["look", "exit", "from", "exit_1"]
         expected_output = 'To example room.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ["look", "door", "from", "exit_1"]
+        expected_output = "doors don't have a description.\n"
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ["look", "lock", "from", "exit_1"]
+        expected_output = "locks don't have a description.\n"
         self.assertEqual(self.get_output_string(test_input), expected_output)
 
 
@@ -171,6 +177,28 @@ class TestCommandParser(unittest.TestCase):
         self.assertEqual(self.get_output_string(test_input), expected_output)
         test_input = ['unlock', 'exit_5', '', '']
         expected_output = 'exit_5 does not have a door.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+
+    def test_unblock(self):
+        test_input = ['unblock', 'exit_1', '', '']
+        expected_output = 'exit_1 door was already unblocked.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['unblock', 'exit_5', '', '']
+        expected_output = 'exit_5 door is now unblocked.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['unblock', 'north', '', '']
+        expected_output = 'That is not a valid exit.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+
+    def test_block(self):
+        test_input = ['block', 'exit_1', '', '']
+        expected_output = 'exit_1 door is now blocked.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['block', 'exit_5', '', '']
+        expected_output = 'exit_5 door was already blocked.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['unblock', 'north', '', '']
+        expected_output = 'That is not a valid exit.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
 
 if __name__ == "__main__":

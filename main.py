@@ -15,12 +15,12 @@ def play():
     ce = CommandExecutor(start_room, None)
 
     while True:
-        print("q to quit.\n")
+        #print("q to quit.\n")
         user_command = input()
         if user_command == 'q':
             break;
         parsed_command = cp.simplify_command(user_command)
-        print(ce.executor(parsed_command))
+        ce.executor(parsed_command)
 
 
 if __name__ == "__main__":

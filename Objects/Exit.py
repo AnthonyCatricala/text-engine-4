@@ -114,7 +114,15 @@ class Exit:
             print(self.compass_direction, "does not have a door.")
 
     def block(self):
-        self.blocked = True
+        if self.blocked:
+            print(self.compass_direction, "door was already blocked.")
+        else:
+            self.blocked = True
+            print(self.compass_direction, "door is now blocked.")
 
     def unblock(self):
-        self.blocked = False
+        if not self.blocked:
+            print(self.compass_direction, "door was already unblocked.")
+        else:
+            self.blocked = False
+            print(self.compass_direction, "door is now unblocked.")

@@ -25,9 +25,11 @@ class CommandExecutor:
         elif parsed_string[0] == "examine":
             self.examine_function(parsed_string)
         elif parsed_string[0] in ["open", "close"]:
-            self.open_close_function(parsed_string)
+            self.open_close_lock_unlock_block_unblock_function(parsed_string)
         elif parsed_string[0] in ["lock", "unlock"]:
-            self.lock_unlock_function(parsed_string)
+            self.open_close_lock_unlock_block_unblock_function(parsed_string)
+        elif parsed_string[0] in ["block", "unblock"]:
+            self.open_close_lock_unlock_block_unblock_function(parsed_string)
 #        elif parsed_string[0] == "take":
 #            self.get_function() TODO add this with items
 
@@ -40,9 +42,11 @@ class CommandExecutor:
                 if x.compass_direction == parsed_string[3]:
                     if parsed_string[1] == "exit":
                         s = x.description
+                    elif parsed_string[1] == "lock" or parsed_string[1] == "door":
+                        s = parsed_string[1] + "s don't have a description."
                     break
             if s == "":
-                s = "No description."
+                s = "No description given."
         print(s)
 
         # TODO Come back to this when objects have been created.
@@ -96,7 +100,7 @@ class CommandExecutor:
                 #if x == examined_item:
                    # print (Item.item_description)
 
-    def open_close_function(self, parsed_string):
+    def open_close_lock_unlock_block_unblock_function(self, parsed_string):
         worked = False
         for x in self.room.exits:
             if x.compass_direction == parsed_string[1]:
@@ -104,23 +108,20 @@ class CommandExecutor:
                     x.open_door()
                 elif parsed_string[0] == "close":
                     x.close_door()
-                worked = True
-                break
-        if not worked:
-            print("That is not a valid exit, thus there was no door.")
-
-    def lock_unlock_function(self, parsed_string):
-        worked = False
-        for x in self.room.exits:
-            if x.compass_direction == parsed_string[1]:
-                if parsed_string[0] == "lock":
+                elif parsed_string[0] == "lock":
                     x.lock_door()
                 elif parsed_string[0] == "unlock":
                     x.unlock_door()
+                elif parsed_string[0] == "block":
+                    x.block()
+                elif parsed_string[0] == "unblock":
+                    x.unblock()
                 worked = True
                 break
-        if not worked:
+        if not worked and (parsed_string[0] in ["lock", "unlock", "open", "close"]):
             print("That is not a valid exit, thus there was no door.")
+        elif not worked:
+            print("That is not a valid exit.")
 
 
 

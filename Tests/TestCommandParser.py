@@ -161,5 +161,13 @@ class TestCommandParser(unittest.TestCase):
                     test_output = self.command_parser.simplify_command(test_input)
                     self.assertEqual(test_output, test_answer)
 
+    def test_block_unblock(self):
+        for x in ["block", "unblock"]:
+            for y in ["north", "south", "east", "west", "exit 1", "exit 2", "exit 3", "exit 4", "exit 5"]:
+                test_answer = [x, y.replace(" ", "_"), "", ""]
+                test_input = x + " " + y
+                test_output = self.command_parser.simplify_command(test_input)
+                self.assertEqual(test_output, test_answer)
+
 if __name__ == "__main__":
     unittest.main()
