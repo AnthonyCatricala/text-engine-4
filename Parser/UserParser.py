@@ -34,7 +34,7 @@ class UserParser:
         #   if i = 1, it returns the command in the form of a string
 
         for cc_ele in com_check:
-            cc_ele = cc_ele.split('_')
+            cc_ele = cc_ele.split(' ')
             while len(par_giv_com) >= len(cc_ele):
                 if par_giv_com[:len(cc_ele)] == cc_ele:
                     for x in cc_ele:
@@ -44,22 +44,25 @@ class UserParser:
                 par_giv_com = par_giv_com[1:]
             par_giv_com = com_given
 
-        if i == 0 or i > 1:
+        if i == 0:
             s = ""
+        if i > 1:
+            s = "error"
         return s
 
     def cut_off_str(self, input_str, inp_cutoff_word):
-        object_str = []
-        x = ""
-        while x != inp_cutoff_word:
-            object_str.append(x)
-            x = input_str.pop()
-        return object_str[1:]
+        i = 0
+        for x in input_str:
+            if x != inp_cutoff_word:
+                i = i + 1
+            else:
+                break
+        return input_str[i+1:]
 
     def turn_into_array(self, list_of_object):
         list_of_exits = []
         for exit in list_of_object:
-            list_of_exits.append(exit.compass_direction)
+            list_of_exits.append(exit.compass_direction.replace("_", " "))
         return list_of_exits
 
     def refine_input(self, inp_com, temp_str1, temp_str2):
@@ -88,6 +91,24 @@ class UserParser:
         del temp_str1, temp_str2, par_com, is_there, i
         return com[1:].split()
 
+    def chosen_obj_check(self, chosen_object, main_obj, chosen_command):
+        if not (chosen_object == "" or chosen_object == "error"):
+            if (chosen_command == "look") and ("lock" in main_obj):
+                return ["look", "lock", "from", chosen_object.replace(" ", "_")]
+            elif (chosen_command == "look") and ("door" in main_obj):
+                return ["look", "door", "from", chosen_object.replace(" ", "_")]
+            elif chosen_command == "look":
+                return ["look", "exit", "from", chosen_object.replace(" ", "_")]
+            elif (chosen_command == "go") and ("door" not in main_obj) and ("lock" not in main_obj):
+                return ["go", chosen_object.replace(" ", "_"), "", ""]
+            elif (chosen_command == "open") and ("door" in main_obj):
+                return ["open", chosen_object.replace(" ", "_"), "", ""]
+            elif (chosen_command == "close") and ("door" in main_obj):
+                return ["close", chosen_object.replace(" ", "_"), "", ""]
+            elif (chosen_command == "lock") and (("door" in main_obj) or ("lock" in main_obj)):
+                return ["lock", chosen_object.replace(" ", "_"), "", ""]
+            elif (chosen_command == "unlock") and (("door" in main_obj) or ("lock" in main_obj)):
+                return ["unlock", chosen_object.replace(" ", "_"), "", ""]
     #TODO make it so doors = compass door
     def simplify_command(self, input_string):
         ##
@@ -105,18 +126,28 @@ class UserParser:
         chosen_command = self.com_check(user_str, ["look", "go", "open", "close", "lock", "unlock"])
         if chosen_command == "":
             return ["error", "not a command", "", ""]
+        elif chosen_command == "error":
+            if self.com_check(user_str, ["go", "open", "close"]) == "error":
+                return ["error", "not a command", "", ""]
+            if self.com_check(user_str, ["look", "go", "open", "close", "unlock"]) == "look":
+                chosen_command = "look"
+            elif self.com_check(user_str, ["look", "go", "open", "close", "unlock"]) == "unlock":
+                chosen_command = "unlock"
+            else:
+                chosen_command = "lock"
         #takes the second half of the string (the one that recieves the action)
         main_obj = self.cut_off_str(user_str.copy(), chosen_command)
-        main_obj.reverse()
         #if the command is look only
         if (chosen_command == "look") and ((len(user_str) == 1) or (main_obj == ["around"])):
             return ["look", "", "", ""]
         if len(self.room.exits) != 0:
             temp_arr = self.turn_into_array(self.room.exits)
             chosen_object = self.com_check(main_obj, temp_arr)
-            if (chosen_command in ["go", "look", "open", "close", "lock", "unlock"]) and (chosen_object != ""):
-                return [chosen_command, chosen_object.replace(" ", "_"), "", ""]
+            result = self.chosen_obj_check(chosen_object, main_obj, chosen_command)
+            if result is not None:
+                return result
         chosen_object = self.com_check(main_obj, ["north", "south", "east", "west"])
-        if chosen_object == "":
-            return ["error", "not a command", "", ""]
-        return [chosen_command, chosen_object, "", ""]
+        result = self.chosen_obj_check(chosen_object, main_obj, chosen_command)
+        if result is not None:
+            return result
+        return ["error", "not a command", "", ""]

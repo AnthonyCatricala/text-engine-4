@@ -41,6 +41,30 @@ class TestCommandParser(unittest.TestCase):
         test_output = self.command_parser.simplify_command(test_input)
         self.assertEqual(test_output, test_answer)
 
+        for x in ["north", "south", "east", "west", "exit 1",  "exit 2",  "exit 3",  "exit 4",  "exit 5"]:
+            test_answer = ["look", "exit", "from", x.replace(" ", "_")]
+            test_input = "look " + x
+            test_output = self.command_parser.simplify_command(test_input)
+            self.assertEqual(test_output, test_answer)
+
+        for x in ["north", "south", "east", "west", "exit 1", "exit 2", "exit 3", "exit 4", "exit 5"]:
+            test_answer = ["look", "door", "from", x.replace(" ", "_")]
+            test_input = "look " + x + " door"
+            test_output = self.command_parser.simplify_command(test_input)
+            self.assertEqual(test_output, test_answer)
+
+        for x in ["north", "south", "east", "west", "exit 1",  "exit 2",  "exit 3",  "exit 4",  "exit 5"]:
+            test_answer = ["look", "lock", "from", x.replace(" ", "_")]
+            test_input = "look " + x + " lock"
+            test_output = self.command_parser.simplify_command(test_input)
+            self.assertEqual(test_output, test_answer)
+
+        for x in ["north", "south", "east", "west", "exit 1", "exit 2", "exit 3", "exit 4", "exit 5"]:
+            test_answer = ["look", "lock", "from", x.replace(" ", "_")]
+            test_input = "look " + x + " door lock"
+            test_output = self.command_parser.simplify_command(test_input)
+            self.assertEqual(test_output, test_answer)
+
     # All tests that should result in a go command.
     def test_go(self):
         # Go [compass direction] should result in output primary command being go,
@@ -105,17 +129,37 @@ class TestCommandParser(unittest.TestCase):
         for x in ['open', 'close']:
             for y in ["north", "south", "east", "west", "exit 1",  "exit 2",  "exit 3",  "exit 4",  "exit 5"]:
                 test_answer = [x, y.replace(" ", "_"), "", ""]
-                test_input = x + " " + y
+                test_input = x + " " + y + " door"
+                test_output = self.command_parser.simplify_command(test_input)
+                self.assertEqual(test_output, test_answer)
+        for x in ['open', 'close']:
+            for y in ["north", "south", "east", "west", "exit 1",  "exit 2",  "exit 3",  "exit 4",  "exit 5"]:
+                test_answer = ['error', 'not a command', '', '']
+                test_input = x + " " + y + " exit"
+                test_output = self.command_parser.simplify_command(test_input)
+                self.assertEqual(test_output, test_answer)
+        for x in ['open', 'close']:
+            for y in ["north", "south", "east", "west", "exit 1",  "exit 2",  "exit 3",  "exit 4",  "exit 5"]:
+                test_answer = ['error', 'not a command', '', '']
+                test_input = x + " " + y + " lock"
                 test_output = self.command_parser.simplify_command(test_input)
                 self.assertEqual(test_output, test_answer)
 
     def test_lock_unlock(self):
         for x in ["lock", "unlock"]:
             for y in ["north", "south", "east", "west", "exit 1",  "exit 2",  "exit 3",  "exit 4",  "exit 5"]:
-                test_answer = [x, y.replace(" ", "_"), "", ""]
-                test_input = x + " " + y
-                test_output = self.command_parser.simplify_command(test_input)
-                self.assertEqual(test_output, test_answer)
+                for z in ["door", "lock", "door lock"]:
+                    test_answer = [x, y.replace(" ", "_"), "", ""]
+                    test_input = x + " " + y + " " + z
+                    test_output = self.command_parser.simplify_command(test_input)
+                    self.assertEqual(test_output, test_answer)
+
+            for x in ["lock", "unlock"]:
+                for y in ["north", "south", "east", "west", "exit 1", "exit 2", "exit 3", "exit 4", "exit 5"]:
+                    test_answer = ['error', 'not a command', '', '']
+                    test_input = x + " " + y
+                    test_output = self.command_parser.simplify_command(test_input)
+                    self.assertEqual(test_output, test_answer)
 
 if __name__ == "__main__":
     unittest.main()

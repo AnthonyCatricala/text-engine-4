@@ -31,7 +31,9 @@ class CommandExecutor:
 #        elif parsed_string[0] == "take":
 #            self.get_function() TODO add this with items
 
-    def look_function(self):
+    def look_function(self, parsed_string):
+        if parsed_string[1] == "":
+            print(self.room.look())
         self.room.look()
 
         # TODO Come back to this when objects have been created.
