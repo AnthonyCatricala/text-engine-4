@@ -166,9 +166,9 @@ class TestCommandParser(unittest.TestCase):
         test_input = ['unlock', 'exit_2', '', '']
         expected_output = 'exit_2 door is now unlocked.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
-        #test_input = ['unlock', 'exit_3', '', '']
-        #expected_output = 'exit_3 door was already unlocked.\n'
-        #self.assertEqual(self.get_output_string(test_input), expected_output)
+        test_input = ['unlock', 'exit_3', '', '']
+        expected_output = 'exit_3 door was already unlocked.\n'
+        self.assertEqual(self.get_output_string(test_input), expected_output)
         test_input = ['unlock', 'exit_4', '', '']
         expected_output = 'exit_4 door has no lock.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)

@@ -91,27 +91,43 @@ class Exit:
 
     def open_door(self):
         if self.door:
-            print(self.compass_direction, self.door.open())
+            result = self.door.open()
+            print(self.compass_direction, result)
         else:
-            print(self.compass_direction, "does not have a door.")
+            print(self.compass_direction, "door does not exist.")
+        if result == "door is now open.":
+            return True
+        return False
 
     def close_door(self):
         if self.door:
-            print(self.compass_direction, self.door.close())
+            result = self.door.close()
+            print(self.compass_direction, result)
         else:
-            print(self.compass_direction, "does not have a door.")
+            print(self.compass_direction, "door does not exist.")
+        if result == "door is now closed.":
+            return True
+        return False
 
     def lock_door(self):
         if self.door:
-            print(self.compass_direction, self.door.lock_door())
+            result = self.door.lock_door()
+            print(self.compass_direction, result)
         else:
-            print(self.compass_direction, "does not have a door.")
+            print(self.compass_direction, "door does not exist.")
+        if result == "door is now locked.":
+            return True
+        return False
 
     def unlock_door(self):
         if self.door:
-            print(self.compass_direction, self.door.unlock_door())
+            result = self.door.unlock_door()
+            print(self.compass_direction, result)
         else:
-            print(self.compass_direction, "does not have a door.")
+            print(self.compass_direction, "door does not exist.")
+        if result == "door is now unlocked.":
+            return True
+        return False
 
     def lock_door(self, key=None):
         # TODO implement key item into function
