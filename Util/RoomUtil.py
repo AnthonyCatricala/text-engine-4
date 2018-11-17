@@ -4,6 +4,7 @@ from Objects.Room import Room
 from Objects.Door import Door
 from Objects.Lock import Lock
 from Objects.Exit import Exit
+from Objects.Trigger import *
 from Objects.UserScript import UserScript
 
 import json
@@ -578,4 +579,30 @@ def apply_user_script(obj=None, user_script=None):
         print()
 
 
+def apply_trigger(obj: (Room, Exit, Door, Lock), trigger: Trigger):
+    applicable_objects = [Room, Exit, Door, Lock]
+    if type(obj) in applicable_objects:
+        if Trigger in type(trigger).__bases__:
+            obj.triggers.append(trigger)
+        else:
+            # TODO Error handling for "Invalid trigger type."
+            print()
+    else:
+        # TODO Error handling for "Invalid object type."
+        print()
 
+
+def link_two_rooms(from_room: Room, to_room: Room, direction: str="", description: str=""):
+    compass_directions = {
+        "north": "south",
+        "south": "north",
+        "east": "west",
+        "west": "east"
+    }
+
+    if direction and direction in compass_directions.keys():
+        from_room.exits.append(Exit(direction, to_room.room_file, description))
+        to_room.exits.append(Exit(compass_directions[direction], from_room.room_file, description))
+    else:
+        # TODO Error handling for invalid compass direction.
+        print()

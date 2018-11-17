@@ -12,7 +12,7 @@ class Exit:
     triggers = None
     user_scripts = None
 
-    def __init__(self, compass_direction, links_to, description, blocked, door, triggers, user_scripts):
+    def __init__(self, compass_direction, links_to, description, blocked=False, door=None, triggers=[], user_scripts=[]):
         self.compass_direction = compass_direction
         self.links_to = links_to
         self.description = description
@@ -91,14 +91,72 @@ class Exit:
 
     def open_door(self):
         if self.door:
-            self.door.open()
+            result = self.door.open()
+            print(self.compass_direction, result)
         else:
-            # TODO Flavor text for 'This exit does not have a door.
-            print()
+            print(self.compass_direction, "door does not exist.")
+        if result == "door is now open.":
+            return True
+        return False
 
     def close_door(self):
         if self.door:
-            self.door.close()
+            result = self.door.close()
+            print(self.compass_direction, result)
         else:
-            # TODO Flavor text for 'This exit does not have a door.
-            print()
+            print(self.compass_direction, "door does not exist.")
+        if result == "door is now closed.":
+            return True
+        return False
+
+    def lock_door(self):
+        if self.door:
+            result = self.door.lock_door()
+            print(self.compass_direction, result)
+        else:
+            print(self.compass_direction, "door does not exist.")
+        if result == "door is now locked.":
+            return True
+        return False
+
+    def unlock_door(self):
+        if self.door:
+            result = self.door.unlock_door()
+            print(self.compass_direction, result)
+        else:
+            print(self.compass_direction, "door does not exist.")
+        if result == "door is now unlocked.":
+            return True
+        return False
+
+    def lock_door(self, key=None):
+        # TODO implement key item into function
+
+        if self.door:
+            if self.door.lock:
+                self.door.lock.lock()
+            else:
+                print("That door doesn't have a lock")
+        else:
+            print("There is no door to open.")
+
+    def unlock_door(self, key=None):
+        # TODO implement key item into function
+
+        if self.door:
+            if self.door.lock:
+                self.door.lock.unlock()
+
+    def block(self):
+        if self.blocked:
+            print(self.compass_direction, "door was already blocked.")
+        else:
+            self.blocked = True
+            print(self.compass_direction, "door is now blocked.")
+
+    def unblock(self):
+        if not self.blocked:
+            print(self.compass_direction, "door was already unblocked.")
+        else:
+            self.blocked = False
+            print(self.compass_direction, "door is now unblocked.")
