@@ -1,10 +1,10 @@
 {
-"room_name": "RoomTester",
+    "room_name": "RoomTester",
     "room_file": "./Tests/Rooms/RoomTester.room",
     "description": "This is the room's description",
     "illuminated": true,
     "exits": {
-    "exit_1": {
+        "exit_1": {
             "links-to": "./Rooms/RoomTester.room",
             "description": "To example room.",
             "blocked": false,

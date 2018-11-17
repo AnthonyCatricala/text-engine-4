@@ -144,7 +144,7 @@ class Room:
 
         if "../" not in self.room_file and self.room_file.endswith(".room"):
             if os.path.isfile(self.room_file):
-                print("Overwriting {}".format(self.room_name))
+               # print("Overwriting {}".format(self.room_name))
                 os.remove(self.room_file)
 
             tmp_file = "{}.tmp".format(self.room_file)

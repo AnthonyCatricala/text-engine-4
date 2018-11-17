@@ -1,37 +1,29 @@
 {
-    "room_name": "Test Room",
+    "room_name": "RoomTester",
     "room_file": "./Tests/Rooms/Test_Room.room",
     "description": "This is the room's description",
     "illuminated": true,
     "exits": {
-        "north": {
-            "links-to": "./Rooms/Test_Room.room",
+        "exit_1": {
+            "links-to": "./Rooms/RoomTester.room",
             "description": "To example room.",
             "blocked": false,
             "door": {
                 "open": true,
-                "lock": {},
+                "lock": {
+                    "locked": true,
+                    "key": "test key",
+                    "triggers": {},
+                    "user-scripts": {}
+                },
                 "triggers": {},
                 "user-scripts": {}
             },
             "triggers": {},
             "user-scripts": {}
         },
-        "south": {
-            "links-to": "./Rooms/Test_Room.room",
-            "description": "To example room.",
-            "blocked": false,
-            "door": {
-                "open": false,
-                "lock": {},
-                "triggers": {},
-                "user-scripts": {}
-            },
-            "triggers": {},
-            "user-scripts": {}
-        },
-        "east": {
-            "links-to": "./Rooms/Test_Room.room",
+        "exit_2": {
+            "links-to": "./Rooms/RoomTester.room",
             "description": "To example room.",
             "blocked": false,
             "door": {
@@ -48,10 +40,49 @@
             "triggers": {},
             "user-scripts": {}
         },
-        "west": {
-            "links-to": "./Rooms/Test_Room.room",
+        "exit_3": {
+            "links-to": "./Rooms/RoomTester.room",
             "description": "To example room.",
             "blocked": false,
+            "door": {
+                "open": true,
+                "lock": {
+                    "locked": false,
+                    "key": "test key",
+                    "triggers": {},
+                    "user-scripts": {}
+                },
+                "triggers": {},
+                "user-scripts": {}
+            },
+            "triggers": {},
+            "user-scripts": {}
+        },
+        "exit_4": {
+            "links-to": "./Rooms/RoomTester.room",
+            "description": "To example room.",
+            "blocked": false,
+            "door": {
+                "open": false,
+                "lock": {},
+                "triggers": {},
+                "user-scripts": {}
+            },
+            "triggers": {},
+            "user-scripts": {}
+        },
+        "exit_5": {
+            "links-to": "./Rooms/RoomTester.room",
+            "description": "To example room.",
+            "blocked": true,
+            "door": {},
+            "triggers": {},
+            "user-scripts": {}
+        },
+        "exit_6": {
+            "links-to": "./Rooms/RoomTester.room",
+            "description": "To example room.",
+            "blocked": true,
             "door": {
                 "open": true,
                 "lock": {

@@ -5,6 +5,7 @@ class Item:
     inventory = None
     triggers = None
     user_scripts = None
+
     def __init__(self, n, descrip, ill, invent, trigg, user_scrip):
         self.name = n
         self.description = descrip
