@@ -25,7 +25,7 @@ apply_trigger(start_room, door_slam)
 # EAST:  DOOR LEADING TO LARGE BEDROOM
 lock_room = create_room(room_name="Hallway",
                         description="To the north there is a door to the storage room.\n"
-                                    "To the east there is a door to a large bedroom\n.")
+                                    "To the east there is a door to a large bedroom.\n")
 
 # LINK THE MISSING FLAG ROOM AND THE HALLWAY
 link_two_rooms(start_room, lock_room, "north", "A very tall open archway.")
@@ -124,6 +124,3 @@ rooms = [start_room,
 
 for room in rooms:
     room.save()
-
-# TODO Remove this; for testing purposes only.
-print()
