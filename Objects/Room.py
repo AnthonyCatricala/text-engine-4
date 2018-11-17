@@ -1,5 +1,5 @@
-from Objects.Exit import Exit
-#from Objects.Item import Item
+from Objects.Exit import *
+from Objects.Item import *
 from Objects.Trigger import *
 from Objects.UserScript import *
 
@@ -49,8 +49,8 @@ class Room:
         # TODO Come back to this (WIP)
 
         out = []
-#        for key, value in inventory_dict.items():
-#            out.append(Item(key, value))
+        for i in inventory_dict:
+            out.append(Item.from_dict(i))
         return out
 
     @staticmethod

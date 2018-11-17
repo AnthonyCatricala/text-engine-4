@@ -71,7 +71,12 @@ class Item:
         visible = item_dict['visible']
         illuminated = item_dict['illuminated']
         obtainable = item_dict['obtainable']
-        inventory = cls.__fill_inventory(item_dict['inventory'])
+
+        inventory_list = item_dict['inventory']
+        if isinstance(inventory_list, list):
+            inventory = cls.__fill_inventory(inventory_list)
+        else:
+            inventory = []
 
         door_dict = item_dict['door']
         if door_dict:
@@ -95,8 +100,10 @@ class Item:
                    user_scripts)
 
     @staticmethod
-    def __fill_inventory(inventory_dict):
+    def __fill_inventory(inventory):
         out = []
+        for i in inventory:
+            out.append(Item.from_dict(i))
         return out
 
 
