@@ -1,3 +1,39 @@
+from Objects.Item import *
+
+
+def create_object(item_name: str="",
+                  description: str = "",
+                  alias: list = None,
+                  quantity: int = 1,
+                  illuminated: bool = False,
+                  obtainable: bool = True,
+                  inventory: list = None,
+                  door: Door = None,
+                  triggers: list = None,
+                  user_scripts: list = None):
+    out = None
+    if item_name:
+        item_dict = dict()
+        item_dict['item_name'] = item_name
+        item_dict['description'] = description
+
+        if isinstance(alias, list):
+            item_dict['alias'] = alias
+        else:
+            item_dict['alias'] = []
+
+        item_dict['quantity'] = quantity
+        item_dict['illuminated'] = illuminated
+
+        item_dict['obtainable'] = obtainable
+        item_dict['inventory'] = inventory
+        item_dict['door'] = door
+        item_dict['triggers'] = triggers
+        item_dict['user-scripts'] = user_scripts
+
+        out = Item.from_dict(item_dict)
+
+    return out
 
 
 def create_object(object_name=None,
