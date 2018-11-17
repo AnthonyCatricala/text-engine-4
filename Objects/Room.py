@@ -119,11 +119,10 @@ class Room:
                 key, value = e.to_json()
                 out['exits'][key] = value
 
-        out['inventory'] = dict()
+        out['inventory'] = []
         if self.inventory:
             for i in self.inventory:
-                key, value = i.to_json()
-                out['inventory'][key] = value
+                out['inventory'].append(i.to_json())
 
         out['triggers'] = dict()
         if self.triggers:

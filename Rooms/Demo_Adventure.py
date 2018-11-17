@@ -64,6 +64,10 @@ flag_room = create_room(room_name="Storage Room",
                                     "The flag seems to be the only object in the room that has been moved in years.\n"
                                     "Flickers of light come from a stone archway to the west.")
 
+# CREATE FLAG OBJECT AND APPLY IT TO THE ROOM
+flag = create_object("missing flag", "The flag that is missing from the flag room.", ['flag'])
+add_object_to_room(flag_room, flag)
+
 
 # LINK HALLWAY TO STORAGE ROOM
 link_two_rooms(lock_room, flag_room, "north", "A locked door to a storage room.")
@@ -81,6 +85,7 @@ apply_door_to_exit(hallway_north_exit, storage_room_door)
 storage_room_south_exit = flag_room.get_exit("south")
 storage_room_south_exit.block()
 storage_room_lock, storage_room_key = create_lock_and_key("storage room key", "An old brass key.", False)
+add_object_to_room(key_room, storage_room_key)
 storage_room_door = create_door(True)
 apply_lock_to_door(storage_room_door, storage_room_lock)
 apply_door_to_exit(storage_room_south_exit, storage_room_door)

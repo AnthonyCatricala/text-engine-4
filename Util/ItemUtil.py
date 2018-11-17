@@ -5,6 +5,7 @@ def create_object(item_name: str="",
                   description: str = "",
                   alias: list = None,
                   quantity: int = 1,
+                  visible: bool = True,
                   illuminated: bool = False,
                   obtainable: bool = True,
                   inventory: list = None,
@@ -23,8 +24,8 @@ def create_object(item_name: str="",
             item_dict['alias'] = []
 
         item_dict['quantity'] = quantity
+        item_dict['visible'] = visible
         item_dict['illuminated'] = illuminated
-
         item_dict['obtainable'] = obtainable
         item_dict['inventory'] = inventory
         item_dict['door'] = door
@@ -35,7 +36,7 @@ def create_object(item_name: str="",
 
     return out
 
-
+'''
 def create_object(object_name=None,
                   object_description=None,
                   alias=None,
@@ -126,7 +127,7 @@ def create_object(object_name=None,
         print()
 
     return out
-
+'''
 
 def add_light_to_object(obj=None):
     # ##

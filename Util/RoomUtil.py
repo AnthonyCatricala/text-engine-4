@@ -212,22 +212,14 @@ def save_room(room=None):
 
 def add_object_to_room(room=None, obj=None):
     if room:
-        if type(room) is dict:
-            if "inventory" in room:
-                inventory = room["inventory"]
-                if type(inventory) is dict:
-                    if type(obj) is dict:
-                        if len(obj) == 1:
-                            for key, value in obj.items():
-                                inventory[key] = value
-                        else:
-                            error_handler("add_object_to_room", "too many arguments")
-                    else:
-                        error_handler("add_object_to_room", "invalid object type")
+        if isinstance(room, Room):
+            if obj:
+                if isinstance(obj, Item):
+                    room.inventory.append(obj)
                 else:
-                    error_handler("add_object_to_room", "invalid format")
+                    error_handler("add_object_to_room", "invalid object type")
             else:
-                error_handler("add_object_to_room", "invalid object")
+                error_handler("add_object_to_room", "no object")
         else:
             error_handler("add_object_to_room", "invalid room type")
     else:
