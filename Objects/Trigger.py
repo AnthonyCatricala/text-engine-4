@@ -17,20 +17,22 @@ class PrintTrigger(Trigger):
 
     def __init__(self, trigger_command="", description="", connected_to=None):
         super().__init__(trigger_command, connected_to)
+        self.type = "print"
         self.description = description
 
     def trigger(self):
         print(self.description)
 
+    @classmethod
+    def from_dict(cls, trigger_dict):
+        instance = cls()
+        instance.__dict__.update(trigger_dict)
+        return instance
+
     def to_json(self):
-        key = self.trigger_command
-
-        value = dict()
-        value['print'] = dict()
-        trigger_args = value['print']
-        trigger_args['description'] = self.description
-
-        return key, value
+        out = self.__dict__
+        out["connected_to"] = None
+        return out
 
 
 class DeathTrigger(PrintTrigger):

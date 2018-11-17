@@ -1,5 +1,5 @@
 from Objects.Lock import Lock
-from Objects.Trigger import Trigger
+from Objects.Trigger import *
 
 
 class Door:
@@ -12,6 +12,8 @@ class Door:
         self.is_open = is_open
         self.lock = lock
         self.triggers = triggers
+        for trigger in self.triggers:
+            trigger.connected_to = self
         self.user_scripts = user_scripts
 
     @classmethod
@@ -31,8 +33,10 @@ class Door:
             triggers_dict = dict()
 
         out = []
-        for key, value in triggers_dict.items():
-            out.append(Trigger(key, value))
+        for trigger_command, trigger_wrapper in triggers_dict.items():
+            for trigger_type, args_wrapper in trigger_wrapper.items():
+                if trigger_type == "print":
+                    out.append(PrintTrigger(trigger_command, args_wrapper['description']))
         return out
 
     @staticmethod

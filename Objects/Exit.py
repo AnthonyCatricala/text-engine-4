@@ -1,5 +1,5 @@
 from Objects.Door import Door
-from Objects.Trigger import Trigger
+from Objects.Trigger import *
 from Objects.UserScript import UserScript
 
 
@@ -19,6 +19,8 @@ class Exit:
         self.blocked = blocked
         self.door = door
         self.triggers = triggers
+        for trigger in self.triggers:
+            trigger.connected_to = self
         self.user_scripts = user_scripts
 
     @classmethod
@@ -44,8 +46,10 @@ class Exit:
             triggers_dict = dict()
 
         out = []
-        for key, value in triggers_dict.items():
-            out.append(Trigger(key, value))
+        for trigger_command, trigger_wrapper in triggers_dict.items():
+            for trigger_type, args_wrapper in trigger_wrapper.items():
+                if trigger_type == "print":
+                    out.append(PrintTrigger(trigger_command, args_wrapper['description']))
         return out
 
     @staticmethod

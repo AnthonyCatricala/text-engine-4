@@ -46,8 +46,6 @@ class Room:
 
     @staticmethod
     def __fill_inventory(inventory_dict):
-        # TODO Come back to this (WIP)
-
         out = []
         for i in inventory_dict:
             out.append(Item.from_dict(i))
@@ -80,15 +78,13 @@ class Room:
         return out
 
     @staticmethod
-    def __fill_triggers(triggers_dict=None):
-        if not triggers_dict:
-            triggers_dict = dict()
-
+    def __fill_triggers(triggers=None):
+        if not triggers:
+            triggers = []
         out = []
-        for trigger_command, trigger_wrapper in triggers_dict.items():
-            for trigger_type, args_wrapper in trigger_wrapper.items():
-                if trigger_type == "print":
-                    out.append(PrintTrigger(trigger_command, args_wrapper['description']))
+        for t in triggers:
+            if t["type"] == "print":
+                out.append(PrintTrigger.from_dict(t))
         return out
 
     @staticmethod
@@ -124,11 +120,10 @@ class Room:
             for i in self.inventory:
                 out['inventory'].append(i.to_json())
 
-        out['triggers'] = dict()
+        out['triggers'] = []
         if self.triggers:
             for t in self.triggers:
-                key, value = t.to_json()
-                out['triggers'][key] = value
+                out['triggers'].append(t.to_json())
 
         out['user-scripts'] = dict()
         if self.user_scripts:

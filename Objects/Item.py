@@ -26,7 +26,7 @@ class Item:
                  obtainable: bool=True,
                  inventory: list= None,
                  door: Door=None,
-                 triggers: list=None,
+                 triggers: list=[],
                  user_scripts: list=None):
 
         self.item_name = item_name
@@ -56,6 +56,8 @@ class Item:
             self.triggers = triggers
         else:
             self.triggers = list()
+        for trigger in self.triggers:
+            trigger.connected_to = self
 
         if user_scripts and isinstance(user_scripts, list):
             self.user_scripts = user_scripts
