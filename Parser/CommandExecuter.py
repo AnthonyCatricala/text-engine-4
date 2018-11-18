@@ -13,14 +13,16 @@ class CommandExecutor:
         #for x in room.triggers:
         #    self.trigger_list.append(("room", x.trigger_command, x.description))
 
-
     def executor(self, parsed_string):
         #print("\n", self.room.room_name)
+
+        triggers = self.room.get_triggers(parsed_string[0])
+
         if parsed_string[0] == "error":
             print(parsed_string[0],":", parsed_string[1])
         elif parsed_string[0] == "look":
             self.look_function(parsed_string)
-        elif parsed_string[ 0] == "go":
+        elif parsed_string[0] == "go":
             self.move_function(parsed_string)
         elif parsed_string[0] == "examine":
             self.examine_function(parsed_string)
@@ -32,6 +34,10 @@ class CommandExecutor:
             self.block_unblock_function(parsed_string)
 #        elif parsed_string[0] == "take":
 #            self.get_function() TODO add this with items
+
+        # TODO Delete triggers after they are tripped.
+        for trigger in triggers:
+            trigger.trigger()
 
     def look_function(self, parsed_string):
         s = ""

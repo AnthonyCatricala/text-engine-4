@@ -1,5 +1,48 @@
+import Objects.Door as Door
+import Objects.Item as Item
 
 
+def create_object(item_name: str="",
+                  description: str = "",
+                  alias: list = None,
+                  quantity: int = 1,
+                  visible: bool = True,
+                  illuminated: bool = False,
+                  obtainable: bool = True,
+                  inventory: list = None,
+                  door: Door = None,
+                  triggers: list = None,
+                  user_scripts: list = None):
+    out = None
+    if item_name:
+        item_dict = dict()
+        item_dict['item_name'] = item_name
+        item_dict['description'] = description
+
+        if isinstance(alias, list):
+            item_dict['alias'] = alias
+        else:
+            item_dict['alias'] = []
+
+        item_dict['quantity'] = quantity
+        item_dict['visible'] = visible
+        item_dict['illuminated'] = illuminated
+        item_dict['obtainable'] = obtainable
+        item_dict['inventory'] = inventory
+        item_dict['door'] = door
+        item_dict['triggers'] = triggers
+        item_dict['user-scripts'] = user_scripts
+
+        out = Item.Item.from_dict(item_dict)
+
+    return out
+
+
+def create_key(key_name: str="", key_description: str = ""):
+    return create_object(key_name, key_description)
+
+
+'''
 def create_object(object_name=None,
                   object_description=None,
                   alias=None,
@@ -90,7 +133,7 @@ def create_object(object_name=None,
         print()
 
     return out
-
+'''
 
 def add_light_to_object(obj=None):
     # ##

@@ -1,5 +1,6 @@
-from Parser.CommandExecuter import *
-from Parser.UserParser import *
+import Parser.UserParser
+import Parser.CommandExecuter
+import Util.RoomUtil
 
 import os
 
@@ -9,16 +10,16 @@ os.chdir(PROJECT_DIR)
 
 
 def play():
-    start_room = load_room('Missing Flag Room')
+    start_room = Util.RoomUtil.load_room('Missing Flag Room')
 
-    cp = UserParser(start_room)
-    ce = CommandExecutor(start_room, None)
+    cp = Parser.UserParser.UserParser(start_room)
+    ce = Parser.CommandExecuter.CommandExecutor(start_room, None)
 
     while True:
         #print("q to quit.\n")
         user_command = input()
         if user_command == 'q':
-            break;
+            break
         parsed_command = cp.simplify_command(user_command)
         ce.executor(parsed_command)
 

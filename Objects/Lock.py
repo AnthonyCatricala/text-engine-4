@@ -1,7 +1,3 @@
-from Objects.Trigger import Trigger
-from Objects.UserScript import UserScript
-
-
 class Lock:
     locked = None
     key = None
@@ -12,41 +8,21 @@ class Lock:
         self.is_locked = locked
         self.key = key
         self.triggers = triggers
+        for trigger in self.triggers:
+            trigger.connected_to = self
         self.user_scripts = user_scripts
 
     @classmethod
     def from_dict(cls, lock_dict):
+        import Objects.Trigger
+        import Objects.UserScript
+
         locked = lock_dict['locked']
         key = lock_dict['key']
-        triggers = cls.__fill_triggers(lock_dict['triggers'])
-        user_scripts = cls.__fill_user_scripts(lock_dict['user-scripts'])
+        triggers = Objects.Trigger.Trigger.fill_triggers(lock_dict['triggers'])
+        user_scripts = Objects.UserScript.UserScript.fill_user_scripts(lock_dict['user-scripts'])
 
         return cls(locked, key, triggers, user_scripts)
-
-    @staticmethod
-    def __fill_triggers(triggers_dict=None):
-        if not triggers_dict:
-            triggers_dict = dict()
-
-        out = []
-        for key, value in triggers_dict.items():
-            out.append(Trigger(key, value))
-        return out
-
-    @staticmethod
-    def __fill_user_scripts(user_script_dict=None):
-        if not user_script_dict:
-            user_script_dict = dict()
-
-        out = []
-
-        for key, value in user_script_dict.items():
-            wrapper = dict()
-            wrapper[key] = value
-
-            out.append(UserScript.from_dict(wrapper))
-
-        return out
 
     def to_json(self):
         out = dict()
