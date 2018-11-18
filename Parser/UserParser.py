@@ -3,19 +3,15 @@ import Util.RoomUtil
 
 class UserParser:
     room = None
+    twoWordDic = {"gn": "go north", "gs": "go south", "ge": "go east", "gw": "go west", "ln": "look north",
+                  "ls": "look south", "le": "look east", "lw": "look west"}
+    action_dict = {"l": "look", "travel": "go", "walk": "go", "run": "go", "enter": "go", "g": "go", "move": "go",
+                   "exam": "examine"}
+    default_dir = {"n": "north", "northern": "north", "s": "south", "southern": "south", "e": "east", "eastern": "east",
+                   "w": "west", "western": "west"}
 
     def __init__(self, room_name = Util.RoomUtil.Room):
         self.room = room_name
-
-    def remove_user_error(self, input_str):
-        ##
-        # Author: Lucy Oliverio
-        # Description: It takes out the spaces and changes all upper case letters to lower
-        ##
-
-        out = input_str.lower()
-        out = re.sub(r" {2,}", " ", out)
-        return out
 
     def com_check(self, com_given, com_check):
         ##
@@ -25,9 +21,7 @@ class UserParser:
         ##
         par_giv_com = com_given
         i = 0
-        ch_item = None
         s = ""
-
         #   checks each individual command with the user's input, if it is there it increases
         #   i. If i > 1, it returns an error that the player has input
         #   too many items for the program to understand. If i = 0, it returns None.
@@ -65,32 +59,6 @@ class UserParser:
             list_of_exits.append(exit.compass_direction.replace("_", " "))
         return list_of_exits
 
-    def refine_input(self, inp_com, temp_str1, temp_str2):
-        ##
-        # Author: Lucy Oliverio
-        # description: Given a string, the program will replaces all key words with the correct words and spacing
-        ##
-        com = self.remove_user_error(inp_com)
-        par_com = com.split(" ")
-        i = 0
-        com = ""
-        is_there = False
-        for x in par_com:
-            for xx in temp_str1:
-                for xxx in xx:
-                    if x == xxx:
-                        com = com + " " + temp_str2[i]
-                        is_there = True
-                        continue
-                i = i + 1
-            i = 0
-            if is_there is False:
-                com = com + " " + x
-            elif is_there is True:
-                is_there = False
-        del temp_str1, temp_str2, par_com, is_there, i
-        return com[1:].split()
-
     def chosen_obj_check(self, chosen_object, main_obj, chosen_command):
         if not (chosen_object == "" or chosen_object == "error"):
             if (chosen_command == "look") and ("lock" in main_obj):
@@ -99,21 +67,31 @@ class UserParser:
                 return ["look", "door", "from", chosen_object.replace(" ", "_")]
             elif chosen_command == "look":
                 return ["look", "exit", "from", chosen_object.replace(" ", "_")]
-            elif (chosen_command == "go") and ("door" not in main_obj) and ("lock" not in main_obj):
+            elif (chosen_command == "go") and (("exit" in main_obj) or (main_obj == chosen_object.split(" "))):
                 return ["go", chosen_object.replace(" ", "_"), "", ""]
-            elif (chosen_command == "open") and ("door" in main_obj):
+            elif (chosen_command == "open") and (("door" in main_obj) or (main_obj == chosen_object.split(" "))):
                 return ["open", chosen_object.replace(" ", "_"), "", ""]
-            elif (chosen_command == "close") and ("door" in main_obj):
+            elif (chosen_command == "close") and (("door" in main_obj) or (main_obj == chosen_object.split(" "))):
                 return ["close", chosen_object.replace(" ", "_"), "", ""]
-            elif (chosen_command == "lock") and (("door" in main_obj) or ("lock" in main_obj)):
+            elif (chosen_command == "lock") and (("door" in main_obj) or ("lock" in main_obj)or (main_obj == chosen_object.split(" "))):
                 return ["lock", chosen_object.replace(" ", "_"), "", ""]
-            elif (chosen_command == "unlock") and (("door" in main_obj) or ("lock" in main_obj)):
+            elif (chosen_command == "unlock") and (("door" in main_obj) or ("lock" in main_obj)or (main_obj == chosen_object.split(" "))):
                 return ["unlock", chosen_object.replace(" ", "_"), "", ""]
             elif chosen_command == "block":
                 return ["block", chosen_object.replace(" ", "_"), "", ""]
             elif chosen_command == "unblock":
                 return ["unblock", chosen_object.replace(" ", "_"), "", ""]
     #TODO make it so doors = compass door
+
+    def refine_inp(self, comp_dictionary, comp_arr):
+        s = ""
+        for x in comp_arr:
+            if x in comp_dictionary:
+                s = s + " " + comp_dictionary[x]
+            else:
+                s = s + " " + x
+        return s[1:]
+
     def simplify_command(self, input_string):
         ##
         # Author: Lucy Oliverio
@@ -121,16 +99,18 @@ class UserParser:
         ##
         if input_string == "":
             return ["", "", "", ""]
-        temp_str1 = {"go", "travel", "walk", "run", "enter", "g", "move"}, {"look", "l"}, {"examine", "exam"}, {"north", "n", "northern"}, {
-                        "south", "s", "southern"}, {"east", "e", "eastern"}, {"west", "w", "western"}
-        temp_str2 = ["go", "look", "examine", "north", "south", "east", "west"]
-        user_str = self.refine_input(input_string, temp_str1, temp_str2)
-        del temp_str1, temp_str2
+
+        out = input_string.lower()
+        out = re.sub(r" {2,}", " ", out)
+        com = self.refine_inp(self.twoWordDic, out.split())
+        com = self.refine_inp(self.action_dict, com.split())
+        user_str = com.split(" ")
+
         #commands
         chosen_command = self.com_check(user_str, ["look", "go", "open", "close", "lock", "unlock", "block", "unblock"])
         if chosen_command == "":
             return ["error", "not a command", "", ""]
-        elif chosen_command == "error":
+        if chosen_command == "error":
             if self.com_check(user_str, ["go", "open", "close", "block", "unblock", "unlock"]) == "error":
                 return ["error", "not a command", "", ""]
             if self.com_check(user_str, ["look", "go", "open", "close", "unlock", "block", "unblock"]) == "look":
@@ -140,7 +120,8 @@ class UserParser:
             else:
                 chosen_command = "lock"
         #takes the second half of the string (the one that recieves the action)
-        main_obj = self.cut_off_str(user_str.copy(), chosen_command)
+        user_str = self.refine_inp(self.default_dir, user_str).split(" ")
+        main_obj = self.cut_off_str(user_str, chosen_command)
         #if the command is look only
         if (chosen_command == "look") and ((len(user_str) == 1) or (main_obj == ["around"])):
             return ["look", "", "", ""]

@@ -15,7 +15,7 @@ def play():
     ce = CommandExecutor(start_room, None)
 
     while True:
-        #print("q to quit.\n")
+        #TODO: print("q to quit.\n")
         user_command = input()
         if user_command == 'q':
             break;

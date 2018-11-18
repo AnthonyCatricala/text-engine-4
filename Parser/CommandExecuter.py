@@ -10,12 +10,15 @@ class CommandExecutor:
     def __init__(self, room, player):
         self.room = room
         self.player = player
+        #TODO: print(self.room.room_name)
+        self.look_function(["look", "", "", ""])
         #for x in room.triggers:
         #    self.trigger_list.append(("room", x.trigger_command, x.description))
 
 
     def executor(self, parsed_string):
-        #print("\n", self.room.room_name)
+        #TODO: print("\n", self.room.room_name)
+        #print(self.room.inventory)
         if parsed_string[0] == "error":
             print(parsed_string[0],":", parsed_string[1])
         elif parsed_string[0] == "look":
@@ -25,17 +28,25 @@ class CommandExecutor:
         elif parsed_string[0] == "examine":
             self.examine_function(parsed_string)
         elif parsed_string[0] in ["open", "close"]:
-            self.open_close_lock_unlock_function(parsed_string)
+            self.open_close_lock_unlock_block_unblock_function(parsed_string)
         elif parsed_string[0] in ["lock", "unlock"]:
-            self.open_close_lock_unlock_function(parsed_string)
+            self.open_close_lock_unlock_block_unblock_function(parsed_string)
         elif parsed_string[0] in ["block", "unblock"]:
-            self.block_unblock_function(parsed_string)
+            self.open_close_lock_unlock_block_unblock_function(parsed_string)
 #        elif parsed_string[0] == "take":
 #            self.get_function() TODO add this with items
 
     def look_function(self, parsed_string):
         s = ""
-        if parsed_string[1] == "":
+        is_bright = self.room.illuminated
+        if not is_bright and self.room.inventory and self.room.inventory.keys():
+            for x in self.room.inventory.keys():
+                if x.illuminated:
+                    is_bright = True
+                    break
+        if not is_bright:
+            s = "It's too dark to see."
+        elif parsed_string[1] == "":
             s = self.room.description
         else:
             for x in self.room.exits:
@@ -53,49 +64,43 @@ class CommandExecutor:
         #for x in self.room.inventory:
          #   print(x)
 
-    def check_move_function(self, check_room, direction):
-        is_exit = None
-        move = None
-        for e in check_room.exits:
-            if e.compass_direction == direction:
+    def move_function(self, parsed_string):
+        blocked = False
+        is_exit = False
+        exit_chosen = None
+        for e in self.room.exits:
+            if e.compass_direction == parsed_string[1]:
                 if e.blocked:
-                    print("There is something blocking the " + e.compass_direction + " exit of the " + check_room.room_name +
+                    print("There is something blocking the " + e.compass_direction + " exit of the " + self.room.room_name +
                           ". You cannot enter.")
                 elif e.door and not e.door.is_open and e.door.lock and e.door.lock.is_locked:
-                    print("The " + check_room.room_name + "'s " + e.compass_direction + " door seems to be locked. "
-                                                                                        "You cannot enter.")
+                    print("The", e.compass_direction, "door seems to be locked. You cannot enter.")
                 elif e.door and not e.door.is_open and e.door.lock and not e.door.lock.is_locked:
-                    print("The", e.compass_direction, "door in the", check_room.room_name, "is closed, but it "
-                                                                                           "doesn't seem to be locked."
-                                                                                           "You can open the door.")
+                    print("The", e.compass_direction, "door is closed, but it doesn't seem to be locked. You can open the door.")
                 elif not e.door or e.door.is_open:
-                    move = e
+                    exit_chosen = e
                 elif e.door and not e.door.is_open:
                     print("The", e.compass_direction, "door is closed. You can open the door.")
                 else:
                     print("The door blocks your path.")
-                is_exit = e
+                is_exit = True
                 break
-        if is_exit is None:
+        if not is_exit:
             print("There is no exit in that direction.")
-        return move
-
-    def move_function(self, parsed_string):
-        returned = None
-        exit_chosen = self.check_move_function(self.room, parsed_string[1])
-        if exit_chosen is not None:
-            name = exit_chosen.links_to
-            #TODO load room doesn't work for the given links-to
-            test_room = load_room(name[8:len(name)-5])
+        elif exit_chosen is not None:
+            test_room = load_room(room_file=exit_chosen.links_to)
             for x in test_room.exits:
                 if x.links_to == self.room.room_file:
-                    returned = self.check_move_function(test_room, x.compass_direction)
-                    #print(returned.compass_direction)
-                    break
-        if returned is not None:
-            self.room.save()
+                    blocked = x.blocked
+                break
+        if blocked and exit_chosen is not None:
+            print("There is something blocking the " + e.compass_direction + " exit of the " + self.room.room_name +
+                  ". You cannot enter.")
+        elif not blocked and exit_chosen is not None:
+            #TODO: self.room.save()
             self.room.load(exit_chosen.links_to)
-            print("You move to {}.".format(self.room.room_name))
+            #TODO: print("\n", self.room.room_name)
+            print(self.room.description)
 
 
     def examine_function(self, parsed_string):
@@ -111,7 +116,7 @@ class CommandExecutor:
                 #if x == examined_item:
                    # print (Item.item_description)
 
-    def open_close_lock_unlock_function(self, parsed_string):
+    def open_close_lock_unlock_block_unblock_function(self, parsed_string):
         worked = False
         change_door = False
         for x in self.room.exits:
@@ -124,15 +129,17 @@ class CommandExecutor:
                     change_door = x.lock_door()
                 elif parsed_string[0] == "unlock":
                     change_door = x.unlock_door()
+                elif parsed_string[0] == "block":
+                        x.block()
+                elif parsed_string[0] == "unblock":
+                        x.unblock()
                 exit_used = x
                 worked = True
                 break
         if not worked:
             print("That is not a valid exit.")
         elif change_door:
-            name = exit_used.links_to
-            # TODO load room doesn't work for the given links-to
-            test_room = load_room(name[8:len(name) - 5])
+            test_room = load_room(room_file=exit_used.links_to)
             for x in test_room.exits:
                 if x.links_to == self.room.room_file:
                     if x.door and parsed_string[0] == "open":
@@ -143,24 +150,8 @@ class CommandExecutor:
                         x.door.lock.is_locked = True
                     elif x.door and x.door.lock and parsed_string[0] == "unlock":
                         x.door.lock.is_locked = False
-                    test_room.save()
+                    #TODO: test_room.save()
                     break
-
-
-
-    def block_unblock_function(self, parsed_string):
-        worked = False
-        for x in self.room.exits:
-            if x.compass_direction == parsed_string[1]:
-                if parsed_string[0] == "block":
-                    x.block()
-                else:
-                    x.unblock()
-                worked = True
-                break
-        if not worked:
-            print("That is not a valid exit.")
-
 
 #   def get_function(self, parsed_string, room):
 # should remove item from room inventory and append to player inventory. Should check for all 4 command parts
