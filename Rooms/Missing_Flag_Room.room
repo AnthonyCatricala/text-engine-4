@@ -1,0 +1,25 @@
+{
+    "room_name": "Missing Flag Room",
+    "room_file": "./Rooms/Missing_Flag_Room.room",
+    "description": "A well lit room surrounded with decorations.\nIn the center of the room stands a plaque mentioning a flag.\nYou look around the room but no flag can be seen.\nAn archway to the north leads into an open hallway.\nAt the end of the hallway through an open door you spot the flag.",
+    "illuminated": true,
+    "exits": {
+        "north": {
+            "links-to": "./Rooms/Hallway.room",
+            "description": "A very tall open archway.",
+            "blocked": false,
+            "door": {},
+            "triggers": {},
+            "user-scripts": {}
+        }
+    },
+    "inventory": {},
+    "triggers": {
+        "go": {
+            "print": {
+                "description": "As you enter the hallway the door to the north slams shut.\nYou hear the a 'click' as the door locks from the other side.\nI wonder if there is another key around here.\n"
+            }
+        }
+    },
+    "user-scripts": {}
+}

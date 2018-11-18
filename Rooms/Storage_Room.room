@@ -1,0 +1,43 @@
+{
+    "room_name": "Storage Room",
+    "room_file": "./Rooms/Storage_Room.room",
+    "description": "A dimly lit storage room.\nOrnate antique furniture sit untouched, covered in weathered cloth and blankets of dust.\nThe flag seems to be the only object in the room that has been moved in years.\nFlickers of light come from a stone archway to the west.",
+    "illuminated": true,
+    "exits": {
+        "south": {
+            "links-to": "./Rooms/Hallway.room",
+            "description": "A locked door to a storage room.",
+            "blocked": false,
+            "door": {
+                "open": false,
+                "lock": {
+                    "locked": true,
+                    "key": "storage room key",
+                    "triggers": {},
+                    "user-scripts": {}
+                },
+                "triggers": {},
+                "user-scripts": {}
+            },
+            "triggers": {},
+            "user-scripts": {}
+        },
+        "west": {
+            "links-to": "./Rooms/Hidden_Corridor.room",
+            "description": "A stone archway.",
+            "blocked": false,
+            "door": {},
+            "triggers": {},
+            "user-scripts": {}
+        }
+    },
+    "inventory": {},
+    "triggers": {
+        "enter": {
+            "print": {
+                "description": "As you enter the room a dusty old cabinet falls over and blocks the southern door."
+            }
+        }
+    },
+    "user-scripts": {}
+}

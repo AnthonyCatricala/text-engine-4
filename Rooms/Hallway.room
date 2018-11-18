@@ -1,0 +1,50 @@
+{
+    "room_name": "Hallway",
+    "room_file": "./Rooms/Hallway.room",
+    "description": "To the north there is a door to the storage room.\nTo the east there is a door to a large bedroom\n.",
+    "illuminated": true,
+    "exits": {
+        "south": {
+            "links-to": "./Rooms/Missing_Flag_Room.room",
+            "description": "A very tall open archway.",
+            "blocked": false,
+            "door": {},
+            "triggers": {},
+            "user-scripts": {}
+        },
+        "east": {
+            "links-to": "./Rooms/Large_Bedroom.room",
+            "description": "A sturdy bedroom door.",
+            "blocked": false,
+            "door": {
+                "open": true,
+                "lock": {},
+                "triggers": {},
+                "user-scripts": {}
+            },
+            "triggers": {},
+            "user-scripts": {}
+        },
+        "north": {
+            "links-to": "./Rooms/Storage_Room.room",
+            "description": "A locked door to a storage room.",
+            "blocked": false,
+            "door": {
+                "open": false,
+                "lock": {
+                    "locked": true,
+                    "key": "storage room key",
+                    "triggers": {},
+                    "user-scripts": {}
+                },
+                "triggers": {},
+                "user-scripts": {}
+            },
+            "triggers": {},
+            "user-scripts": {}
+        }
+    },
+    "inventory": {},
+    "triggers": {},
+    "user-scripts": {}
+}

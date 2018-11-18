@@ -1,0 +1,24 @@
+{
+    "room_name": "Large Bedroom",
+    "room_file": "./Rooms/Large_Bedroom.room",
+    "description": "A large comfy looking bed sits on the opposite end of the room.\nAs you look around you notice a glint of light reflecting off of a key sitting on a bedside table.\nI wonder if that key will unlock the door in the hallway.",
+    "illuminated": true,
+    "exits": {
+        "west": {
+            "links-to": "./Rooms/Hallway.room",
+            "description": "A sturdy bedroom door.",
+            "blocked": false,
+            "door": {
+                "open": false,
+                "lock": {},
+                "triggers": {},
+                "user-scripts": {}
+            },
+            "triggers": {},
+            "user-scripts": {}
+        }
+    },
+    "inventory": {},
+    "triggers": {},
+    "user-scripts": {}
+}

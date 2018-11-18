@@ -1,0 +1,33 @@
+{
+    "room_name": "Hidden Corridor",
+    "room_file": "./Rooms/Hidden_Corridor.room",
+    "description": "A dark hidden tunnel with a glimpse of light to the south.\nThe stone archway to the east leads back into the storage room.",
+    "illuminated": true,
+    "exits": {
+        "east": {
+            "links-to": "./Rooms/Storage_Room.room",
+            "description": "A stone archway.",
+            "blocked": false,
+            "door": {},
+            "triggers": {},
+            "user-scripts": {}
+        },
+        "south": {
+            "links-to": "./Rooms/Missing_Flag_Room.room",
+            "description": "The light at the end of the tunnel leads to the missing flag room.",
+            "blocked": false,
+            "door": {},
+            "triggers": {},
+            "user-scripts": {}
+        }
+    },
+    "inventory": {},
+    "triggers": {},
+    "user-scripts": {
+        "enter": {
+            "before": "print('Hello World!')",
+            "instead": "print('This was done instead!')",
+            "after": "self.load('Rooms/Missing_Flag_Room.room')"
+        }
+    }
+}
