@@ -1,5 +1,3 @@
-from Objects.Lock import Lock
-from Objects.Trigger import *
 
 
 class Door:
@@ -18,41 +16,18 @@ class Door:
 
     @classmethod
     def from_dict(cls, door_dict):
+        import Objects.Trigger
+        import Objects.UserScript
+        import Objects.Lock
+
         is_open = door_dict['open']
         if door_dict['lock']:
-            lock = Lock.from_dict(door_dict['lock'])
+            lock = Objects.Lock.Lock.from_dict(door_dict['lock'])
         else:
             lock = None
-        triggers = cls.__fill_triggers(door_dict['triggers'])
-        user_scripts = cls.__fill_user_scripts(door_dict['user-scripts'])
+        triggers = Objects.Trigger.Trigger.fill_triggers(door_dict['triggers'])
+        user_scripts = Objects.UserScript.UserScript.fill_user_scripts(door_dict['user-scripts'])
         return cls(is_open, lock, triggers, user_scripts)
-
-    @staticmethod
-    def __fill_triggers(triggers_dict=None):
-        if not triggers_dict:
-            triggers_dict = dict()
-
-        out = []
-        for trigger_command, trigger_wrapper in triggers_dict.items():
-            for trigger_type, args_wrapper in trigger_wrapper.items():
-                if trigger_type == "print":
-                    out.append(PrintTrigger(trigger_command, args_wrapper['description']))
-        return out
-
-    @staticmethod
-    def __fill_user_scripts(user_script_dict=None):
-        if not user_script_dict:
-            user_script_dict = dict()
-
-        out = []
-
-        for key, value in user_script_dict.items():
-            wrapper = dict()
-            wrapper[key] = value
-
-            out.append(UserScript.from_dict(wrapper))
-
-        return out
 
     def to_json(self):
         out = dict()

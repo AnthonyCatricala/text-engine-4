@@ -1,16 +1,14 @@
-from Util.ItemUtil import *
 from Util.ErrorUtil import *
+from Objects.Item import Item
 from Objects.Room import Room
+from Objects.Exit import Exit
 from Objects.Door import Door
 from Objects.Lock import Lock
-from Objects.Exit import Exit
-from Objects.Trigger import *
+from Objects.Trigger import Trigger
 from Objects.UserScript import UserScript
 
 import json
 import os
-
-# TODO Create Item Python Object.
 
 
 def change_room_name(room=None, room_name=None):
@@ -283,41 +281,29 @@ def create_door(is_open=False,
     return out
 
 
-# TODO Come back to this when Items have been created.
-def create_lock_and_key(key_name="",
-                        key_description="",
-                        is_locked=True,
-                        triggers=None,
-                        user_scripts=None):
-    lock = None
-    key = None
+def create_lock(key: Item=None,
+                is_locked=True,
+                triggers=None,
+                user_scripts=None):
 
-    if key_name and type(key_name) is str:
-        if key_description and type(key_description) is str:
-            lock_dict = dict()
-            lock_dict["key"] = key_name
-            lock_dict["locked"] = is_locked
+    if key and isinstance(key, Item):
+        lock_dict = dict()
+        lock_dict["key"] = key.item_name
+        lock_dict["locked"] = is_locked
 
-            if triggers:
-                lock_dict["triggers"] = triggers
-            else:
-                lock_dict["triggers"] = dict()
-
-            if user_scripts:
-                lock_dict['user-scripts'] = user_scripts
-            else:
-                lock_dict["user-scripts"] = dict()
-
-            lock = Lock.from_dict(lock_dict)
-
-            key = create_object(key_name, key_description)
-
+        if triggers:
+            lock_dict["triggers"] = triggers
         else:
-            error_handler("create_lock_and_key", "no key description")
-    else:
-        error_handler("create_lock_and_key", "no key name")
+            lock_dict["triggers"] = dict()
 
-    return lock, key
+        if user_scripts:
+            lock_dict['user-scripts'] = user_scripts
+        else:
+            lock_dict["user-scripts"] = dict()
+
+        lock = Lock.from_dict(lock_dict)
+
+    return lock
 
 
 def apply_lock_to_door(door=None, lock=None):

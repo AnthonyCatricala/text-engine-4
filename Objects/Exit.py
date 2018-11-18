@@ -1,6 +1,3 @@
-from Objects.Door import Door
-from Objects.Trigger import *
-from Objects.UserScript import UserScript
 
 
 class Exit:
@@ -25,45 +22,49 @@ class Exit:
 
     @classmethod
     def from_dict(cls, compass_direction, exit_dict):
+        import Objects.Door
+        import Objects.Trigger
+        import Objects.UserScript
+
         compass_direction = compass_direction
         links_to = exit_dict['links-to']
         description = exit_dict['description']
         blocked = exit_dict['blocked']
         door_dict = exit_dict['door']
+
         if door_dict:
-            door = Door.from_dict(door_dict)
+            door = Objects.Door.Door.from_dict(door_dict)
         else:
             door = None
 
-        triggers = cls.__fill_triggers(exit_dict['triggers'])
-        user_scripts = cls.__fill_user_scripts(exit_dict['user-scripts'])
+        triggers = Objects.Trigger.Trigger.fill_triggers(exit_dict['triggers'])
+        user_scripts = Objects.UserScript.UserScript.fill_user_scripts(exit_dict['user-scripts'])
 
         return cls(compass_direction, links_to, description, blocked, door, triggers, user_scripts)
 
-    @staticmethod
-    def __fill_triggers(triggers_dict=None):
-        if not triggers_dict:
-            triggers_dict = dict()
-
-        out = []
-        for trigger_command, trigger_wrapper in triggers_dict.items():
-            for trigger_type, args_wrapper in trigger_wrapper.items():
-                if trigger_type == "print":
-                    out.append(PrintTrigger(trigger_command, args_wrapper['description']))
-        return out
-
-    @staticmethod
-    def __fill_user_scripts(user_script_dict=None):
-        if not user_script_dict:
-            user_script_dict = dict()
+    @classmethod
+    def fill_exits(cls, exits=None):
+        if not exits:
+            exits = dict()
 
         out = []
 
-        for key, value in user_script_dict.items():
-            wrapper = dict()
-            wrapper[key] = value
+        if type(exits) is dict:
+            for key, value in exits.items():
+                out.append(cls.from_dict(key, value))
+        elif type(exits) is list:
+            for e in exits:
+                if isinstance(e, Exit):
+                    out.append(e)
+                else:
+                    out = []
+                    # TODO Error handling for 'Exits supplied are not the right format.'
+                    print()
+                    break
 
-            out.append(UserScript.from_dict(wrapper))
+        else:
+            # TODO Error handling for 'Exits supplied are not the right format.'
+            print()
 
         return out
 
@@ -145,8 +146,6 @@ class Exit:
             print("There is no door to open.")
 
     def unlock_door(self, key=None):
-
-
         if self.door:
             if self.door.lock:
                 print(self.door.lock.unlock())

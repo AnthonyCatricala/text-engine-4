@@ -10,6 +10,21 @@ class UserScript:
         self.after = after
 
     @classmethod
+    def fill_user_scripts(cls, user_script_dict=None):
+        if not user_script_dict:
+            user_script_dict = dict()
+
+        out = []
+
+        for key, value in user_script_dict.items():
+            wrapper = dict()
+            wrapper[key] = value
+
+            out.append(cls.from_dict(wrapper))
+
+        return out
+
+    @classmethod
     def from_dict(cls, script_dict):
 
         for key, value in script_dict.items():

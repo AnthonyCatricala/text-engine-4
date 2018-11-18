@@ -1,6 +1,4 @@
-from Objects.Door import *
-from Objects.Trigger import *
-from Objects.UserScript import *
+import Objects.Door
 
 
 class Item:
@@ -25,8 +23,8 @@ class Item:
                  illuminated: bool=False,
                  obtainable: bool=True,
                  inventory: list= None,
-                 door: Door=None,
-                 triggers: list=[],
+                 door: Objects.Door.Door=None,
+                 triggers: list=None,
                  user_scripts: list=None):
 
         self.item_name = item_name
@@ -38,7 +36,7 @@ class Item:
             self.alias = list()
 
         self.quantity = quantity
-
+        self.visible = visible
         self.illuminated = illuminated
         self.obtainable = obtainable
 
@@ -47,7 +45,7 @@ class Item:
         else:
             self.inventory = list()
 
-        if isinstance(door, Door):
+        if isinstance(door, Objects.Door.Door):
             self.door = door
         else:
             self.door = None
@@ -63,9 +61,22 @@ class Item:
             self.user_scripts = user_scripts
         else:
             self.user_scripts = list()
+    
+    @classmethod
+    def fill_inventory(cls, inventory=None):
+        if not inventory:
+            inventory = []
+
+        out = []
+        for i in inventory:
+            out.append(cls.from_dict(i))
+        return out
 
     @classmethod
     def from_dict(cls, item_dict):
+        import Objects.Trigger
+        import Objects.UserScript
+
         item_name = item_dict['item_name']
         description = item_dict['description']
         alias = item_dict['alias']
@@ -76,18 +87,18 @@ class Item:
 
         inventory_list = item_dict['inventory']
         if isinstance(inventory_list, list):
-            inventory = cls.__fill_inventory(inventory_list)
+            inventory = cls.fill_inventory(inventory_list)
         else:
             inventory = []
 
         door_dict = item_dict['door']
         if door_dict:
-            door = Door.from_dict(door_dict)
+            door = Objects.Door.Door.from_dict(door_dict)
         else:
             door = None
 
-        triggers = cls.__fill_triggers(item_dict['triggers'])
-        user_scripts = cls.__fill_user_scripts(item_dict['user-scripts'])
+        triggers = Objects.Trigger.Trigger.fill_triggers(item_dict['triggers'])
+        user_scripts = Objects.UserScript.UserScript.fill_user_scripts(item_dict['user-scripts'])
 
         return cls(item_name,
                    description,
@@ -100,41 +111,6 @@ class Item:
                    door,
                    triggers,
                    user_scripts)
-
-    @staticmethod
-    def __fill_inventory(inventory):
-        out = []
-        for i in inventory:
-            out.append(Item.from_dict(i))
-        return out
-
-
-    @staticmethod
-    def __fill_triggers(triggers_dict=None):
-        if not triggers_dict:
-            triggers_dict = dict()
-
-        out = []
-        for trigger_command, trigger_wrapper in triggers_dict.items():
-            for trigger_type, args_wrapper in trigger_wrapper.items():
-                if trigger_type == "print":
-                    out.append(PrintTrigger(trigger_command, args_wrapper['description']))
-        return out
-
-    @staticmethod
-    def __fill_user_scripts(user_script_dict=None):
-        if not user_script_dict:
-            user_script_dict = dict()
-
-        out = []
-
-        for key, value in user_script_dict.items():
-            wrapper = dict()
-            wrapper[key] = value
-
-            out.append(UserScript.from_dict(wrapper))
-
-        return out
 
     def to_json(self):
         out = dict()
@@ -168,7 +144,5 @@ class Item:
             for s in self.user_scripts:
                 key, value = s.to_json()
                 out['user-scripts'][key] = value
-
-
 
         return out

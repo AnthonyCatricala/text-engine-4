@@ -1,8 +1,17 @@
 import re
 import Util.RoomUtil
 
+
 class UserParser:
     room = None
+    applicable_commands = {
+        "go": ["go", "travel", "walk", "run", "enter", "g", "move"],
+        "look": ["look", "l"], "examine": ["examine", "exam"],
+        "north": ["north", "n", "northern"],
+        "south": ["south", "s", "southern"],
+        "east": ["east", "e", "eastern"],
+        "west": ["west", "w", "western"]
+    }
 
     def __init__(self, room_name = Util.RoomUtil.Room):
         self.room = room_name
@@ -65,7 +74,8 @@ class UserParser:
             list_of_exits.append(exit.compass_direction.replace("_", " "))
         return list_of_exits
 
-    def refine_input(self, inp_com, temp_str1, temp_str2):
+    # TODO Delete this after explaining changes to Lucy.
+    def refine_input_old(self, inp_com, temp_str1, temp_str2):
         ##
         # Author: Lucy Oliverio
         # description: Given a string, the program will replaces all key words with the correct words and spacing
@@ -75,10 +85,16 @@ class UserParser:
         i = 0
         com = ""
         is_there = False
+
+        # For each word within the user command.
         for x in par_com:
+            # For each grouping of like words
             for xx in temp_str1:
+                # For each word with the like word groupings.
                 for xxx in xx:
+                    # If the match is found within the grouping
                     if x == xxx:
+
                         com = com + " " + temp_str2[i]
                         is_there = True
                         continue
@@ -88,8 +104,25 @@ class UserParser:
                 com = com + " " + x
             elif is_there is True:
                 is_there = False
+
+        # TODO You don't need to clean up variables when a function ends.
         del temp_str1, temp_str2, par_com, is_there, i
+
         return com[1:].split()
+
+    def refine_input(self, user_command):
+        # Split the user supplied command.
+        command_parts = user_command.split(" ")
+        for i in range(len(command_parts)):
+
+            # Compare to like commands and replace where needed.
+            for actual_command, like_commands in self.applicable_commands.items():
+                if command_parts[i] in like_commands:
+                    command_parts[i] = actual_command
+                    break
+
+        return command_parts
+
 
     def chosen_obj_check(self, chosen_object, main_obj, chosen_command):
         if not (chosen_object == "" or chosen_object == "error"):
@@ -119,12 +152,19 @@ class UserParser:
         # Author: Lucy Oliverio
         # description: Given a string, returns
         ##
+
+        # If given empty return empty.
         if input_string == "":
             return ["", "", "", ""]
+
+
         temp_str1 = {"go", "travel", "walk", "run", "enter", "g", "move"}, {"look", "l"}, {"examine", "exam"}, {"north", "n", "northern"}, {
                         "south", "s", "southern"}, {"east", "e", "eastern"}, {"west", "w", "western"}
         temp_str2 = ["go", "look", "examine", "north", "south", "east", "west"]
-        user_str = self.refine_input(input_string, temp_str1, temp_str2)
+
+        #user_str = self.refine_input(input_string, temp_str1, temp_str2)
+        user_str = self.refine_input(input_string)
+
         del temp_str1, temp_str2
         #commands
         chosen_command = self.com_check(user_str, ["look", "go", "open", "close", "lock", "unlock", "block", "unblock"])

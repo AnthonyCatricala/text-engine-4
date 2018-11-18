@@ -1,9 +1,10 @@
-from Objects.Exit import *
-from Objects.Item import *
-from Objects.Trigger import *
-from Objects.UserScript import *
+from Objects.Item import Item
+from Objects.Exit import Exit
+from Objects.Trigger import Trigger
+from Objects.UserScript import UserScript
 
 from Util.ErrorUtil import *
+
 
 import os
 import json
@@ -37,70 +38,12 @@ class Room:
         room_file = room_dict['room_file']
         description = room_dict['description']
         illuminated = room_dict['illuminated']
-        inventory = cls.__fill_inventory(room_dict['inventory'])
-        exits = cls.__fill_exits(room_dict['exits'])
-        triggers = cls.__fill_triggers(room_dict['triggers'])
-        user_scripts = cls.__fill_user_scripts(room_dict["user-scripts"])
+        inventory = Item.fill_inventory(room_dict['inventory'])
+        exits = Exit.fill_exits(room_dict['exits'])
+        triggers = Trigger.fill_triggers(room_dict['triggers'])
+        user_scripts = UserScript.fill_user_scripts(room_dict["user-scripts"])
 
         return cls(room_name, room_file, description, illuminated, inventory, exits, triggers, user_scripts)
-
-    @staticmethod
-    def __fill_inventory(inventory_dict):
-        out = []
-        for i in inventory_dict:
-            out.append(Item.from_dict(i))
-        return out
-
-    @staticmethod
-    def __fill_exits(exits=None):
-        if not exits:
-            exits = dict()
-
-        out = []
-
-        if type(exits) is dict:
-            for key, value in exits.items():
-                out.append(Exit.from_dict(key, value))
-        elif type(exits) is list:
-            for e in exits:
-                if type(e) is Exit:
-                    out.append(e)
-                else:
-                    out = []
-                    # TODO Error handling for 'Exits supplied are not the right format.'
-                    print()
-                    break
-
-        else:
-            # TODO Error handling for 'Exits supplied are not the right format.'
-            print()
-
-        return out
-
-    @staticmethod
-    def __fill_triggers(triggers=None):
-        if not triggers:
-            triggers = []
-        out = []
-        for t in triggers:
-            if t["type"] == "print":
-                out.append(PrintTrigger.from_dict(t))
-        return out
-
-    @staticmethod
-    def __fill_user_scripts(user_script_dict=None):
-        if not user_script_dict:
-            user_script_dict = dict()
-
-        out = []
-
-        for key, value in user_script_dict.items():
-            wrapper = dict()
-            wrapper[key] = value
-
-            out.append(UserScript.from_dict(wrapper))
-
-        return out
 
     def save(self):
         out = dict()
@@ -138,7 +81,7 @@ class Room:
 
         if "../" not in self.room_file and self.room_file.endswith(".room"):
             if os.path.isfile(self.room_file):
-               # print("Overwriting {}".format(self.room_name))
+                # print("Overwriting {}".format(self.room_name))
                 os.remove(self.room_file)
 
             tmp_file = "{}.tmp".format(self.room_file)
@@ -182,10 +125,10 @@ class Room:
             self.room_file = room_dict['room_file']
             self.description = room_dict['description']
             self.illuminated = room_dict['illuminated']
-            self.inventory = self.__fill_inventory(room_dict['inventory'])
-            self.exits = self.__fill_exits(room_dict['exits'])
-            self.triggers = self.__fill_triggers(room_dict['triggers'])
-            self.user_scripts = self.__fill_user_scripts(room_dict["user-scripts"])
+            self.inventory = Item.fill_inventory(room_dict['inventory'])
+            self.exits = Exit.fill_exits(room_dict['exits'])
+            self.triggers = Trigger.fill_triggers(room_dict['triggers'])
+            self.user_scripts = UserScript.fill_user_scripts(room_dict["user-scripts"])
 
     def get_exit(self, compass_direction: str):
         compass_directions = [

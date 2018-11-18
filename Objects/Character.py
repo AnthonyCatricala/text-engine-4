@@ -29,6 +29,17 @@ class NPC(Character):
         self.dialogue_dict = dialogue_dict
         self.talk_output = talk_output
 
+    def examine(self):
+        print(self.description)
+
+    def talk_to(self):
+        print(self.talk_output)
+
+    def ask_about(self, topic=""):
+        if self.dialogue_dict[topic]:
+            print(self.dialogue_dict[topic])
+
+
 # Everything after this point should go in command executor
 
     def examine_function(self, parsed_string):
@@ -41,6 +52,7 @@ class NPC(Character):
             print(Room.inventory.examine_target.description)
         elif examine_target in Room.Character.name:
             print(Room.Character.examine_target.description)
+
 
     def talk_function(self, parsed_string):
         # TODO Add call to talk_function to command executor if parsed_string[0] == 'TALK'

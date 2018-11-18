@@ -1,4 +1,5 @@
-from Objects.Item import *
+import Objects.Door as Door
+import Objects.Item as Item
 
 
 def create_object(item_name: str="",
@@ -32,9 +33,14 @@ def create_object(item_name: str="",
         item_dict['triggers'] = triggers
         item_dict['user-scripts'] = user_scripts
 
-        out = Item.from_dict(item_dict)
+        out = Item.Item.from_dict(item_dict)
 
     return out
+
+
+def create_key(key_name: str="", key_description: str = ""):
+    return create_object(key_name, key_description)
+
 
 '''
 def create_object(object_name=None,
