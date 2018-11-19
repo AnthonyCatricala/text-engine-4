@@ -7,7 +7,7 @@ start_room = load_room("Example")
 up = UserParser(start_room)
 print(start_room.inventory)
 if start_room.inventory:
-    print(start_room.inventory.keys())
+    print(start_room.inventory[0].name)
 #print(start_room.exits[0].links_to[8:len(start_room.exits[0].links_to) - 5])
 #load_room(room_file= start_room.exits[0].links_to)
 #cp = UserParser(start_room)

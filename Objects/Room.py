@@ -1,5 +1,5 @@
 from Objects.Exit import Exit
-#from Objects.Item import Item
+from Objects.Item import Item
 from Objects.Trigger import *
 from Objects.UserScript import *
 
@@ -46,12 +46,34 @@ class Room:
 
     @staticmethod
     def __fill_inventory(inventory_dict):
-        # TODO Come back to this (WIP)
+        if not inventory_dict:
+            exits = dict()
 
         out = []
+
+        if type(inventory_dict) is dict:
+            for key, value in inventory_dict.items():
+                out.append(Item.from_dict(key, value))
+        elif type(Item) is list:
+            for e in exits:
+                if type(e) is Item:
+                    out.append(e)
+                else:
+                    out = []
+                    # TODO Error handling for 'Exits supplied are not the right format.'
+                    print()
+                    break
+
+        else:
+            # TODO Error handling for 'Exits supplied are not the right format.'
+            print()
+
+        return out
+        #out = []
+        # TODO Come back to this (WIP)
 #        for key, value in inventory_dict.items():
 #            out.append(Item(key, value))
-        return out
+        #return out
 
     @staticmethod
     def __fill_exits(exits=None):
