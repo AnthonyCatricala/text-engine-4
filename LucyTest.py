@@ -3,9 +3,11 @@ from Parser.CommandExecuter import *
 from Parser.UserParser import *
 
 
-start_room = load_room("Missing Flag Room")
+start_room = load_room("Example")
 up = UserParser(start_room)
-print(up.simplify_command("g n"))
+print(start_room.inventory)
+if start_room.inventory:
+    print(start_room.inventory.keys())
 #print(start_room.exits[0].links_to[8:len(start_room.exits[0].links_to) - 5])
 #load_room(room_file= start_room.exits[0].links_to)
 #cp = UserParser(start_room)

@@ -9,9 +9,9 @@
             "description": "A locked door to a storage room.",
             "blocked": false,
             "door": {
-                "open": false,
+                "open": true,
                 "lock": {
-                    "locked": true,
+                    "locked": false,
                     "key": "storage room key",
                     "triggers": {},
                     "user-scripts": {}

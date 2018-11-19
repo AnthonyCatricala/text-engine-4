@@ -10,14 +10,14 @@ class CommandExecutor:
     def __init__(self, room, player):
         self.room = room
         self.player = player
-        #TODO: print(self.room.room_name)
+        print(self.room.room_name)
         self.look_function(["look", "", "", ""])
         #for x in room.triggers:
         #    self.trigger_list.append(("room", x.trigger_command, x.description))
 
 
     def executor(self, parsed_string):
-        #TODO: print("\n", self.room.room_name)
+        #print("\n", self.room.room_name)
         #print(self.room.inventory)
         if parsed_string[0] == "error":
             print(parsed_string[0],":", parsed_string[1])
@@ -97,9 +97,9 @@ class CommandExecutor:
             print("There is something blocking the " + e.compass_direction + " exit of the " + self.room.room_name +
                   ". You cannot enter.")
         elif not blocked and exit_chosen is not None:
-            #TODO: self.room.save()
+            self.room.save()
             self.room.load(exit_chosen.links_to)
-            #TODO: print("\n", self.room.room_name)
+            print("\n", self.room.room_name)
             print(self.room.description)
 
 
@@ -150,7 +150,7 @@ class CommandExecutor:
                         x.door.lock.is_locked = True
                     elif x.door and x.door.lock and parsed_string[0] == "unlock":
                         x.door.lock.is_locked = False
-                    #TODO: test_room.save()
+                    test_room.save()
                     break
 
 #   def get_function(self, parsed_string, room):

@@ -11,7 +11,8 @@
       "obtainable": false,
       "inventory": {},
       "door": {},
-      "triggers": {}
+      "triggers": {},
+      "user-scripts": {}
     }
   },
   "exits": {
@@ -24,11 +25,14 @@
         "lock": {
           "locked": false,
           "key": "key name",
-          "triggers": {}
+          "triggers": {},
+          "user-scripts": {}
         },
-        "triggers": {}
+        "triggers": {},
+        "user-scripts": {}
       },
-      "triggers":{}
+      "triggers":{},
+      "user-scripts": {}
     }
   },
   "triggers": {
@@ -37,5 +41,6 @@
         "description": "Message to be displayed on trigger."
       }
     }
-  }
+  },
+  "user-scripts": {}
 }
