@@ -3,11 +3,11 @@ from Parser.CommandExecuter import *
 from Parser.UserParser import *
 
 
-start_room = load_room("Example")
+start_room = load_room("RoomTester")
 up = UserParser(start_room)
-print(start_room.inventory)
-if start_room.inventory:
-    print(start_room.inventory[0].name)
+print(up.simplify_command("go exit_1"))
+#print(start_room.inventory)
+#print(start_room.triggers)
 #print(start_room.exits[0].links_to[8:len(start_room.exits[0].links_to) - 5])
 #load_room(room_file= start_room.exits[0].links_to)
 #cp = UserParser(start_room)

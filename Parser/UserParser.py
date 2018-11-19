@@ -99,7 +99,7 @@ class UserParser:
         ##
         if input_string == "":
             return ["", "", "", ""]
-
+        input_string = input_string.replace("_", " ")
         out = input_string.lower()
         out = re.sub(r" {2,}", " ", out)
         com = self.refine_inp(self.twoWordDic, out.split())
