@@ -53,6 +53,7 @@ hallway_east_exit = lock_room.get_exit("east")
 bedroom_door = create_door()
 apply_door_to_exit(hallway_east_exit, bedroom_door)
 bedroom_west_exit = key_room.get_exit("west")
+bedroom_west_exit.block()
 apply_door_to_exit(bedroom_west_exit, bedroom_door)
 
 
@@ -87,7 +88,7 @@ apply_door_to_exit(hallway_north_exit, storage_room_door)
 
 # CREATE THE DOOR AND LOCK FROM THE INSIDE VIEW
 storage_room_south_exit = flag_room.get_exit("south")
-storage_room_south_exit.block()
+#storage_room_south_exit.block() -- TODO: You can't move if you block the exit.
 
 storage_room_lock = create_lock(storage_room_key, False)
 add_object_to_room(key_room, storage_room_key)

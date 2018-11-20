@@ -134,22 +134,6 @@ class Exit:
             return True
         return False
 
-    def lock_door(self, key=None):
-        # TODO implement key item into function
-
-        if self.door:
-            if self.door.lock:
-                print(self.door.lock.lock())
-            else:
-                print("That door doesn't have a lock")
-        else:
-            print("There is no door to open.")
-
-    def unlock_door(self, key=None):
-        if self.door:
-            if self.door.lock:
-                print(self.door.lock.unlock())
-
     def block(self):
         if self.blocked:
             print(self.compass_direction, "door was already blocked.")

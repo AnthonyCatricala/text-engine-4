@@ -134,19 +134,20 @@ class UserParser:
                 return ["look", "exit", "from", chosen_object.replace(" ", "_")]
             elif (chosen_command == "go") and ("door" not in main_obj) and ("lock" not in main_obj):
                 return ["go", chosen_object.replace(" ", "_"), "", ""]
-            elif (chosen_command == "open") and ("door" in main_obj):
+            elif (chosen_command == "open") and (("door" in main_obj) or main_obj == chosen_object.split(" ")):
                 return ["open", chosen_object.replace(" ", "_"), "", ""]
-            elif (chosen_command == "close") and ("door" in main_obj):
+            elif (chosen_command == "close") and (("door" in main_obj)or main_obj == chosen_object.split(" ")):
                 return ["close", chosen_object.replace(" ", "_"), "", ""]
-            elif (chosen_command == "lock") and (("door" in main_obj) or ("lock" in main_obj)):
+            elif (chosen_command == "lock") and (("door" in main_obj) or ("lock" in main_obj)or main_obj == chosen_object.split(" ")):
                 return ["lock", chosen_object.replace(" ", "_"), "", ""]
-            elif (chosen_command == "unlock") and (("door" in main_obj) or ("lock" in main_obj)):
+            elif (chosen_command == "unlock") and (("door" in main_obj) or ("lock" in main_obj)or main_obj == chosen_object.split(" ")):
                 return ["unlock", chosen_object.replace(" ", "_"), "", ""]
             elif chosen_command == "block":
                 return ["block", chosen_object.replace(" ", "_"), "", ""]
             elif chosen_command == "unblock":
                 return ["unblock", chosen_object.replace(" ", "_"), "", ""]
     #TODO make it so doors = compass door
+
     def simplify_command(self, input_string):
         ##
         # Author: Lucy Oliverio
