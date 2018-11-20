@@ -1,5 +1,6 @@
-from Util.RoomUtil import load_room
+from Util.RoomUtil import *
 from Objects.Room import Room
+from Objects.Trigger import WinTrigger
 
 
 class CommandExecutor:
@@ -91,13 +92,12 @@ class CommandExecutor:
         exit_chosen = self.check_move_function(self.room, parsed_string[1])
         if exit_chosen is not None:
             name = exit_chosen.links_to
-            #TODO load room doesn't work for the given links-to
-            test_room = load_room(name[8:len(name)-5])
+            test_room = load_room(room_file=name)
             for x in test_room.exits:
                 if x.links_to == self.room.room_file:
                     returned = self.check_move_function(test_room, x.compass_direction)
-                    #print(returned.compass_direction)
                     break
+
         if returned is not None:
             self.room.save()
             self.room.load(exit_chosen.links_to)
@@ -137,8 +137,7 @@ class CommandExecutor:
             print("That is not a valid exit.")
         elif change_door:
             name = exit_used.links_to
-            # TODO load room doesn't work for the given links-to
-            test_room = load_room(name[8:len(name) - 5])
+            test_room = load_room(room_file=name)
             for x in test_room.exits:
                 if x.links_to == self.room.room_file:
                     if x.door and parsed_string[0] == "open":

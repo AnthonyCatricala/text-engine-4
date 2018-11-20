@@ -121,10 +121,17 @@ apply_exit_to_room(user_script_room, hidden_corridor_south_exit)
 
 
 # CREATE EXAMPLE USER SCRIPT
-user_script = create_user_script(trigger_command="enter",
-                                          before="print('Hello World!')",
-                                          instead="print('This was done instead!')",
-                                          after="self.load('Rooms/Missing_Flag_Room.room')")
+user_script = create_user_script(trigger_command="look",
+                                 before="print('Hello World!')",
+                                 instead="print('This was done instead!')",
+                                 after="for i in range(10):\n"
+                                       "  ans = int(input('2^{} = '.format(i)))\n"
+                                       "  while ans != pow(2, i):\n"
+                                       "    print('Wrong! Try Again!')\n"
+                                       "    ans = int(input('2^{} = '.format(i)))\n"
+                                       "print('You teleport to the missing flag room.')\n"
+                                       "self.room.load('Rooms/Missing_Flag_Room.room')\n"
+                                       "WinTrigger('instant', 'You place the flag on the flag pole and you feel acomplished. You Win!').trigger()")
 apply_user_script(user_script_room, user_script)
 
 
