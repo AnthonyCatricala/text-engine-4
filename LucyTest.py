@@ -4,7 +4,7 @@ from Parser.UserParser import *
 
 
 start_room = load_room("RoomTester")
-
+d
 cp = UserParser(start_room)
 #eh = "go exit 1".split()
 exit_name = "exit_1"
