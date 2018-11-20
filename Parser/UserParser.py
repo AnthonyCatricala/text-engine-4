@@ -6,7 +6,8 @@ class UserParser:
     room = None
     applicable_commands = {
         "go": ["go", "travel", "walk", "run", "enter", "g", "move"],
-        "look": ["look", "l"], "examine": ["examine", "exam"],
+        "look": ["look", "l"],
+        "examine": ["examine", "exam"],
         "north": ["north", "n", "northern"],
         "south": ["south", "s", "southern"],
         "east": ["east", "e", "eastern"],

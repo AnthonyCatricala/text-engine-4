@@ -1,5 +1,6 @@
-from Util.RoomUtil import load_room
+from Util.RoomUtil import *
 from Objects.Room import Room
+from Objects.Trigger import WinTrigger
 
 
 class CommandExecutor:
