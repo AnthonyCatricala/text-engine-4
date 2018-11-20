@@ -156,37 +156,95 @@ class Room:
 
         return out
 
-    #def look(self, ):
-    #    print(self.description)
-
-    # TODO Implement this for gathering all applicable triggers dependent on a command.
-    # TODO Work In Progress; Do Not Use!
+    # Gets all applicable triggers and removes them from their respective objects.
     def get_triggers(self, primary_command):
         trigger_list = []
 
-        # All triggers in the room.
+        # Get all applicable triggers from the room.
+        room_triggers = []
         for t in self.triggers:
             if t.trigger_command == primary_command:
-                trigger_list.append(t)
+                room_triggers.append(t)
 
-        # All triggers from all exits
+        # Remove all applicable triggers from the room.
+        for t in room_triggers:
+            self.triggers.remove(t)
+        trigger_list += room_triggers
+
+        # All exits
         for e in self.exits:
 
-            # All triggers from the exit
+            # Get all applicable triggers from the exit.
+            exit_triggers = []
             for t in e.triggers:
                 if t.trigger_command == primary_command:
-                    trigger_list.append(t)
+                    exit_triggers.append(t)
 
-            # All triggers from the door
+            # Remove all applicable triggers form the exit.
+            for t in exit_triggers:
+                e.triggers.remove(t)
+            trigger_list += exit_triggers
+
+            # The door attached to the exit.
             if e.door:
+
+                # Get all applicable triggers from the door.
+                door_triggers = []
                 for t in e.door.triggers:
                     if t.trigger_command == primary_command:
-                        trigger_list.append(t)
+                        door_triggers.append(t)
 
-                # All triggers from the lock.
+                # Remove all applicable triggers from the door.
+                for t in e.door.triggers:
+                    e.door.triggers.remove(t)
+                trigger_list += door_triggers
+
+                # The lock on the door.
                 if e.door.lock:
+
+                    # Get all applicable triggers from the lock.
+                    lock_triggers = []
                     for t in e.door.lock.triggers:
                         if t.trigger_command == primary_command:
-                            trigger_list.append(t)
+                            lock_triggers.append(t)
+
+                    # Remove all applicable triggers from the lock.
+                    for t in lock_triggers:
+                        e.door.lock.triggers.remove(t)
+                    trigger_list += lock_triggers
 
         return trigger_list
+
+    def get_user_scripts(self, primary_command):
+        user_scripts = []
+
+        # Get all applicable triggers from the room.
+        for us in self.user_scripts:
+            if us.trigger_command == primary_command:
+                user_scripts.append(us)
+
+        # All exits
+        for e in self.exits:
+
+            # Get all applicable triggers from the exit.
+            for us in e.user_scripts:
+                if us.trigger_command == primary_command:
+                    user_scripts.append(us)
+
+            # The door attached to the exit.
+            if e.door:
+
+                # Get all applicable triggers from the door.
+                for us in e.door.user_scripts:
+                    if us.trigger_command == primary_command:
+                        user_scripts.append(us)
+
+                # The lock on the door.
+                if e.door.lock:
+
+                    # Get all applicable triggers from the lock.
+                    for us in e.door.lock.user_scripts:
+                        if t.trigger_command == primary_command:
+                            user_scripts.append(us)
+
+        return user_scripts

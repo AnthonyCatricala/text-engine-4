@@ -145,10 +145,12 @@ class Exit:
         else:
             print("There is no door to open.")
 
+    '''
     def unlock_door(self, key=None):
         if self.door:
             if self.door.lock:
                 print(self.door.lock.unlock())
+    '''
 
     def block(self):
         if self.blocked:
