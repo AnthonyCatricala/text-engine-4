@@ -11,12 +11,14 @@ class CommandExecutor:
     def __init__(self, room, player):
         self.room = room
         self.player = player
+        print("\n" + self.room.room_name)
+        print(self.room.description)
         #for x in room.triggers:
         #    self.trigger_list.append(("room", x.trigger_command, x.description))
 
     def executor(self, parsed_string):
-        #print("\n", self.room.room_name)
-
+        if parsed_string[0] != "go":
+            print("\n", self.room.room_name)
         triggers = self.room.get_triggers(parsed_string[0])
 
         if parsed_string[0] == "error":
@@ -67,24 +69,30 @@ class CommandExecutor:
         for e in self.room.exits:
             if e.compass_direction == parsed_string[1]:
                 if e.blocked:
+                    print("\n", self.room.room_name)
                     print("There is something blocking the " + e.compass_direction + " exit of the " + self.room.room_name +
                           ". You cannot enter.")
                 elif e.door and not e.door.is_open and e.door.lock and e.door.lock.is_locked:
+                    print("\n", self.room.room_name)
                     print("The " + self.room.room_name + "'s " + e.compass_direction + " door seems to be locked. "
                                                                                         "You cannot enter.")
                 elif e.door and not e.door.is_open and e.door.lock and not e.door.lock.is_locked:
+                    print("\n", self.room.room_name)
                     print("The", e.compass_direction, "door in the", self.room.room_name, "is closed, but it "
                                                                                            "doesn't seem to be locked."
                                                                                            "You can open the door.")
                 elif not e.door or e.door.is_open:
                     move = e
                 elif e.door and not e.door.is_open:
+                    print("\n", self.room.room_name)
                     print("The", e.compass_direction, "door is closed. You can open the door.")
                 else:
+                    print("\n", self.room.room_name)
                     print("The door blocks your path.")
                 is_exit = e
                 break
         if is_exit is None:
+            print("\n", self.room.room_name)
             print("There is no exit in that direction.")
         elif move is not None:
             test_room = load_room(room_file = move.links_to)
@@ -98,7 +106,9 @@ class CommandExecutor:
             if move is not None and blocked is False:
                 self.room.save()
                 self.room.load(move.links_to)
-                print("You move to {}.".format(self.room.room_name))
+                print("\n" + self.room.room_name)
+                print(self.room.description)
+                #print("You move to {}.".format(self.room.room_name))
 
     def examine_function(self, parsed_string):
 
