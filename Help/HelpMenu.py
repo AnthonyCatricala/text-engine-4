@@ -70,3 +70,60 @@ class HelpMenu:
         desc = """\nuse the examine command to examine a specific item that is in the room the player is in. It will give the 
         user a more detailed description of the item that is being targeted."""
         return use, desc
+
+    @staticmethod
+    def help_unlock():
+        use = "[unlock][*valid exit*]"
+        desc = """\nUse the unlock command to unlock doors."""
+        return use, desc
+
+    @staticmethod
+    def help_lock():
+        use = "[lock][*valid exit*]"
+        desc = """\nUse the lock command to lock doors."""
+        return use, desc
+
+    @staticmethod
+    def help_open():
+        use = "[open][*valid exit*]"
+        desc = """\nUse the open command to open doors."""
+        return use, desc
+
+    @staticmethod
+    def help_close():
+        use = "[close][*valid exit*]"
+        desc = """\nUse the close command to close doors."""
+        return use, desc
+
+    @staticmethod
+    def help_block():
+        use = "[block][*valid exit*]"
+        desc = """\nUse the block command to block a door."""
+        return use, desc
+
+    def help_command(self, command):
+        if command == "help move":
+            self.help_move()
+        elif command == "help look":
+            self.help_look()
+        elif command == "help user":
+            self.help_use()
+        elif command == "help get":
+            self.help.get()
+        elif command == "help_examine":
+            self.help_examine()
+        elif command == "help unlock":
+            self.help_unlock()
+        elif command == "help lock":
+            self.help_lock()
+        elif command == "help open":
+            self.help_open()
+        elif command == "help close":
+            self.help_close()
+        elif command == "help block":
+            self.help_block()
+        else:
+            self.help()
+        return
+
+
