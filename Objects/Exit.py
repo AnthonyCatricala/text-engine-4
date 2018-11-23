@@ -114,9 +114,9 @@ class Exit:
             return True
         return False
 
-    def lock_door(self):
+    def lock_door(self, player_inv):
         if self.door:
-            result = self.door.lock_door()
+            result = self.door.lock_door(player_inv)
             print(self.compass_direction, result)
         else:
             print(self.compass_direction, "door does not exist.")
@@ -124,9 +124,9 @@ class Exit:
             return True
         return False
 
-    def unlock_door(self):
+    def unlock_door(self, player_inv):
         if self.door:
-            result = self.door.unlock_door()
+            result = self.door.unlock_door(player_inv)
             print(self.compass_direction, result)
         else:
             print(self.compass_direction, "door does not exist.")

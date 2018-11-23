@@ -98,7 +98,21 @@
             "user-scripts": {}
         }
     },
-    "inventory": {},
+    "inventory": [
+    {
+    "item_name": "storage room key",
+    "description": "An old brass key.",
+    "alias": [],
+    "quantity": 1,
+    "visible": true,
+    "illuminated": false,
+    "obtainable": true,
+    "inventory": [],
+    "door": {},
+    "triggers": {},
+    "user-scripts": {}
+    }
+    ],
     "triggers": {},
     "user-scripts": {}
 }

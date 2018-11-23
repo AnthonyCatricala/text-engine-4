@@ -43,15 +43,19 @@ class Lock:
 
         return out
 
-    def unlock(self):
-        if self.is_locked:
+    def unlock(self, player_inv):
+        if self.key.replace(" ", "_") not in player_inv:
+            return "you don't have the key"
+        elif self.is_locked:
             self.is_locked = False
             return "door is now unlocked."
         else:
             return "door was already unlocked."
 
-    def lock(self):
-        if not self.is_locked:
+    def lock(self, player_inv):
+        if self.key.replace(" ", "_") not in player_inv:
+            return "you don't have the key"
+        elif not self.is_locked:
             self.is_locked = True
             return "door is now locked."
         else:
