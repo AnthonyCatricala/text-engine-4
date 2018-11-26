@@ -4,113 +4,104 @@
     "description": "This is the room's description",
     "illuminated": true,
     "exits": {
-    "exit_1": {
-            "links-to": "./Rooms/RoomTester.room",
-            "description": "To example room.",
+        "l_e_1": {
+            "links-to": None,
+            "description": "look exit 1.",
             "blocked": false,
-            "door": {
+            "door": [{
                 "open": true,
-                "lock": {
+                "lock": [{
                     "locked": true,
                     "key": "test key",
-                    "triggers": {},
-                    "user-scripts": {}
-                },
-                "triggers": {},
-                "user-scripts": {}
-            },
-            "triggers": {},
-            "user-scripts": {}
+                    "triggers": [],
+                    "user-scripts": []
+                }],
+                "triggers": [],
+                "user-scripts": []
+            }],
+            "triggers": [],
+            "user-scripts": []
         },
-        "exit_2": {
-            "links-to": "./Rooms/RoomTester.room",
-            "description": "To example room.",
+        "l_e_2":
+        {
+            "links-to": None,
+            "description": "look exit 2.",
             "blocked": false,
-            "door": {
-                "open": false,
-                "lock": {
-                    "locked": true,
-                    "key": "test key",
-                    "triggers": {},
-                    "user-scripts": {}
-                },
-                "triggers": {},
-                "user-scripts": {}
-            },
-            "triggers": {},
-            "user-scripts": {}
+            "door": [{
+               "open": true,
+               "lock": [],
+                "triggers": [],
+                "user-scripts": []
+            }],
+            "triggers": [],
+            "user-scripts": []
         },
-        "exit_3": {
-            "links-to": "./Rooms/RoomTester.room",
-            "description": "To example room.",
+        "l_e_3":
+         {
+            "links-to": None,
+            "description": "look exit 3.",
             "blocked": false,
-            "door": {
-                "open": true,
-                "lock": {
-                    "locked": false,
-                    "key": "test key",
-                    "triggers": {},
-                    "user-scripts": {}
-                },
-                "triggers": {},
-                "user-scripts": {}
-            },
-            "triggers": {},
-            "user-scripts": {}
-        },
-        "exit_4": {
-            "links-to": "./Rooms/RoomTester.room",
-            "description": "To example room.",
-            "blocked": false,
-            "door": {
-                "open": false,
-                "lock": {},
-                "triggers": {},
-                "user-scripts": {}
-            },
-            "triggers": {},
-            "user-scripts": {}
-        },
-        "exit_5": {
-            "links-to": "./Rooms/RoomTester.room",
-            "description": "To example room.",
-            "blocked": true,
-            "door": {},
-            "triggers": {},
-            "user-scripts": {}
-        },
-        "exit_6": {
-            "links-to": "./Rooms/RoomTester.room",
-            "description": "To example room.",
-            "blocked": true,
-            "door": {
-                "open": true,
-                "lock": {
-                    "locked": true,
-                    "key": "test key",
-                    "triggers": {},
-                    "user-scripts": {}
-                },
-                "triggers": {},
-                "user-scripts": {}
-            },
-            "triggers": {},
-            "user-scripts": {}
-        }
+            "door": [],
+            "triggers": [],
+            "user-scripts": []
+         }
+
     },
-    "inventory": [
+    "inventory":
+    [
     {
-    "item_name": "storage room key",
-    "description": "An old brass key.",
-    "alias": [],
-    "quantity": 1,
-    "visible": true,
-    "illuminated": false,
-    "obtainable": true,
-    "inventory": [],
-    "door": {},
-    "triggers": {},
-    "user-scripts": {}
+        "item_name": "l_ri_1",
+        "description": "Look room item 1.",
+        "alias": [],
+        "quantity": 100,
+        "visible": true,
+        "illuminated": false,
+        "obtainable": true,
+        "inventory": [],
+        "door": [{
+            "open": true,
+                "lock": [{
+                    "locked": true,
+                    "key": "test key",
+                    "triggers": [],
+                    "user-scripts": []
+                }],
+                 "triggers": [],
+                 "user-scripts": []
+         }],
+        "triggers": {},
+        "user-scripts": {}
+    },
+    {
+    "item_name": "l_ri_3",
+            "description": "Look room item 2.",
+            "alias": [],
+            "quantity": 100,
+            "visible": true,
+            "illuminated": false,
+            "obtainable": true,
+            "inventory": [],
+            "door": [{
+                "open": true,
+                    "lock": [],
+                     "triggers": [],
+                     "user-scripts": []
+             }],
+            "triggers": {},
+            "user-scripts": {}
+    },
+    {
+    "item_name": "l_ri_3",
+            "description": "Look room item 3.",
+            "alias": [],
+            "quantity": 100,
+            "visible": true,
+            "illuminated": false,
+            "obtainable": true,
+            "inventory": [],
+            "door": [],
+            "triggers": {},
+            "user-scripts": {}
     }
     ],
     "triggers": {},

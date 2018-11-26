@@ -1,5 +1,6 @@
 from Util.RoomUtil import *
 from Parser.CommandExecuter import CommandExecutor
+from Objects.Character import Player
 
 import os
 import sys
@@ -23,7 +24,8 @@ class StdOut(object):
 
 class TestCommandParser(unittest.TestCase):
     room = load_room(room_file='Tests/Rooms/RoomTester.room')
-    ce = CommandExecutor(room, None)
+    player = Player("name", [], "Player description", Player)
+    ce = CommandExecutor(room, Player)
 
     def get_output_string(self, test_input):
         original_std_out = sys.stdout
@@ -39,32 +41,33 @@ class TestCommandParser(unittest.TestCase):
     # Testing empty input.
     def test_empty(self):
         test_input = ['', '', '', '']
-        expected_output = ''
+        expected_output = '\n RoomTester\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
 
     # All tests that should result in the look command.
     def test_look(self):
-        test_input = ['look', '', '', '']
-        expected_output = 'This is the room\'s description\n'
+        test_input = ['look', '', '', '']#general command
+        expected_output = '\n RoomTester\nThis is the room\'s description\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
-        test_input = ["look", "lock", "from", "north"]
-        expected_output = 'No description given.\n'
+        test_input = ["look", "lock", "exit", "north"]#valid lock, invalid exit
+        expected_output = '\n RoomTester\nNo description given.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
-        test_input = ["look", "door", "from", "north"]
-        expected_output = 'No description given.\n'
+        test_input = ["look", "door", "exit", "north"]#door of invalid exit
+        expected_output = '\n RoomTester\nNo description given.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
-        test_input = ["look", "exit", "from", "north"]
-        expected_output = 'No description given.\n'
+        test_input = ["look", "exit", "exit", "north"]#exit of invalid exit
+        expected_output = '\n RoomTester\nNo description given.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
-        test_input = ["look", "exit", "from", "exit_1"]
-        expected_output = 'To example room.\n'
+        test_input = ["look", "exit", "exit", "exit_1"]#valid exit
+        expected_output = '\n RoomTester\nTo example room.\n'
         self.assertEqual(self.get_output_string(test_input), expected_output)
-        test_input = ["look", "door", "from", "exit_1"]
-        expected_output = "doors don't have a description.\n"
+        test_input = ["look", "door", "exit", "exit_1"]#valid door
+        expected_output = "\n RoomTester\ndoors don't have a description.\n"
         self.assertEqual(self.get_output_string(test_input), expected_output)
-        test_input = ["look", "lock", "from", "exit_1"]
-        expected_output = "locks don't have a description.\n"
+        test_input = ["look", "lock", "exit", "exit_1"]#valid lock
+        expected_output = "\n RoomTester\nlocks don't have a description.\n"
         self.assertEqual(self.get_output_string(test_input), expected_output)
+
 
 
     def test_go(self):

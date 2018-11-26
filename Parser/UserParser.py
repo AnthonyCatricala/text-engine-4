@@ -6,15 +6,16 @@ from Objects.Character import *
 class UserParser:
     room = None
     player = None
+    #TODO: add item alias
     applicable_commands = {
         "go": ["go", "travel", "walk", "run", "enter", "g", "move"],
-        "look": ["look", "l"],
-        "examine": ["examine", "exam"],
+        "look": ["look", "l", "examine, exam"],
         "north": ["north", "n", "northern"],
         "south": ["south", "s", "southern"],
         "east": ["east", "e", "eastern"],
         "west": ["west", "w", "western"],
-        "get": ["acquire", "take"]
+        "get": ["acquire", "take"],
+        "inventory": ["i"]
     }
 
     def __init__(self, room_name = Util.RoomUtil.Room, p = Player):
@@ -73,13 +74,13 @@ class UserParser:
                 break
         return input_str[i+1:]
 
-    def refine_input(self, user_command):
+    def refine_input(self, user_command, li):
         # Split the user supplied command.
         command_parts = user_command.split(" ")
         for i in range(len(command_parts)):
 
             # Compare to like commands and replace where needed.
-            for actual_command, like_commands in self.applicable_commands.items():
+            for actual_command, like_commands in li:
                 if command_parts[i] in like_commands:
                     command_parts[i] = actual_command
                     break
@@ -121,7 +122,12 @@ class UserParser:
             return ["", "", "", ""]
 
         temp_arr = ""
-        user_str = self.refine_input(input_string)
+        user_str = self.refine_input(input_string, self.applicable_commands.items())
+        #if self.room.inventory:
+            #for x in self.room.inventory:
+                #if x.alias:
+
+           # user_str = self.refine_input(user_str, self.room.)
         #commands
         result = None
         temp_str = ""
@@ -129,6 +135,9 @@ class UserParser:
         for x in user_str:
             temp_str = temp_str + " " + x
         user_str = temp_str[1:].replace("pick up", "get").split(" ")
+        #inventory
+        if user_str == ["inventory"]:
+            return["inventory", "", "", ""]
         #other command check
         chosen_command = self.com_check(user_str, ["look", "go", "open", "close", "lock", "unlock", "block", "unblock",
                                                    "get", "drop"])
@@ -151,45 +160,55 @@ class UserParser:
         #Room Inventory Check:
         if self.room.inventory:
             temp_arr = []
+            st = ""
             for x in self.room.inventory:
-                temp_arr.append(x.item_name)
+                for mo in main_obj:
+                    st = st + " " + mo
+                st = st[1:]
+                if x.alias:
+                    for al in x.alias:
+                        if al in st:
+                            main_obj = st.replace(al, x.item_name).split(" ")
+                            break
+                temp_arr.append(x.item_name.replace("_", " "))
             chosen_object = self.com_check(main_obj, temp_arr)
             if chosen_command in ["unlock", "lock", "open", "close", "look"]:
                 result = self.chosen_exit_check(chosen_object, main_obj, chosen_command, "room_item")
             elif not (chosen_object == "" or chosen_object == "error") and chosen_command == "get":
                 result = [chosen_command, chosen_object.replace(" ", "_"), "room_item", ""]
-                #TODO: pickup and drop commands
-            #TODO: Add other item clauses [pick up, put down], add to command executor, save remaining
-            #TODO: maybe add in arrays of valid exit commands, valid item commands to know what to put down
-        if result is not None:
-            return result
         #Player inventory
-        if self.player.inventory:
+        if (result is None) and self.player.inventory != []:
             temp_arr = []
+            st = ""
             for x in self.player.inventory:
-                temp_arr.append(x.item_name)
+                for mo in main_obj:
+                    st = st + " " + mo
+                st = st[1:]
+                if x.alias:
+                    for al in x.alias:
+                        if al in st:
+                            main_obj = st.replace(al, x.item_name).split(" ")
+                            break
+            for x in self.player.inventory:
+                temp_arr.append(x.item_name.replace("_", " "))
             chosen_object = self.com_check(main_obj, temp_arr)
             if chosen_command in ["unlock", "lock", "open", "close", "look"]:
                 result = self.chosen_exit_check(chosen_object, main_obj, chosen_command, "player_item")
             elif not (chosen_object == "" or chosen_object == "error") and chosen_command == "drop":
                 result = [chosen_command, chosen_object.replace(" ", "_"), "player_item", ""]
-        if result is not None:
-            return result
 
         #Exits check
-        if self.room.exits:
+        if self.room.exits and (result is None):
             temp_arr = []
             for ext in self.room.exits:
                 temp_arr.append(ext.compass_direction.replace("_", " "))
             chosen_object = self.com_check(main_obj, temp_arr)
             result = self.chosen_exit_check(chosen_object, main_obj, chosen_command, "exit")
-            print(result)
-            if result is not None:
-                return result
-
-        #North/south/east/west check
-        chosen_object = self.com_check(main_obj, ["north", "south", "east", "west"])
-        result = self.chosen_exit_check(chosen_object, main_obj, chosen_command, "exit")
+            #print(result)
+        if result is None:
+            #North/south/east/west check
+            chosen_object = self.com_check(main_obj, ["north", "south", "east", "west"])
+            result = self.chosen_exit_check(chosen_object, main_obj, chosen_command, "exit")
         if result is not None:
             return result
         return ["error", "not a command", "", ""]

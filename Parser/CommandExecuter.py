@@ -20,15 +20,14 @@ class CommandExecutor:
         if parsed_string[0] != "go":
             print("\n", self.room.room_name)
         triggers = self.room.get_triggers(parsed_string[0])
-
         if parsed_string[0] == "error":
             print(parsed_string[0],":", parsed_string[1])
         elif parsed_string[0] == "look":
             self.look_function(parsed_string)
         elif parsed_string[0] == "go":
             self.move_function(parsed_string)
-        elif parsed_string[0] == "examine":
-            self.examine_function(parsed_string)
+#        elif parsed_string[0] == "examine":
+#            self.examine_function(parsed_string)
         elif parsed_string[0] in ["open", "close"]:
             self.open_close_lock_unlock_function(parsed_string)
         elif parsed_string[0] in ["lock", "unlock"]:
@@ -39,6 +38,11 @@ class CommandExecutor:
             self.take_function(parsed_string)
         elif parsed_string[0] == "drop":
             self.drop_function(parsed_string)
+        elif parsed_string[0] == "inventory":
+            print("inventory:")
+            if self.player.inventory:
+                for x in self.player.inventory:
+                    print(x.quantity, x.item_name)
         self.room.save()
 #        elif parsed_string[0] == "take":
 #            self.get_function() TODO add this with items
@@ -47,20 +51,35 @@ class CommandExecutor:
         for trigger in triggers:
             trigger.trigger()
 
-    def is_bright(self, list):
-        for x in list:
+    def is_bright(self, li):
+        for x in li:
             if x.illuminated:
                 return True
         return False
+
+    def look_check(self, parsed_string, li):
+        s = ""
+        for x in li:
+            if x.item_name.replace(" ", "_") == parsed_string[3]:
+                if parsed_string[1] == parsed_string[2] and not x.visible:
+                    s = "You can't see that item."
+                    break
+                elif parsed_string[1] == parsed_string[2]:
+                    s = x.description
+                elif parsed_string[1] == "lock" or parsed_string[1] == "door":
+                    s = parsed_string[1] + "s don't have a description."
+                break
+        if s == "":
+            s = "No description given."
+        return s
 
 
 
     def look_function(self, parsed_string):
         s = ""
-        dark = True
         if not self.is_bright([self.room]) and not (self.player.inventory and self.is_bright(self.player.inventory)) \
                 and not (self.is_bright(self.room.inventory and self.room.inventory)):
-            print("Its too dark!")
+            s = "It's too dark!"
         elif parsed_string[1] == "":
             s = self.room.description
         elif parsed_string[2] == "exit":
@@ -73,28 +92,11 @@ class CommandExecutor:
                     break
             if s == "":
                 s = "No description given."
-        elif parsed_string[2] == "room_item":
-            for x in self.room.inventory:
-                if x.item_name.replace(" ", "_") == parsed_string[3] and x.visible:
-                    if parsed_string[1] == "room_item":
-                        s = x.description
-                    elif parsed_string[1] == "lock" or parsed_string[1] == "door":
-                        s = parsed_string[1] + "s don't have a description."
-                    break
-            if s == "":
-                s = "No description given."
-        elif parsed_string[2] == "player_item":
-            for x in self.player.inventory:
-                if x.item_name.replace(" ", "_") == parsed_string[3] and x.visible:
-                    if parsed_string[1] == "player_item":
-                        s = x.description
-                    elif parsed_string[1] == "lock" or parsed_string[1] == "door":
-                        s = parsed_string[1] + "s don't have a description."
-                    break
-            if s == "":
-                s = "No description given."
+        elif parsed_string[2] == "room_item" and self.room.inventory:
+            s = self.look_check(parsed_string, self.room.inventory)
+        elif parsed_string[2] == "player_item" and self.player.inventory:
+            s = self.look_check(parsed_string, self.player.inventory)
         print(s)
-
         # TODO Come back to this when objects have been created.
         #for x in self.room.inventory:
          #   print(x)
@@ -102,7 +104,7 @@ class CommandExecutor:
     def move_function(self, parsed_string):
         is_exit = None
         move = None
-        blocked = False
+        second_fail = False
         for e in self.room.exits:
             if e.compass_direction == parsed_string[1]:
                 if e.blocked:
@@ -113,16 +115,11 @@ class CommandExecutor:
                     print("\n", self.room.room_name)
                     print("The " + self.room.room_name + "'s " + e.compass_direction + " door seems to be locked. "
                                                                                         "You cannot enter.")
-                elif e.door and not e.door.is_open and e.door.lock and not e.door.lock.is_locked:
-                    print("\n", self.room.room_name)
-                    print("The", e.compass_direction, "door in the", self.room.room_name, "is closed, but it "
-                                                                                           "doesn't seem to be locked."
-                                                                                           "You can open the door.")
-                elif not e.door or e.door.is_open:
-                    move = e
                 elif e.door and not e.door.is_open:
                     print("\n", self.room.room_name)
-                    print("The", e.compass_direction, "door is closed. You can open the door.")
+                    print("The", e.compass_direction, "door is closed. You can try to open the door.")
+                elif not e.door or e.door.is_open:
+                    move = e
                 else:
                     print("\n", self.room.room_name)
                     print("The door blocks your path.")
@@ -135,24 +132,30 @@ class CommandExecutor:
             test_room = load_room(room_file = move.links_to)
             for x in test_room.exits:
                 if x.links_to == self.room.room_file:
-                    blocked = x.blocked
-                    if blocked:
-                        print("There is something blocking the " + x.compass_direction + " exit of the " +
-                              test_room.room_name + ". You cannot enter.")
+                    if x.blocked:
+                        second_fail = True
+                        print("\n", self.room.room_name, "\nThere is something blocking the " + x.compass_direction +
+                              " exit of the " + test_room.room_name + ". You cannot enter.")
+                    elif x.door and not x.door.is_open:
+                        second_fail = True
+                        print("\n", self.room.room_name,"\nThe door is closed on the other side. You cannot enter.")
+                    elif x.door and not x.door.is_open and x.door.lock and x.door.lock.is_locked:
+                        second_fail = True
+                        print("\n", self.room.room_name,"\nThe door is locked on the other side. You cannot enter.")
                     break
-            if move is not None and blocked is False:
+            if move is not None and second_fail is False:
                 self.room.save()
                 self.room.load(move.links_to)
                 print("\n" + self.room.room_name)
                 print(self.room.description)
                 #print("You move to {}.".format(self.room.room_name))
 
-    def examine_function(self, parsed_string):
-
-        examined_item = parsed_string[1]
-
-        if examined_item not in Room.inventory: #and examined_item not in Player.inventory: # TODO bring this back once items/player inventory exist.
-            print("That doesn't seem to be here. What are you trying to examine?")
+    #def examine_function(self, parsed_string):
+#
+#        examined_item = parsed_string[1]
+#
+#        if examined_item not in Room.inventory: #and examined_item not in Player.inventory: # TODO bring this back once items/player inventory exist.
+#            print("That doesn't seem to be here. What are you trying to examine?")
 
         # TODO bring things below this line in once items are implemented.
         #else:
@@ -160,38 +163,29 @@ class CommandExecutor:
                 #if x == examined_item:
                    # print (Item.item_description)
 
+    def oclu_check(self, parsed_string, li, player_inv):
+        for x in li:
+            if x.item_name.replace(" ", "_") == parsed_string[1]:
+                if not x.door:
+                    print("There is no door.")
+                elif parsed_string[0] == "open":
+                    print(x.door.open())
+                elif parsed_string[0] == "close":
+                    print(x.door.close())
+                elif parsed_string[0] == "lock":
+                    print(x.door.lock_door(player_inv))
+                elif parsed_string[0] == "unlock":
+                    print(x.door.unlock_door(player_inv))
+                break
+
     def open_close_lock_unlock_function(self, parsed_string):
         player_inv = []
         for x in self.player.inventory:
             player_inv.append(x.item_name.replace(" ", "_"))
         if parsed_string[2] == "room_item":
-            for x in self.room.inventory:
-                if x.item_name.replace(" ", "_") == parsed_string[1]:
-                    if not x.door:
-                        print("There is no door.")
-                    elif parsed_string[0] == "open":
-                        print(x.door.open())
-                    elif parsed_string[0] == "close":
-                        print(x.door.close())
-                    elif parsed_string[0] == "lock":
-                        print(x.door.lock_door(player_inv))
-                    elif parsed_string[0] == "unlock":
-                        print(x.door.unlock_door(player_inv))
-                    break
+            self.oclu_check(parsed_string, self.room.inventory, player_inv)
         elif parsed_string[2] == "player_item":
-            for x in self.player.inventory:
-                if x.item_name.replace(" ", "_") == parsed_string[1]:
-                    if not x.door:
-                        print("There is no door.")
-                    elif parsed_string[0] == "open":
-                        print(x.door.open())
-                    elif parsed_string[0] == "close":
-                        print(x.door.close())
-                    elif parsed_string[0] == "lock":
-                        print(x.door.lock_door(player_inv))
-                    elif parsed_string[0] == "unlock":
-                        print(x.door.unlock_door(player_inv))
-                    break
+            self.oclu_check(parsed_string, self.player.inventory, player_inv)
         elif parsed_string[2] == "exit":
             worked = False
             change_door = False
@@ -219,9 +213,11 @@ class CommandExecutor:
                         elif x.door and parsed_string[0] == "close":
                             x.door.is_open = False
                         elif x.door and x.door.lock and parsed_string[0] == "lock":
-                            x.door.lock.is_locked = True
+                            if x.door.lock.key and x.door.lock.key.replace(" ", "_") in player_inv:
+                                x.door.lock.is_locked = True
                         elif x.door and x.door.lock and parsed_string[0] == "unlock":
-                            x.door.lock.is_locked = False
+                            if x.door.lock.key and x.door.lock.key.replace(" ", "_") in player_inv:
+                                x.door.lock.is_locked = False
                         test_room.save()
                         break
 
@@ -263,6 +259,8 @@ class CommandExecutor:
                                           room_item.visible, room_item.illuminated, room_item.obtainable,
                                           room_item.inventory, room_item.door, room_item.triggers,
                                           room_item.user_scripts))
+        if not room_check:
+            print(parsed_string[1].replace("_"," ") + " is not obtainable!")
 
     def drop_function(self, parsed_string):
         room_check = False
