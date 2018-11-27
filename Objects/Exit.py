@@ -95,7 +95,8 @@ class Exit:
         return key, value
 
     def open_door(self):
-        if self.door:
+        result = ""
+        if self.door is not None:
             result = self.door.open()
             print(self.compass_direction, result)
         else:
@@ -105,6 +106,7 @@ class Exit:
         return False
 
     def close_door(self):
+        result = ""
         if self.door:
             result = self.door.close()
             print(self.compass_direction, result)
@@ -114,9 +116,10 @@ class Exit:
             return True
         return False
 
-    def lock_door(self):
+    def lock_door(self, player_inv):
+        result = ""
         if self.door:
-            result = self.door.lock_door()
+            result = self.door.lock_door(player_inv)
             print(self.compass_direction, result)
         else:
             print(self.compass_direction, "door does not exist.")
@@ -124,9 +127,10 @@ class Exit:
             return True
         return False
 
-    def unlock_door(self):
+    def unlock_door(self, player_inv):
+        result = ""
         if self.door:
-            result = self.door.unlock_door()
+            result = self.door.unlock_door(player_inv)
             print(self.compass_direction, result)
         else:
             print(self.compass_direction, "door does not exist.")

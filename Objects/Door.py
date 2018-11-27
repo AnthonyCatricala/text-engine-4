@@ -52,15 +52,15 @@ class Door:
 
         return out
 
-    def lock_door(self):
+    def lock_door(self, player_inv):
         if self.lock:
-            return self.lock.lock()
+            return self.lock.lock(player_inv)
         else:
             return "door has no lock."
 
-    def unlock_door(self):
+    def unlock_door(self, player_inv):
         if self.lock:
-            return self.lock.unlock()
+            return self.lock.unlock(player_inv)
         else:
             return "door has no lock."
 

@@ -1,15 +1,22 @@
-from Util.RoomUtil import *
 from Parser.CommandExecuter import *
 from Parser.UserParser import *
+from Objects.Character import Player
+import Objects.Door
+import Objects.Lock
 
-
-start_room = load_room("RoomTester")
-
-cp = UserParser(start_room)
-#eh = "go exit 1".split()
-exit_name = "exit_1"
-ce = CommandExecutor(start_room, None)
-print((start_room.exits[1].links_to)[8:len(start_room.exits[1].links_to)-5])
-#ce.move_function(["go", exit_name, "", ""])
-#ce.new_move_function(["go", "exit_5", "", ""])
-#ce.newest_move_function(["go", exit_name, "", ""])
+room = load_room(room_file="./Tests/Rooms/RoomTester.room")   # blocked on one side
+player = Player("player", [],"Player description", None)
+ce = CommandExecutor(room, player)
+cp = UserParser(room, player)
+room_trans = load_room(room_file="./Tests/Rooms/RoomTesterTransverse.room") # Exit leads to a room on the other side
+room.exits[0].links_to = "./Tests/Rooms/RoomTesterTransverse.room"
+room_trans.exits[0].links_to = "./Tests/Rooms/RoomTester.room"
+room_trans.exits[0].door.lock.is_locked = False
+room.exits[0].door.lock.is_locked = False
+room_trans.exits[0].door.is_open = True
+room.exits[0].door.is_open = True
+room.exits[0].blocked = False
+room_trans.exits[0].blocked = False
+room.exits[0].blocked = False
+room_trans.exits[0].blocked = True
+ce.executor(['go', 'exit_1', 'exit', ''])
