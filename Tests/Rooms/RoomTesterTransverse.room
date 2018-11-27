@@ -1,10 +1,10 @@
 {
-    "room_name": "RoomTester",
-    "room_file": "./Tests/Rooms/RoomTester.room",
-    "description": "This is the room's description",
+    "room_name": "RoomTesterTransverse",
+    "room_file": "./Tests/Rooms/RoomTesterTransverse.room",
+    "description": "Transferred rooms.",
     "illuminated": true,
     "exits": {
-        "exit_1": {
+        "exit_1_transverse": {
             "links-to": "",
             "description": "look exit 1",
             "blocked": false,
@@ -22,12 +22,12 @@
             "triggers": {},
             "user-scripts": {}
         },
-        "exit_2": {
+        "exit_2_transverse": {
             "links-to": "",
             "description": "look exit 2",
             "blocked": false,
             "door": {
-                "open": false,
+                "open": true,
                 "lock": {},
                 "triggers": {},
                 "user-scripts": {}
@@ -35,7 +35,7 @@
             "triggers": {},
             "user-scripts": {}
         },
-        "exit_3": {
+        "exit_3_transverse": {
             "links-to": "",
             "description": "look exit 3",
             "blocked": false,
