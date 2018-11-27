@@ -19,26 +19,40 @@ class CommandExecutor:
 
         triggers = self.room.get_triggers(parsed_string[0])
 
-        if parsed_string[0] == "error":
-            print(parsed_string[0],":", parsed_string[1])
-        elif parsed_string[0] == "look":
-            self.look_function(parsed_string)
-        elif parsed_string[0] == "go":
-            self.move_function(parsed_string)
-        elif parsed_string[0] == "examine":
-            self.examine_function(parsed_string)
-        elif parsed_string[0] in ["open", "close"]:
-            self.open_close_lock_unlock_function(parsed_string)
-        elif parsed_string[0] in ["lock", "unlock"]:
-            self.open_close_lock_unlock_function(parsed_string)
-        elif parsed_string[0] in ["block", "unblock"]:
-            self.block_unblock_function(parsed_string)
-#        elif parsed_string[0] == "take":
-#            self.get_function() TODO add this with items
+        user_scripts = self.room.get_user_scripts(parsed_string[0])
+        instead = False
+        for user_script in user_scripts:
+            if user_script.before:
+                exec(user_script.before)
+            if user_script.instead:
+                instead = True
+                exec(user_script.instead)
+
+        if not instead:
+            if parsed_string[0] == "error":
+                print(parsed_string[0],":", parsed_string[1])
+            elif parsed_string[0] == "look":
+                self.look_function(parsed_string)
+            elif parsed_string[0] == "go":
+                self.move_function(parsed_string)
+            elif parsed_string[0] == "examine":
+                self.examine_function(parsed_string)
+            elif parsed_string[0] in ["open", "close"]:
+                self.open_close_lock_unlock_function(parsed_string)
+            elif parsed_string[0] in ["lock", "unlock"]:
+                self.open_close_lock_unlock_function(parsed_string)
+            elif parsed_string[0] in ["block", "unblock"]:
+                self.block_unblock_function(parsed_string)
+            #elif parsed_string[0] == "take":
+                #self.get_function() TODO add this with items
 
         # TODO Delete triggers after they are tripped.
         for trigger in triggers:
             trigger.trigger()
+
+        for user_script in user_scripts:
+            if user_script.after:
+                exec(user_script.after)
 
     def look_function(self, parsed_string):
         s = ""

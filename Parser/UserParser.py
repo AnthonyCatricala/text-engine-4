@@ -75,42 +75,6 @@ class UserParser:
             list_of_exits.append(exit.compass_direction.replace("_", " "))
         return list_of_exits
 
-    # TODO Delete this after explaining changes to Lucy.
-    def refine_input_old(self, inp_com, temp_str1, temp_str2):
-        ##
-        # Author: Lucy Oliverio
-        # description: Given a string, the program will replaces all key words with the correct words and spacing
-        ##
-        com = self.remove_user_error(inp_com)
-        par_com = com.split(" ")
-        i = 0
-        com = ""
-        is_there = False
-
-        # For each word within the user command.
-        for x in par_com:
-            # For each grouping of like words
-            for xx in temp_str1:
-                # For each word with the like word groupings.
-                for xxx in xx:
-                    # If the match is found within the grouping
-                    if x == xxx:
-
-                        com = com + " " + temp_str2[i]
-                        is_there = True
-                        continue
-                i = i + 1
-            i = 0
-            if is_there is False:
-                com = com + " " + x
-            elif is_there is True:
-                is_there = False
-
-        # TODO You don't need to clean up variables when a function ends.
-        del temp_str1, temp_str2, par_com, is_there, i
-
-        return com[1:].split()
-
     def refine_input(self, user_command):
         # Split the user supplied command.
         command_parts = user_command.split(" ")
@@ -123,7 +87,6 @@ class UserParser:
                     break
 
         return command_parts
-
 
     def chosen_obj_check(self, chosen_object, main_obj, chosen_command):
         if not (chosen_object == "" or chosen_object == "error"):
@@ -159,15 +122,8 @@ class UserParser:
         if input_string == "":
             return ["", "", "", ""]
 
-
-        temp_str1 = {"go", "travel", "walk", "run", "enter", "g", "move"}, {"look", "l"}, {"examine", "exam"}, {"north", "n", "northern"}, {
-                        "south", "s", "southern"}, {"east", "e", "eastern"}, {"west", "w", "western"}
-        temp_str2 = ["go", "look", "examine", "north", "south", "east", "west"]
-
-        #user_str = self.refine_input(input_string, temp_str1, temp_str2)
         user_str = self.refine_input(input_string)
 
-        del temp_str1, temp_str2
         #commands
         chosen_command = self.com_check(user_str, ["look", "go", "open", "close", "lock", "unlock", "block", "unblock"])
         if chosen_command == "":
