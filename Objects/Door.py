@@ -38,29 +38,27 @@ class Door:
         else:
             out['lock'] = dict()
 
-        out['triggers'] = dict()
+        out['triggers'] = list()
         if self.triggers:
             for t in self.triggers:
-                key, value = t.to_json()
-                out[key] = value
+                out['triggers'].append(t.to_json())
 
-        out['user-scripts'] = dict()
+        out["user-scripts"] = list()
         if self.user_scripts:
             for s in self.user_scripts:
-                key, value = s.to_json()
-                out['user-scripts'][key] = value
+                out["user-scripts"].append(s.to_json())
 
         return out
 
-    def lock_door(self):
+    def lock_door(self, player_inv):
         if self.lock:
-            return self.lock.lock()
+            return self.lock.lock(player_inv)
         else:
             return "door has no lock."
 
-    def unlock_door(self):
+    def unlock_door(self, player_inv):
         if self.lock:
-            return self.lock.unlock()
+            return self.lock.unlock(player_inv)
         else:
             return "door has no lock."
 

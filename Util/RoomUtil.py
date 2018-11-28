@@ -130,12 +130,12 @@ def create_room(room_name="",
             room_dict["exits"] = exits
 
         if not triggers:
-            room_dict["triggers"] = dict()
+            room_dict["triggers"] = list()
         else:
             room_dict["triggers"] = triggers
 
         if not user_scripts:
-            room_dict['user-scripts'] = dict()
+            room_dict['user-scripts'] = list()
         else:
             room_dict['user-scripts'] = user_scripts
 
@@ -269,10 +269,10 @@ def create_door(is_open=False,
     if triggers:
         door_dict["triggers"] = triggers
     else:
-        door_dict["triggers"] = dict()
+        door_dict["triggers"] = list()
 
     if not user_scripts:
-        door_dict['user-scripts'] = dict()
+        door_dict["user-scripts"] = list()
     else:
         door_dict['user-scripts'] = user_scripts
 
@@ -294,12 +294,12 @@ def create_lock(key: Item=None,
         if triggers:
             lock_dict["triggers"] = triggers
         else:
-            lock_dict["triggers"] = dict()
+            lock_dict["triggers"] = list()
 
         if user_scripts:
             lock_dict['user-scripts'] = user_scripts
         else:
-            lock_dict["user-scripts"] = dict()
+            lock_dict["user-scripts"] = list()
 
         lock = Lock.from_dict(lock_dict)
 
@@ -381,12 +381,12 @@ def create_room_exit(compass_direction="",
                                     if triggers:
                                         room_exit["triggers"] = triggers
                                     else:
-                                        room_exit["triggers"] = dict()
+                                        room_exit["triggers"] = list()
 
                                     if user_scripts:
                                         room_exit["user-scripts"] = user_scripts
                                     else:
-                                        room_exit["user-scripts"] = dict()
+                                        room_exit["user-scripts"] = list()
 
                                     out = Exit.from_dict(compass_direction, room_exit)
 
@@ -489,13 +489,19 @@ def remove_exit_from_room(room=None, compass_direction=None):
         error_handler("remove_exit_from_room", "no room object")
 
 
-def create_user_script(trigger_command="", before="", instead="", after=""):
+def create_user_script(trigger_command="",
+                       before="",
+                       instead="",
+                       after="",
+                       before_file="",
+                       instead_file="",
+                       after_file=""):
     out = None
     if type(trigger_command) is str:
         if type(before) is str:
             if type(instead) is str:
                 if type(after) is str:
-                    out = UserScript(trigger_command, before, instead, after)
+                    out = UserScript(trigger_command, before, instead, after, before_file, instead_file, after_file)
                 else:
                     # TODO Error handling; Wrong type (String)
                     print()

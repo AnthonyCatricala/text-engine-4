@@ -13,6 +13,7 @@ class Trigger(object):
     def fill_triggers(cls, triggers=None):
         if not triggers:
             triggers = []
+
         out = []
         for t in triggers:
             if t["type"] == "print":

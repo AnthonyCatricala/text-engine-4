@@ -78,7 +78,7 @@ link_two_rooms(lock_room, flag_room, "north", "A locked door to a storage room."
 
 # CREATE THE STORAGE ROOM DOOR AND LOCK
 hallway_north_exit = lock_room.get_exit("north")
-storage_room_key = create_key("storage room key", "An old brass key.")
+storage_room_key = create_key("storage room key", "An old brass key.", ["key"])
 storage_room_lock = create_lock(storage_room_key)
 storage_room_door = create_door()
 apply_lock_to_door(storage_room_door, storage_room_lock)
@@ -88,9 +88,7 @@ apply_door_to_exit(hallway_north_exit, storage_room_door)
 # CREATE THE DOOR AND LOCK FROM THE INSIDE VIEW
 storage_room_south_exit = flag_room.get_exit("south")
 
-##storage_room_lock = create_lock(storage_room_key, False)
 add_object_to_room(key_room, storage_room_key)
-##storage_room_door = create_door()
 apply_lock_to_door(storage_room_door, storage_room_lock)
 apply_door_to_exit(storage_room_south_exit, storage_room_door)
 
@@ -123,14 +121,7 @@ apply_exit_to_room(user_script_room, hidden_corridor_south_exit)
 user_script = create_user_script(trigger_command="look",
                                  before="print('Hello World!')",
                                  instead="print('This was done instead!')",
-                                 after="for i in range(10):\n"
-                                       "  ans = int(input('2^{} = '.format(i)))\n"
-                                       "  while ans != pow(2, i):\n"
-                                       "    print('Wrong! Try Again!')\n"
-                                       "    ans = int(input('2^{} = '.format(i)))\n"
-                                       "print('You teleport to the missing flag room.')\n"
-                                       "self.room.load('Rooms/Missing_Flag_Room.room')\n"
-                                       "WinTrigger('instant', 'You place the flag on the flag pole and you feel acomplished. You Win!').trigger()")
+                                 after_file="./Scripts/arbitrary_code")
 apply_user_script(user_script_room, user_script)
 
 

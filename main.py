@@ -1,6 +1,7 @@
 import Parser.UserParser
 import Parser.CommandExecuter
 import Util.RoomUtil
+from Objects.Character import Player
 
 import os
 
@@ -11,9 +12,9 @@ os.chdir(PROJECT_DIR)
 
 def play():
     start_room = Util.RoomUtil.load_room('Missing Flag Room')
-
-    cp = Parser.UserParser.UserParser(start_room)
-    ce = Parser.CommandExecuter.CommandExecutor(start_room, None)
+    player = Player("Name", [], "Player Description", None)
+    cp = Parser.UserParser.UserParser(start_room, player)
+    ce = Parser.CommandExecuter.CommandExecutor(start_room, player)
 
     while True:
         #print("q to quit.\n")

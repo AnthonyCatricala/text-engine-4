@@ -29,30 +29,32 @@ class Lock:
         out['locked'] = self.is_locked
         out['key'] = self.key
 
-        out['triggers'] = dict()
+        out['triggers'] = list()
         if self.triggers:
             for t in self.triggers:
-                key, value = t.to_json()
-                out[key] = value
+                out['triggers'].append(t.to_json)
 
-        out['user-scripts'] = dict()
+        out["user-scripts"] = list()
         if self.user_scripts:
             for s in self.user_scripts:
-                key, value = s.to_json()
-                out['user-scripts'][key] = value
+                out["user-scripts"].append(s.to_json())
 
         return out
 
-    def unlock(self):
-        if self.is_locked:
+    def unlock(self, player_inv):
+        if self.key.replace(" ", "_") not in player_inv:
+            return "you don't have the key."
+        elif not self.is_locked:
+            return "door was already unlocked."
+        else:
             self.is_locked = False
             return "door is now unlocked."
-        else:
-            return "door was already unlocked."
 
-    def lock(self):
-        if not self.is_locked:
+    def lock(self, player_inv):
+        if self.key.replace(" ", "_") not in player_inv:
+            return "you don't have the key."
+        elif self.is_locked:
+            return "door was already locked."
+        else:
             self.is_locked = True
             return "door is now locked."
-        else:
-            return "door was already locked."

@@ -80,22 +80,21 @@ class Exit:
         else:
             value['door'] = dict()
 
-        value['triggers'] = dict()
+        value['triggers'] = list()
         if self.triggers:
             for t in self.triggers:
-                k, v = t.to_json()
-                value[k] = v
+                value['triggers'].append(t.to_json())
 
-        value['user-scripts'] = dict()
+        value["user-scripts"] = list()
         if self.user_scripts:
             for s in self.user_scripts:
-                k, v = s.to_json()
-                value['user-scripts'][k] = v
+                value['user-scripts'].append(s.to_json())
 
         return key, value
 
     def open_door(self):
-        if self.door:
+        result = ""
+        if self.door is not None:
             result = self.door.open()
             print(self.compass_direction, result)
         else:
@@ -105,6 +104,7 @@ class Exit:
         return False
 
     def close_door(self):
+        result = ""
         if self.door:
             result = self.door.close()
             print(self.compass_direction, result)
@@ -114,9 +114,10 @@ class Exit:
             return True
         return False
 
-    def lock_door(self):
+    def lock_door(self, player_inv):
+        result = ""
         if self.door:
-            result = self.door.lock_door()
+            result = self.door.lock_door(player_inv)
             print(self.compass_direction, result)
         else:
             print(self.compass_direction, "door does not exist.")
@@ -124,9 +125,10 @@ class Exit:
             return True
         return False
 
-    def unlock_door(self):
+    def unlock_door(self, player_inv):
+        result = ""
         if self.door:
-            result = self.door.unlock_door()
+            result = self.door.unlock_door(player_inv)
             print(self.compass_direction, result)
         else:
             print(self.compass_direction, "door does not exist.")

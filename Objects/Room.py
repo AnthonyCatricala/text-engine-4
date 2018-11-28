@@ -58,21 +58,20 @@ class Room:
                 key, value = e.to_json()
                 out['exits'][key] = value
 
-        out['inventory'] = []
+        out['inventory'] = list()
         if self.inventory:
             for i in self.inventory:
                 out['inventory'].append(i.to_json())
 
-        out['triggers'] = []
+        out['triggers'] = list()
         if self.triggers:
             for t in self.triggers:
                 out['triggers'].append(t.to_json())
 
-        out['user-scripts'] = dict()
+        out["user-scripts"] = list()
         if self.user_scripts:
             for s in self.user_scripts:
-                key, value = s.to_json()
-                out['user-scripts'][key] = value
+                out['user-scripts'].append(s.to_json())
 
         room_json = json.dumps(out, indent=4)
 
