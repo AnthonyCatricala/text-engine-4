@@ -98,7 +98,8 @@ def create_room(room_name="",
                 inventory=None,
                 exits=None,
                 triggers=None,
-                user_scripts=None):
+                user_scripts=None,
+                visited=False):
     # ##
     # Creates a room to be further manipulated via the other room API functions.
     # Base room creation function.
@@ -138,6 +139,8 @@ def create_room(room_name="",
             room_dict['user-scripts'] = list()
         else:
             room_dict['user-scripts'] = user_scripts
+
+        room_dict['visited'] = visited
 
         out = Room.from_dict(room_dict)
         out.save()

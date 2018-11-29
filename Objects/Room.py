@@ -19,8 +19,18 @@ class Room:
     exits = None
     triggers = None
     user_scripts = None
+    visited = None
 
-    def __init__(self, room_name, room_file, description, illuminated, inventory, exits, triggers, user_scripts):
+    def __init__(self,
+                 room_name: str,
+                 room_file: str,
+                 description: str,
+                 illuminated: bool,
+                 inventory: list,
+                 exits: list,
+                 triggers: list,
+                 user_scripts: list,
+                 visited: bool):
         self.room_name = room_name
         self.room_file = room_file
         self.description = description
@@ -31,6 +41,7 @@ class Room:
         for trigger in self.triggers:
             trigger.connected_to = self
         self.user_scripts = user_scripts
+        self.visited = visited
 
     @classmethod
     def from_dict(cls, room_dict):
@@ -42,8 +53,9 @@ class Room:
         exits = Exit.fill_exits(room_dict['exits'])
         triggers = Trigger.fill_triggers(room_dict['triggers'])
         user_scripts = UserScript.fill_user_scripts(room_dict["user-scripts"])
+        visited = room_dict["visited"]
 
-        return cls(room_name, room_file, description, illuminated, inventory, exits, triggers, user_scripts)
+        return cls(room_name, room_file, description, illuminated, inventory, exits, triggers, user_scripts, visited)
 
     def save(self):
         out = dict()
@@ -72,6 +84,8 @@ class Room:
         if self.user_scripts:
             for s in self.user_scripts:
                 out['user-scripts'].append(s.to_json())
+
+        out['visited'] = self.visited
 
         room_json = json.dumps(out, indent=4)
 
@@ -128,6 +142,7 @@ class Room:
             self.exits = Exit.fill_exits(room_dict['exits'])
             self.triggers = Trigger.fill_triggers(room_dict['triggers'])
             self.user_scripts = UserScript.fill_user_scripts(room_dict["user-scripts"])
+            self.visited = room_dict['visited']
 
     def get_exit(self, compass_direction: str):
         compass_directions = [

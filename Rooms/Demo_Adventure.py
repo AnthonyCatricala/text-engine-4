@@ -1,6 +1,6 @@
 from Util.RoomUtil import *
 from Util.ItemUtil import *
-from Objects.Trigger import PrintTrigger
+from Objects.Trigger import *
 from Objects.Character import NPC
 
 
@@ -20,7 +20,16 @@ start_room = create_room(room_name="Missing Flag Room",
 door_slam = PrintTrigger(trigger_command="go",
                          description="As you enter the hallway the door to the north slams shut.\n"
                                      "You hear the a 'click' as the door locks from the other side.\n"
-                                     "I wonder if there is another key around here.\n")
+                                     "I wonder if there is another key around here.")
+
+door_slam = ChangeDescriptionTrigger(trigger_command="go",
+                                     description="As you enter the hallway the door to the north slams shut.\n"
+                                                 "You hear the a 'click' as the door locks from the other side.\n"
+                                                 "I wonder if there is another key around here.",
+                                     new_description="A well lit room surrounded with decorations.\n"
+                                                     "In the center of the room stands a plaque mentioning a flag.\n"
+                                                     "You look around the room but no flag can be seen.\n"
+                                                     "An archway to the north leads into an open hallway.")
 
 apply_trigger(start_room, door_slam)
 
@@ -29,7 +38,7 @@ apply_trigger(start_room, door_slam)
 # EAST:  DOOR LEADING TO LARGE BEDROOM
 lock_room = create_room(room_name="Hallway",
                         description="To the north there is a door to the storage room.\n"
-                                    "To the east there is a door to a large bedroom.\n")
+                                    "To the east there is a door to a large bedroom.")
 
 # LINK THE MISSING FLAG ROOM AND THE HALLWAY
 link_two_rooms(start_room, lock_room, "north", "A very tall open archway.")
@@ -42,6 +51,9 @@ key_room = create_room(room_name="Large Bedroom",
                        description="A large comfy looking bed sits on the opposite end of the room.\n"
                                    "As you look around you notice a glint of light reflecting off of a key sitting on a bedside table.\n"
                                    "I wonder if that key will unlock the door in the hallway.")
+
+apply_trigger(key_room, ChangeDescriptionTrigger(trigger_command="get",
+                                                 new_description="A large comfy looking bed sits on the opposite end of the room."))
 
 # LINK HALLWAY TO BEDROOM
 link_two_rooms(lock_room, key_room, "east", "A sturdy bedroom door.")
@@ -86,17 +98,20 @@ apply_door_to_exit(hallway_north_exit, storage_room_door)
 
 
 # CREATE THE DOOR AND LOCK FROM THE INSIDE VIEW
-storage_room_south_exit = flag_room.get_exit("south")
 
-add_object_to_room(key_room, storage_room_key)
+storage_room_south_exit = create_room_exit(compass_direction="south",
+                                           links_to=lock_room.room_file,
+                                           description="A dusty old cabinet has fallen over and blocked the exit.")
 apply_lock_to_door(storage_room_door, storage_room_lock)
 apply_door_to_exit(storage_room_south_exit, storage_room_door)
+apply_exit_to_room(flag_room, storage_room_south_exit)
+add_object_to_room(key_room, storage_room_key)
 
 
 # UPON ENTERING A ROOM THE EXIT GETS BLOCKED
-falling_cabinet = PrintTrigger(trigger_command="enter",
+falling_cabinet = BlockTrigger(trigger_command="enter",
                                description="As you enter the room a dusty old cabinet falls over and blocks the southern door.")
-apply_trigger(flag_room, falling_cabinet)
+apply_trigger(storage_room_south_exit, falling_cabinet)
 
 
 # CREATE HIDDEN CORRIDOR
@@ -133,6 +148,3 @@ rooms = [start_room,
 
 for room in rooms:
     room.save()
-
-# TODO Remove this; for testing purposes only.
-print()

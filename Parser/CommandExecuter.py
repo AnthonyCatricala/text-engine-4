@@ -11,10 +11,14 @@ class CommandExecutor:
     def __init__(self, room, player):
         self.room = room
         self.player = player
+
+        # If the room hasn't been visited, then print the room name and details.
         print("\n" + self.room.room_name)
-        self.look_function(["look", "", "", ""])
-        #for x in room.triggers:
-        #    self.trigger_list.append(("room", x.trigger_command, x.description))
+        if not room.visited:
+            self.room.visited = True
+            self.look_function(["look", "", "", ""])
+        # Newline for readability.
+        print()
 
     def executor(self, parsed_string):
         triggers = self.room.get_triggers(parsed_string[0])
@@ -28,39 +32,55 @@ class CommandExecutor:
                 instead = True
                 exec(user_script.instead)
 
-        if parsed_string[0] not in ["go", "inventory"]:
-            print("\n" + self.room.room_name)
-        if parsed_string[0] == "error":
-            print(parsed_string[0] + ":" + parsed_string[1])
-        elif parsed_string[0] == "look":
-            self.look_function(parsed_string)
-        elif parsed_string[0] == "go":
-            self.move_function(parsed_string)
-#        elif parsed_string[0] == "examine":
-#            self.examine_function(parsed_string)
-        elif parsed_string[0] in ["open", "close"]:
-            self.open_close_lock_unlock_function(parsed_string)
-        elif parsed_string[0] in ["lock", "unlock"]:
-            self.open_close_lock_unlock_function(parsed_string)
-        elif parsed_string[0] in ["block", "unblock"]:
-            self.block_unblock_function(parsed_string)
-        elif parsed_string[0] == "get":
-            self.take_function(parsed_string)
-        elif parsed_string[0] == "drop":
-            self.drop_function(parsed_string)
-        elif parsed_string[0] == "inventory":
-            print("\ninventory:")
-            if self.player.inventory:
-                for x in self.player.inventory:
-                    print("{}x {}".format(x.quantity, x.item_name))
+        # When leaving a room, triggers need to occur before the new room is loaded.
+        triggered = False
+        if parsed_string[0] == 'go':
+            triggered = True
+            for trigger in triggers:
+                trigger.trigger()
+
+        # A user script may forcefully skip typical command execution if it has an 'instead' value.
+        if not instead:
+            if parsed_string[0] not in ["go", "inventory"]:
+                print("\n" + self.room.room_name)
+            if parsed_string[0] == "error":
+                print(parsed_string[0] + ":" + parsed_string[1])
+            elif parsed_string[0] == "look":
+                self.look_function(parsed_string)
+            elif parsed_string[0] == "go":
+                self.move_function(parsed_string)
+    #        elif parsed_string[0] == "examine":
+    #            self.examine_function(parsed_string)
+            elif parsed_string[0] in ["open", "close"]:
+                self.open_close_lock_unlock_function(parsed_string)
+            elif parsed_string[0] in ["lock", "unlock"]:
+                self.open_close_lock_unlock_function(parsed_string)
+            elif parsed_string[0] in ["block", "unblock"]:
+                self.block_unblock_function(parsed_string)
+            elif parsed_string[0] == "get":
+                self.take_function(parsed_string)
+            elif parsed_string[0] == "drop":
+                self.drop_function(parsed_string)
+            elif parsed_string[0] == "inventory":
+                print("\ninventory:")
+                if self.player.inventory:
+                    for x in self.player.inventory:
+                        print("{}x {}".format(x.quantity, x.item_name))
+
+        # Save the state of the room.
         self.room.save()
 
-        for trigger in triggers:
-            trigger.trigger()
+
+        if not triggered:
+            for trigger in triggers:
+                trigger.trigger()
 
         for user_script in user_scripts:
             if user_script.after:
                 exec(user_script.after)
+
+        # New line for readability.
+        print()
 
     def is_bright(self, li):
         for x in li:
@@ -160,8 +180,17 @@ class CommandExecutor:
             if move is not None and second_fail is False:
                 self.room.save()
                 self.room.load(move.links_to)
+
                 print("\n" + self.room.room_name)
-                print(self.room.description)
+                if not self.room.visited:
+                    self.room.visited = True
+                    print(self.room.description)
+
+                # Trigger all events that happen when you enter a room.
+                for trigger in self.room.get_triggers("enter"):
+                    print()
+                    trigger.trigger()
+
                 #print("You move to {}.".format(self.room.room_name))
 
     #def examine_function(self, parsed_string):
