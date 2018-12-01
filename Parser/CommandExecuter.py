@@ -68,7 +68,7 @@ class CommandExecutor:
                         print("{}x {}".format(x.quantity, x.item_name))
 
         # Save the state of the room.
-        self.room.save()
+        self.save()
 
 
         if not triggered:
@@ -299,9 +299,9 @@ class CommandExecutor:
                     break
         if room_check and not player_check:
             self.player.inventory.append(Item(room_item.item_name, room_item.description, room_item.alias, 1,
-                                          room_item.visible, room_item.illuminated, room_item.obtainable,
-                                          room_item.inventory, room_item.door, room_item.triggers,
-                                          room_item.user_scripts))
+                                              room_item.visible, room_item.illuminated, room_item.obtainable,
+                                              room_item.inventory, room_item.door, room_item.triggers,
+                                              room_item.user_scripts))
         if not room_check:
             print(parsed_string[1].replace("_"," ") + " is not obtainable!")
 
@@ -327,6 +327,10 @@ class CommandExecutor:
                     break
         if player_check and not room_check:
             self.room.inventory.append(Item(player_item.item_name, player_item.description, player_item.alias, 1,
-                                              player_item.visible, player_item.illuminated, player_item.obtainable,
-                                              player_item.inventory, player_item.door, player_item.triggers,
-                                              player_item.user_scripts))
+                                            player_item.visible, player_item.illuminated, player_item.obtainable,
+                                            player_item.inventory, player_item.door, player_item.triggers,
+                                            player_item.user_scripts))
+
+    def save(self):
+        self.room.save()
+        self.player.save(self.room.room_file)

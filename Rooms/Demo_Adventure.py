@@ -134,9 +134,10 @@ apply_exit_to_room(user_script_room, hidden_corridor_south_exit)
 
 # CREATE EXAMPLE USER SCRIPT
 user_script = create_user_script(trigger_command="look",
-                                 before="print('Hello World!')",
-                                 instead="print('This was done instead!')",
+                                 before="print('Is the player is alive: {}'.format(self.player.alive))",
+                                 instead="print('This was done instead of looking around the room!')",
                                  after_file="./Scripts/arbitrary_code")
+
 apply_user_script(user_script_room, user_script)
 
 

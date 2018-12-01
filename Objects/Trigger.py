@@ -34,7 +34,9 @@ class Trigger(object):
         return instance
 
     def to_json(self):
-        out = self.__dict__
+        out = {}
+        out.update(self.__dict__)
+
         out["connected_to"] = None
         return out
 
@@ -52,6 +54,9 @@ class PrintTrigger(Trigger):
 
 
 class ChangeDescriptionTrigger(Trigger):
+    # ##
+    # Trigger for changing the description of a WhatIF Object.
+    # ##
     def __init__(self,
                  trigger_command: str="",
                  description: str="",
@@ -129,7 +134,7 @@ class CloseTrigger(Trigger):
             self.connected_to.is_open = False
 
 # TODO (WIP)
-
+'''
 class DeathTrigger(PrintTrigger):
     def __init__(self, trigger_command="", description="", connected_to=None):
         super().__init__(trigger_command, description, connected_to)
@@ -137,6 +142,7 @@ class DeathTrigger(PrintTrigger):
     def trigger(self):
         super().trigger()
         exit(0)
+'''
 
 
 class WinTrigger(PrintTrigger):
@@ -146,14 +152,3 @@ class WinTrigger(PrintTrigger):
     def trigger(self):
         super().trigger()
         exit(0)
-
-
-class OpenTrigger(Trigger):
-    def __init__(self, trigger_command="", connected_to=None):
-        super().__init__(trigger_command, connected_to)
-    
-    def trigger(self):
-        try:
-            self.connected_to.open()
-        except:
-            print("This cannot be opened.")

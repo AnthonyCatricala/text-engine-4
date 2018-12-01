@@ -141,6 +141,9 @@ class Room:
             self.inventory = Item.fill_inventory(room_dict['inventory'])
             self.exits = Exit.fill_exits(room_dict['exits'])
             self.triggers = Trigger.fill_triggers(room_dict['triggers'])
+            for trigger in self.triggers:
+                trigger.connected_to = self
+
             self.user_scripts = UserScript.fill_user_scripts(room_dict["user-scripts"])
             self.visited = room_dict['visited']
 

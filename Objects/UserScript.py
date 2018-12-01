@@ -1,5 +1,6 @@
 import os
 
+
 class UserScript:
     before = None
     instead = None

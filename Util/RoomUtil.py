@@ -554,7 +554,7 @@ def apply_user_script_to_lock(lock=None, user_script=None):
 
 
 def apply_user_script(obj=None, user_script=None):
-    applicable_objects = [Room, Exit, Door, Lock]
+    applicable_objects = [Room, Exit, Door, Lock, Item]
     if type(obj) in applicable_objects:
         if type(user_script) is UserScript:
             obj.user_scripts.append(user_script)
@@ -566,8 +566,8 @@ def apply_user_script(obj=None, user_script=None):
         print()
 
 
-def apply_trigger(obj: (Room, Exit, Door, Lock), trigger: Trigger):
-    applicable_objects = [Room, Exit, Door, Lock]
+def apply_trigger(obj: (Room, Exit, Door, Lock, Item), trigger: Trigger):
+    applicable_objects = [Room, Exit, Door, Lock, Item]
     if type(obj) in applicable_objects:
         if Trigger in type(trigger).__bases__:
             obj.triggers.append(trigger)
