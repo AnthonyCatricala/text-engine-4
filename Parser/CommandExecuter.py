@@ -191,6 +191,12 @@ class CommandExecutor:
                     print()
                     trigger.trigger()
 
+                for user_script in self.room.get_user_scripts("enter"):
+                    print()
+                    exec(user_script.before)
+                    exec(user_script.instead)
+                    exec(user_script.after)
+
                 #print("You move to {}.".format(self.room.room_name))
 
     #def examine_function(self, parsed_string):

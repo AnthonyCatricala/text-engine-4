@@ -16,6 +16,9 @@ start_room = create_room(room_name="Missing Flag Room",
                                      "An archway to the north leads into an open hallway.\n"
                                      "At the end of the hallway through an open door you spot the flag.")
 
+plant_flag = UserScript("enter", after_file="./Scripts/plant_flag")
+apply_user_script(start_room, plant_flag)
+
 # TRIGGER: NOTIFICATION THAT THE STORAGE ROOM DOOR HAS SLAMMED SHUT AND LOCKED.
 door_slam = PrintTrigger(trigger_command="go",
                          description="As you enter the hallway the door to the north slams shut.\n"
@@ -38,7 +41,8 @@ apply_trigger(start_room, door_slam)
 # EAST:  DOOR LEADING TO LARGE BEDROOM
 lock_room = create_room(room_name="Hallway",
                         description="To the north there is a door to the storage room.\n"
-                                    "To the east there is a door to a large bedroom.")
+                                    "To the east there is a door to a large bedroom.\n"
+                                    "To the south there is an open archway leading into the room with the missing flag.")
 
 # LINK THE MISSING FLAG ROOM AND THE HALLWAY
 link_two_rooms(start_room, lock_room, "north", "A very tall open archway.")
