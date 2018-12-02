@@ -6,7 +6,9 @@ from Objects.Character import *
 class UserParser:
     room = None
     player = None
+
     #TODO: add item alias
+
     applicable_commands = {
         "go": ["go", "travel", "walk", "run", "enter", "g", "move"],
         "look": ["look", "l", "examine, exam"],
@@ -74,13 +76,19 @@ class UserParser:
                 break
         return input_str[i+1:]
 
-    def refine_input(self, user_command, li):
+    def turn_into_array(self, list_of_object):
+        list_of_exits = []
+        for exit in list_of_object:
+            list_of_exits.append(exit.compass_direction.replace("_", " "))
+        return list_of_exits
+
+    def refine_input(self, user_command):
         # Split the user supplied command.
         command_parts = user_command.split(" ")
         for i in range(len(command_parts)):
 
             # Compare to like commands and replace where needed.
-            for actual_command, like_commands in li:
+            for actual_command, like_commands in self.applicable_commands.items():
                 if command_parts[i] in like_commands:
                     command_parts[i] = actual_command
                     break
@@ -122,7 +130,9 @@ class UserParser:
             return ["", "", "", ""]
 
         temp_arr = ""
-        user_str = self.refine_input(input_string, self.applicable_commands.items())
+        input_string = input_string.replace("pick up ", "get ")
+        user_str = self.refine_input(input_string)
+
         #if self.room.inventory:
             #for x in self.room.inventory:
                 #if x.alias:
@@ -131,13 +141,16 @@ class UserParser:
         #commands
         result = None
         temp_str = ""
+
         #Quick pick up check
-        for x in user_str:
-            temp_str = temp_str + " " + x
-        user_str = temp_str[1:].replace("pick up", "get").split(" ")
+        # for x in user_str:
+        #     temp_str = temp_str + " " + x
+        # user_str = temp_str[1:].replace("pick up", "get").split(" ")
+
         #inventory
         if user_str == ["inventory"]:
             return["inventory", "", "", ""]
+
         #other command check
         chosen_command = self.com_check(user_str, ["look", "go", "open", "close", "lock", "unlock", "block", "unblock",
                                                    "get", "drop"])

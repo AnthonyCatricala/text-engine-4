@@ -29,17 +29,15 @@ class Lock:
         out['locked'] = self.is_locked
         out['key'] = self.key
 
-        out['triggers'] = dict()
+        out['triggers'] = list()
         if self.triggers:
             for t in self.triggers:
-                key, value = t.to_json()
-                out[key] = value
+                out['triggers'].append(t.to_json)
 
-        out['user-scripts'] = dict()
+        out["user-scripts"] = list()
         if self.user_scripts:
             for s in self.user_scripts:
-                key, value = s.to_json()
-                out['user-scripts'][key] = value
+                out["user-scripts"].append(s.to_json())
 
         return out
 

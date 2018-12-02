@@ -1,0 +1,7 @@
+print("Here is some arbitrary code running from a random file.")
+for i in range(10):
+  ans = int(input('2^{} = '.format(i)))
+  while ans != pow(2, i):
+    print('Wrong! Try Again!')
+    ans = int(input('2^{} = '.format(i)))
+print('Go on with that you were doing.')

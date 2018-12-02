@@ -1,47 +1,77 @@
+import os
+
+
 class UserScript:
     before = None
     instead = None
     after = None
 
-    def __init__(self, trigger_command="", before="", instead="", after=""):
+    def __init__(self,
+                 trigger_command: str="",
+                 before: str="",
+                 instead: str="",
+                 after: str="",
+                 before_file: str="",
+                 instead_file: str="",
+                 after_file: str=""):
+
         self.trigger_command = trigger_command
-        self.before = before
-        self.instead = instead
-        self.after = after
+
+        if before_file and os.path.isfile(before_file):
+            self.set_before_from_file(before_file)
+        else:
+            self.before = before
+
+        if instead_file and os.path.isfile(instead_file):
+            self.set_instead_from_file(instead_file)
+        else:
+            self.instead = instead
+
+        if after_file and os.path.isfile(after_file):
+            self.set_after_from_file(after_file)
+        else:
+            self.after = after
 
     @classmethod
-    def fill_user_scripts(cls, user_script_dict=None):
-        if not user_script_dict:
-            user_script_dict = dict()
+    def fill_user_scripts(cls, user_scripts=None):
+        if not user_scripts:
+            user_scripts = list()
 
         out = []
 
-        for key, value in user_script_dict.items():
-            wrapper = dict()
-            wrapper[key] = value
-
-            out.append(cls.from_dict(wrapper))
+        for user_script in user_scripts:
+            out.append(cls.from_dict(user_script))
 
         return out
 
     @classmethod
     def from_dict(cls, script_dict):
-
-        for key, value in script_dict.items():
-            trigger_command = key
-
-            before = script_dict[key]['before']
-            instead = script_dict[key]['instead']
-            after = script_dict[key]['after']
-
+            trigger_command = script_dict["trigger_command"]
+            before = script_dict["before"]
+            instead = script_dict["instead"]
+            after = script_dict["after"]
             return cls(trigger_command, before, instead, after)
 
+    def set_before_from_file(self, file_name=""):
+        with open(file_name) as f:
+            self.before = f.read()
+        f.close()
+
+    def set_instead_from_file(self, file_name=""):
+        with open(file_name) as f:
+            self.instead = f.read()
+        f.close()
+
+    def set_after_from_file(self, file_name=""):
+        with open(file_name) as f:
+            self.after = f.read()
+        f.close()
+
     def to_json(self):
-        out_key = self.trigger_command
-
-        out_value = dict()
-        out_value['before'] = self.before
-        out_value['instead'] = self.instead
-        out_value['after'] = self.after
-
-        return out_key, out_value
+        out = {
+            "trigger_command": self.trigger_command,
+            "before": self.before,
+            "instead": self.instead,
+            "after": self.after
+        }
+        return out

@@ -11,45 +11,76 @@ class CommandExecutor:
     def __init__(self, room, player):
         self.room = room
         self.player = player
+
+        # If the room hasn't been visited, then print the room name and details.
         print("\n" + self.room.room_name)
-        self.look_function(["look", "", "", ""])
-        #for x in room.triggers:
-        #    self.trigger_list.append(("room", x.trigger_command, x.description))
+        if not room.visited:
+            self.room.visited = True
+            self.look_function(["look", "", "", ""])
+        # Newline for readability.
+        print()
 
     def executor(self, parsed_string):
-        if parsed_string[0] != "go":
-            print("\n", self.room.room_name)
         triggers = self.room.get_triggers(parsed_string[0])
-        if parsed_string[0] == "error":
-            print(parsed_string[0],":", parsed_string[1])
-        elif parsed_string[0] == "look":
-            self.look_function(parsed_string)
-        elif parsed_string[0] == "go":
-            self.move_function(parsed_string)
-#        elif parsed_string[0] == "examine":
-#            self.examine_function(parsed_string)
-        elif parsed_string[0] in ["open", "close"]:
-            self.open_close_lock_unlock_function(parsed_string)
-        elif parsed_string[0] in ["lock", "unlock"]:
-            self.open_close_lock_unlock_function(parsed_string)
-        elif parsed_string[0] in ["block", "unblock"]:
-            self.block_unblock_function(parsed_string)
-        elif parsed_string[0] == "get":
-            self.take_function(parsed_string)
-        elif parsed_string[0] == "drop":
-            self.drop_function(parsed_string)
-        elif parsed_string[0] == "inventory":
-            print("inventory:")
-            if self.player.inventory:
-                for x in self.player.inventory:
-                    print(x.quantity, x.item_name)
-        self.room.save()
-#        elif parsed_string[0] == "take":
-#            self.get_function() TODO add this with items
 
-        # TODO Delete triggers after they are tripped.
-        for trigger in triggers:
-            trigger.trigger()
+        user_scripts = self.room.get_user_scripts(parsed_string[0])
+        instead = False
+        for user_script in user_scripts:
+            if user_script.before:
+                exec(user_script.before)
+            if user_script.instead:
+                instead = True
+                exec(user_script.instead)
+
+        # When leaving a room, triggers need to occur before the new room is loaded.
+        triggered = False
+        if parsed_string[0] == 'go':
+            triggered = True
+            for trigger in triggers:
+                trigger.trigger()
+
+        # A user script may forcefully skip typical command execution if it has an 'instead' value.
+        if not instead:
+            if parsed_string[0] not in ["go", "inventory"]:
+                print("\n" + self.room.room_name)
+            if parsed_string[0] == "error":
+                print(parsed_string[0] + ":" + parsed_string[1])
+            elif parsed_string[0] == "look":
+                self.look_function(parsed_string)
+            elif parsed_string[0] == "go":
+                self.move_function(parsed_string)
+    #        elif parsed_string[0] == "examine":
+    #            self.examine_function(parsed_string)
+            elif parsed_string[0] in ["open", "close"]:
+                self.open_close_lock_unlock_function(parsed_string)
+            elif parsed_string[0] in ["lock", "unlock"]:
+                self.open_close_lock_unlock_function(parsed_string)
+            elif parsed_string[0] in ["block", "unblock"]:
+                self.block_unblock_function(parsed_string)
+            elif parsed_string[0] == "get":
+                self.take_function(parsed_string)
+            elif parsed_string[0] == "drop":
+                self.drop_function(parsed_string)
+            elif parsed_string[0] == "inventory":
+                print("\ninventory:")
+                if self.player.inventory:
+                    for x in self.player.inventory:
+                        print("{}x {}".format(x.quantity, x.item_name))
+
+        # Save the state of the room.
+        self.save()
+
+
+        if not triggered:
+            for trigger in triggers:
+                trigger.trigger()
+
+        for user_script in user_scripts:
+            if user_script.after:
+                exec(user_script.after)
+
+        # New line for readability.
+        print()
 
     def is_bright(self, li):
         for x in li:
@@ -108,25 +139,25 @@ class CommandExecutor:
         for e in self.room.exits:
             if e.compass_direction == parsed_string[1]:
                 if e.blocked:
-                    print("\n", self.room.room_name)
-                    print("There is something blocking the " + e.compass_direction + " exit of the " + self.room.room_name +
-                          ". You cannot enter.")
+                    print("\n" + self.room.room_name)
+                    print("There is something blocking the {} exit of the {}. You cannot enter"
+                          .format(e.compass_direction, self.room.room_name))
                 elif e.door and not e.door.is_open and e.door.lock and e.door.lock.is_locked:
-                    print("\n", self.room.room_name)
-                    print("The " + self.room.room_name + "'s " + e.compass_direction + " door seems to be locked. "
-                                                                                        "You cannot enter.")
+                    print("\n" + self.room.room_name)
+                    print("The {}'s {} door seems to be locked. You cannot enter."
+                          .format(self.room.room_name, e.compass_direction))
                 elif e.door and not e.door.is_open:
-                    print("\n", self.room.room_name)
-                    print("The", e.compass_direction, "door is closed. You can try to open the door.")
+                    print("\n" + self.room.room_name)
+                    print("The {} door is closed. You can try to open the door.".format(e.compass_direction))
                 elif not e.door or e.door.is_open:
                     move = e
                 else:
-                    print("\n", self.room.room_name)
+                    print("\n" + self.room.room_name)
                     print("The door blocks your path.")
                 is_exit = e
                 break
         if is_exit is None:
-            print("\n", self.room.room_name)
+            print("\n" + self.room.room_name)
             print("There is no exit in that direction.")
         elif move is not None:
             test_room = load_room(room_file = move.links_to)
@@ -134,20 +165,38 @@ class CommandExecutor:
                 if x.links_to == self.room.room_file:
                     if x.blocked:
                         second_fail = True
-                        print("\n", self.room.room_name, "\nThere is something blocking the " + x.compass_direction +
-                              " exit of the " + test_room.room_name + ". You cannot enter.")
+                        print("\n" + self.room.room_name)
+                        print("There is something blocking the {} exit of the {}. You cannot enter."
+                              .format(x.compass_direction, test_room.room_name))
                     elif x.door and not x.door.is_open:
                         second_fail = True
-                        print("\n", self.room.room_name,"\nThe door is closed on the other side. You cannot enter.")
+                        print("\n" + self.room.room_name)
+                        print("The door is closed on the other side. You cannot enter.")
                     elif x.door and not x.door.is_open and x.door.lock and x.door.lock.is_locked:
                         second_fail = True
-                        print("\n", self.room.room_name,"\nThe door is locked on the other side. You cannot enter.")
+                        print("\n" + self.room.room_name)
+                        print("The door is locked on the other side. You cannot enter.")
                     break
             if move is not None and second_fail is False:
                 self.room.save()
                 self.room.load(move.links_to)
+
                 print("\n" + self.room.room_name)
-                print(self.room.description)
+                if not self.room.visited:
+                    self.room.visited = True
+                    print(self.room.description)
+
+                # Trigger all events that happen when you enter a room.
+                for trigger in self.room.get_triggers("enter"):
+                    print()
+                    trigger.trigger()
+
+                for user_script in self.room.get_user_scripts("enter"):
+                    print()
+                    exec(user_script.before)
+                    exec(user_script.instead)
+                    exec(user_script.after)
+
                 #print("You move to {}.".format(self.room.room_name))
 
     #def examine_function(self, parsed_string):
@@ -256,9 +305,9 @@ class CommandExecutor:
                     break
         if room_check and not player_check:
             self.player.inventory.append(Item(room_item.item_name, room_item.description, room_item.alias, 1,
-                                          room_item.visible, room_item.illuminated, room_item.obtainable,
-                                          room_item.inventory, room_item.door, room_item.triggers,
-                                          room_item.user_scripts))
+                                              room_item.visible, room_item.illuminated, room_item.obtainable,
+                                              room_item.inventory, room_item.door, room_item.triggers,
+                                              room_item.user_scripts))
         if not room_check:
             print(parsed_string[1].replace("_"," ") + " is not obtainable!")
 
@@ -284,6 +333,10 @@ class CommandExecutor:
                     break
         if player_check and not room_check:
             self.room.inventory.append(Item(player_item.item_name, player_item.description, player_item.alias, 1,
-                                              player_item.visible, player_item.illuminated, player_item.obtainable,
-                                              player_item.inventory, player_item.door, player_item.triggers,
-                                              player_item.user_scripts))
+                                            player_item.visible, player_item.illuminated, player_item.obtainable,
+                                            player_item.inventory, player_item.door, player_item.triggers,
+                                            player_item.user_scripts))
+
+    def save(self):
+        self.room.save()
+        self.player.save(self.room.room_file)

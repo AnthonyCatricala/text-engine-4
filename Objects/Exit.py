@@ -80,17 +80,15 @@ class Exit:
         else:
             value['door'] = dict()
 
-        value['triggers'] = dict()
+        value['triggers'] = list()
         if self.triggers:
             for t in self.triggers:
-                k, v = t.to_json()
-                value[k] = v
+                value['triggers'].append(t.to_json())
 
-        value['user-scripts'] = dict()
+        value["user-scripts"] = list()
         if self.user_scripts:
             for s in self.user_scripts:
-                k, v = s.to_json()
-                value['user-scripts'][k] = v
+                value['user-scripts'].append(s.to_json())
 
         return key, value
 
