@@ -22,6 +22,9 @@ class CommandExecutor:
         triggers = self.room.get_triggers(parsed_string[0])
         if parsed_string[0] == "error":
             print(parsed_string[0],":", parsed_string[1])
+            if parsed_string[2] != "":
+                print("You may try to " + parsed_string[2] + ":")
+                print(parsed_string[3])
         elif parsed_string[0] == "look":
             self.look_function(parsed_string)
         elif parsed_string[0] == "go":
@@ -42,7 +45,7 @@ class CommandExecutor:
             print("inventory:")
             if self.player.inventory:
                 for x in self.player.inventory:
-                    print(x.quantity, x.item_name)
+                    print(x.quantity, x.item_name.upper())
         self.room.save()
 #        elif parsed_string[0] == "take":
 #            self.get_function() TODO add this with items
@@ -213,10 +216,10 @@ class CommandExecutor:
                         elif x.door and parsed_string[0] == "close":
                             x.door.is_open = False
                         elif x.door and x.door.lock and parsed_string[0] == "lock":
-                            if x.door.lock.key and x.door.lock.key.replace(" ", "_") in player_inv:
+                            if not x.door.lock.key or (x.door.lock.key.replace(" ", "_") in player_inv):
                                 x.door.lock.is_locked = True
                         elif x.door and x.door.lock and parsed_string[0] == "unlock":
-                            if x.door.lock.key and x.door.lock.key.replace(" ", "_") in player_inv:
+                            if not x.door.lock.key or (x.door.lock.key.replace(" ", "_") in player_inv):
                                 x.door.lock.is_locked = False
                         test_room.save()
                         break
@@ -248,7 +251,7 @@ class CommandExecutor:
                     self.room.inventory.remove(x)
                 break
         if room_check:
-            print("took " + room_item.item_name)
+            print("took " + room_item.item_name.upper())
             for x in self.player.inventory:
                 if x.item_name.replace(" ", "_") == parsed_string[1]:
                     x.quantity = x.quantity + 1
@@ -276,7 +279,7 @@ class CommandExecutor:
                     self.player.inventory.remove(x)
                 break
         if player_check:
-            print("dropped " + player_item.item_name)
+            print("dropped " + player_item.item_name.upper())
             for x in self.room.inventory:
                 if x.item_name.replace(" ", "_") == parsed_string[1]:
                     x.quantity = x.quantity + 1
