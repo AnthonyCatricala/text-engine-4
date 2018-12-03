@@ -1,11 +1,6 @@
 from Util.RoomUtil import *
 from Util.ItemUtil import *
 from Objects.Trigger import *
-from Objects.Character import NPC
-
-
-from os import chdir
-chdir("..")
 
 # CREATE START ROOM.
 # NORTH: OPEN EXIT LEADING TO THE HALLWAY
