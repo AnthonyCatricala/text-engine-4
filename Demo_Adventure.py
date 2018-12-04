@@ -1,6 +1,8 @@
 from Util.RoomUtil import *
 from Util.ItemUtil import *
 from Objects.Trigger import *
+from Objects.Character import NPC
+
 
 # CREATE START ROOM.
 # NORTH: OPEN EXIT LEADING TO THE HALLWAY
@@ -15,11 +17,6 @@ plant_flag = UserScript("enter", after_file="./Scripts/plant_flag")
 apply_user_script(start_room, plant_flag)
 
 # TRIGGER: NOTIFICATION THAT THE STORAGE ROOM DOOR HAS SLAMMED SHUT AND LOCKED.
-door_slam = PrintTrigger(trigger_command="go",
-                         description="As you enter the hallway the door to the north slams shut.\n"
-                                     "You hear the a 'click' as the door locks from the other side.\n"
-                                     "I wonder if there is another key around here.")
-
 door_slam = ChangeDescriptionTrigger(trigger_command="go",
                                      description="As you enter the hallway the door to the north slams shut.\n"
                                                  "You hear the a 'click' as the door locks from the other side.\n"
