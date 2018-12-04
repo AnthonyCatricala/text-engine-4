@@ -6,31 +6,31 @@ class HelpMenu:
 
     def help_move(self):
         move = [
-                "Go"
-                "go"
-                "Move"
-                "move"
-                "Walk"
-                "walk"
-                "Run"
+                "Go, "
+                "go, "
+                "Move, "
+                "move, "
+                "Walk, "
+                "walk, "
+                "Run, "
                 "run"
         ]
         direction = [
-            "N"
-            "n"
-            "North"
-            "north"
-            "S"
-            "s"
-            "South"
-            "south"
-            "E"
-            "e"
-            "East"
-            "east"
-            "W"
-            "w"
-            "West"
+            "N, "
+            "n, "
+            "North, "
+            "north, "
+            "S, "
+            "s, "
+            "South, "
+            "south, "
+            "E, "
+            "e, "
+            "East, "
+            "east, "
+            "W, "
+            "w, "
+            "West, "
             "west"
         ]
         use = "[move] [direction]"
@@ -93,7 +93,7 @@ class HelpMenu:
 
     def help_command(self, command):
         s = ""
-        if command == "move":
+        if command == "go":
             s = self.help_move()
         elif command == "look":
             s = self.help_look()
