@@ -1,11 +1,13 @@
 import re
 import Util.RoomUtil
+import Help.HelpMenu
 from Objects.Character import *
 
 
 class UserParser:
     room = None
     player = None
+    h = None
     #TODO: add item alias
     applicable_commands = {
         "go": ["go", "travel", "walk", "run", "enter", "g", "move"],
@@ -21,6 +23,7 @@ class UserParser:
     def __init__(self, room_name = Util.RoomUtil.Room, p = Player):
         self.room = room_name
         self.player = p
+        self.h = Help.HelpMenu.HelpMenu()
 
     def remove_user_error(self, input_str):
         ##
@@ -177,7 +180,7 @@ class UserParser:
         # Author: Lucy Oliverio
         # description: Given a string, returns the correct response
         ##
-
+        help_choice = ""
         # If given empty return empty.
         if input_string == "":
             return ["", "", "", ""]
@@ -192,8 +195,18 @@ class UserParser:
         # other action commands
         chosen_command = self.com_check(user_str, ["look", "go", "open", "close", "lock", "unlock", "block", "unblock",
                                                    "get", "drop"])
-        if chosen_command == "":
-            return ["error", "not a command", "", ""]
+        if chosen_command != "error":
+            if self.com_check(user_str, ["help"]) == "help":
+                print("\nHelp")
+                #print("Please stand by, the help menu is under construction.")
+                print(self.h.help_command(chosen_command))  # -- right now it breaks the code
+                return ["", "", "", ""]
+        if chosen_command == "" and not help_choice:
+            return ["error", "not a command", "There is no action command. Active commands are:", ["look", "go", "open",
+                                                                                                   "close", "lock",
+                                                                                                   "unlock", "block",
+                                                                                                   "unblock", "get",
+                                                                                                   "drop", "help"]]
         elif chosen_command == "error":
             if self.com_check(user_str, ["go", "open", "close", "block", "unblock", "unlock"]) == "error":
                 return ["error", "not a command", "", ""]
