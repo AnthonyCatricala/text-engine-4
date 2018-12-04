@@ -21,10 +21,13 @@ class Trigger(object):
         for t in triggers:
             if t["type"] == "print":
                 out.append(PrintTrigger.from_dict(t))
-            if t["type"] == "description-change":
+            elif t["type"] == "description-change":
                 out.append(ChangeDescriptionTrigger.from_dict(t))
-            if t["type"] == "block":
+            elif t["type"] == "block":
                 out.append(BlockTrigger.from_dict(t))
+            elif t["type"] == "unblock":
+                out.append(UnblockTrigger.from_dict(t))
+
         return out
 
     @classmethod
@@ -92,7 +95,7 @@ class UnblockTrigger(Trigger):
     # Trigger for blocking exits.
     # ##
 
-    def __init__(self, trigger_command:str ="", description: str="", connected_to=None):
+    def __init__(self, trigger_command: str ="", description: str="", connected_to=None):
         super().__init__(trigger_command, "unblock", description, connected_to)
 
     def trigger(self):
