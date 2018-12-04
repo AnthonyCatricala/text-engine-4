@@ -4,9 +4,6 @@ from Objects.Trigger import *
 from Objects.Character import NPC
 
 
-from os import chdir
-chdir("..")
-
 # CREATE START ROOM.
 # NORTH: OPEN EXIT LEADING TO THE HALLWAY
 start_room = create_room(room_name="Missing Flag Room",
