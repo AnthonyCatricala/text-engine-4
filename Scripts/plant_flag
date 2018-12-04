@@ -1,0 +1,6 @@
+flag_name = "missing flag"
+for item in self.player.inventory:
+    if item.item_name == "missing flag":
+        print("You attach the missing flag to the flag pole.")
+        print("You Win!")
+        exit(0)

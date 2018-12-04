@@ -1,22 +1,93 @@
+from Objects.Trigger import Trigger
+from Objects.Exit import Exit
+from Objects.Item import Item
+from Objects.UserScript import UserScript
+
+import os
+import json
+
+
 class Character:
-    # TODO Add character file to room
     name = None
     inventory = None
     description = None
-    character_file = None
 
-    def __init__(self, name, inventory, description, character_file):
-
+    def __init__(self, name, inventory, description):
         self.name = name
         self.inventory = inventory
         self.description = description
-        self.character_file = character_file
 
 
 class Player(Character):
+    character_file = None
+    current_room_file = None
+    alive = None
 
-    alive = True
-#  TODO  if not alive: game over trigger
+    def __init__(self, name, inventory, description, character_file="", current_room_file="", alive=True):
+        super().__init__(name, inventory, description)
+
+        if character_file:
+            self.character_file = character_file
+        else:
+            self.character_file = "./Players/{}.player".format(self.name)
+
+        self.current_room_file = current_room_file
+
+        self.alive = alive
+
+    def save(self, room_file: str=""):
+        if isinstance(room_file, str) and room_file != "":
+            self.current_room_file = room_file
+
+            out = dict()
+            out["name"] = self.name
+
+            out['inventory'] = list()
+            if self.inventory:
+                for i in self.inventory:
+                    out['inventory'].append(i.to_json())
+
+            out['description'] = self.description
+            out['character_file'] = self.character_file
+            out['current_room_file'] = self.current_room_file
+            out['alive'] = self.alive
+
+            player_json = json.dumps(out, indent=4)
+
+            if not os.path.isdir("./Players/"):
+                os.makedirs("./Players/")
+
+            if "../" not in self.character_file and self.character_file.endswith(".player"):
+                if os.path.isfile(self.character_file):
+                    # print("Overwriting {}".format(self.room_name))
+                    os.remove(self.character_file)
+
+                tmp_file = "{}.tmp".format(self.name)
+                with open(tmp_file, "w+") as f:
+                    f.write(player_json)
+                f.close()
+
+                os.rename(tmp_file, self.character_file)
+
+    @classmethod
+    def load(cls, character_file: str=None):
+        if isinstance(character_file, str):
+
+            character_dict = None
+            if character_file:
+                if "../" not in character_file and not character_file.startswith("/"):
+                    if os.path.isfile(character_file):
+                        with open(character_file) as f:
+                            character_dict = json.load(f)
+                        f.close()
+
+            if character_dict:
+                name = character_dict['name']
+                inventory = Item.fill_inventory(character_dict['inventory'])
+                description = character_dict['description']
+                current_room_file = character_dict['current_room_file']
+                alive = character_dict['alive']
+                return cls(name, inventory, description, character_file, current_room_file, alive)
 
 
 class NPC(Character):
