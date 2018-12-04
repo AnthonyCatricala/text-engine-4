@@ -1,7 +1,79 @@
-print("Here is some arbitrary code running from a random file.")
-for i in range(10):
-  ans = int(input('2^{} = '.format(i)))
-  while ans != pow(2, i):
-    print('Wrong! Try Again!')
-    ans = int(input('2^{} = '.format(i)))
-print('Go on with that you were doing.')
+#Hangman.py by Anthony Catricala
+#Just a simple command-line hangman game, it pulls words from the dictionary file words.txt
+import random
+import os
+
+with open('/usr/share/dict/american-english') as f:
+    num_lines = sum(1 for line in f)
+    print ("there are",num_lines, "lines in the file")
+
+word = "'"
+#so many words in the user dictionary are possessives ending with 's.
+#I thought it would be silly to include these in the game, so I made a little structure to filter them out
+
+with open('/usr/share/dict/american-english') as f:
+    for x in range (random.randint(1,num_lines)):
+        f.readline()
+    while "'" in word:
+        word = f.readline().upper()
+        word = word.rstrip()
+
+print(word)
+
+solved_progress = list(word)
+for x in range (len(word)):
+    solved_progress[x] = "_"
+
+wordarray = list(word)
+wrong_guesses = []
+lives = 7
+
+art = [0,0,0,0,0,0,0]
+
+art[6] = " ______     \n|      |    \n|           \n|           \n|           \n|           \n"
+art[5] = " ______     \n|      |    \n|      0    \n|           \n|           \n|           \n"
+art[4] = " ______     \n|      |    \n|      0    \n|      |    \n|           \n|           \n"
+art[3] = " ______     \n|      |    \n|      0    \n|     /|    \n|           \n|           \n"
+art[2] = " ______     \n|      |    \n|      0    \n|     /|\   \n|           \n|           \n"
+art[1] = " ______     \n|      |    \n|      0    \n|     /|\   \n|     /     \n|           \n"
+art[0] = " ______     \n|      |    \n|      0    \n|     /|\   \n|     / \   \n|           \n"
+#This array holds the ascii art for the hangman
+
+while 1:
+    print (art[lives-1],"\n\n")
+    print ("Incorrect Guesses:", wrong_guesses, end=" ")
+    print("\n")
+    print(solved_progress, end =" ")
+    print("\n")
+
+    input_letter=input().upper()
+
+    if not input_letter.isalpha():
+        continue
+    if not len(input_letter) is 1:
+        continue
+
+    correct = 0
+    for x in range (0,len(word)):
+        if input_letter in wordarray[x]:
+            solved_progress[x] = wordarray[x]
+            correct = 1
+    if correct is 0:
+        if input_letter not in wrong_guesses:
+            wrong_guesses.append(input_letter)
+            lives = lives - 1
+
+    if lives < 2:
+        print (art[0])
+        break
+
+    won_game = 1
+    for x in range (0,len(word)):
+        if '_' in solved_progress[x]:
+            won_game = 0
+
+    if won_game is 1:
+        print("YOU WON THE GAME! THE WORD WAS ",word,"! THANKS FOR PLAYING!", sep='')
+        break
+
+print ("GAME OVER! THE WORD WAS ",word,"!", sep='')
